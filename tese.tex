@@ -49,14 +49,6 @@
 \usepackage{imegoodies}
 \usepackage[thesis]{imelooks}
 
-%\nocolorlinks % para impressão em P&B
-
-% Diretórios onde estão as figuras; com isso, não é necessário (mas
-% é permitido) colocar o caminho completo em \includegraphics. Note
-% que a extensão nunca é necessária (mas é permitida), ou seja, o
-% resultado é o mesmo com "\includegraphics{figuras/foto.jpeg}",
-% "\includegraphics{foto.jpeg}", "\includegraphics{figuras/foto}"
-% ou "\includegraphics{foto}".
 \graphicspath{{figuras/},{fig/},{logos/},{img/},{images/},{imagens/}}
 
 % Comandos rápidos para mudar de língua:
@@ -94,18 +86,18 @@
 \title{Título do trabalho}[um subtítulo]
 \translatedtitle{Title of the document}[a subtitle]
 
-\author[fem]{Nome Completo}
+\author{Antonio Marcos Shiro Arnauts Hachisuca}
 
 \def\profa{Prof\kern.02em.\kern-.07emª\kern.07em}
 \def\dra{Dr\kern-.04em.\kern-.11emª\kern.07em}
 
 % Para TCCs, este comando define o supervisor
-\orientador[fem]{\profa{} \dra{} Fulana de Tal}
+\orientador{Prof. Dr. Marcel Kenji de Carli Silva}
 
 % Se não houver, remova; se houver mais de um, basta
 % repetir o comando quantas vezes forem necessárias
-\coorientador{Prof. Dr. Ciclano de Tal}
-\coorientador[fem]{\profa{} \dra{} Beltrana de Tal}
+%\coorientador{Prof. Dr. Ciclano de Tal}
+%\coorientador[fem]{\profa{} \dra{} Beltrana de Tal}
 
 \banca{
   \profa{} \dra{} Fulana de Tal (orientadora) -- IME-USP [sem ponto final],
@@ -120,43 +112,14 @@
 % definitiva (ou seja, a versão final após a incorporação das sugestões
 % da banca).
 \tipotese{
-  mestrado,
-  %doutorado,
-  %tcc,
-  %definitiva, % É a versão para defesa ou a versão definitiva?
-  %quali, % É qualificação?
+  tcc,
   programa={Ciência da Computação},
 }
 
 \defesa{
   local={São Paulo},
-  data=2017-08-10, % YYYY-MM-DD
+  data=2024-01-01, % YYYY-MM-DD
 }
-
-% Se não houve bolsa, remova
-%
-% Norma sobre agradecimento por auxílios da FAPESP:
-% https://fapesp.br/11789/referencia-ao-apoio-da-fapesp-em-todas-as-formas-de-divulgacao
-%
-% Norma sobre agradecimento por auxílios da CAPES (Portaria 206,
-% de 4 de Setembro de 2018):
-% https://www.in.gov.br/materia/-/asset_publisher/Kujrw0TZC2Mb/content/id/39729251/do1-2018-09-05-portaria-n-206-de-4-de-setembro-de-2018-39729135
-%
-%\apoio{O presente trabalho foi realizado com apoio da Coordenação
-%      de Aperfeiçoamento\\ de Pessoal de Nível Superior -- Brasil
-%      (CAPES) -- Código de Financiamento 001} % o código é sempre 001
-%
-%\apoio{This study was financed in part by the Coordenação de
-%      Aperfeiçoamento\\ de Pessoal de Nível Superior -- Brasil
-%      (CAPES) -- Finance Code 001} % o código é sempre 001
-%
-%\apoio{Durante o desenvolvimento deste trabalho, o autor recebeu\\
-%      auxílio financeiro da FAPESP -- processo nº aaaa/nnnnn-d}
-%
-%\apoio{During the development if this work, the author received\\
-%      financial support from FAPESP -- grant \#aaaa/nnnnn-d}
-\apoio{Durante o desenvolvimento deste trabalho o autor
-       recebeu auxílio financeiro da XXXX}
 
 % A licença do seu trabalho. Use CC-BY, CC-BY-NC, CC-BY-ND, CC-BY-SA,
 % CC-BY-NC-SA ou CC-BY-NC-ND para escolher a licença Creative Commons
@@ -183,11 +146,6 @@
 % preencha o formulário e escolha a opção "Gerar Código LaTeX".
 % Basta copiar e colar o resultado aqui.
 \fichacatalografica{}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%% AQUI COMEÇA O CONTEÚDO DE FATO %%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -238,18 +196,6 @@ texto texto texto texto. Texto opcional.
 % obrigatória, inserimos uma quebra manualmente aqui.
 \cleardoublepage
 
-% Todas as listas são opcionais; Usando "\chapter*" elas não são incluídas
-% no sumário. As listas geradas automaticamente também não são incluídas por
-% conta das opções "notlot" e "notlof" que usamos para a package tocbibind.
-
-% Normalmente, "\chapter*" faz o novo capítulo iniciar em uma nova página, e as
-% listas geradas automaticamente também por padrão ficam em páginas separadas.
-% Como cada uma destas listas é muito curta, não faz muito sentido fazer isso
-% aqui, então usamos este comando para desabilitar essas quebras de página.
-% Se você preferir, comente as linhas com esse comando e des-comente as linhas
-% sem ele para criar as listas em páginas separadas. Observe que você também
-% pode inserir quebras de página manualmente (com \clearpage, veja o exemplo
-% mais abaixo).
 \newcommand\disablenewpage[1]{{\let\clearpage\par\let\cleardoublepage\par #1}}
 
 % Nestas listas, é melhor usar "raggedbottom" (veja basics.tex). Colocamos
@@ -264,11 +210,7 @@ texto texto texto texto. Texto opcional.
 \disablenewpage{\chapter*{Lista de abreviaturas}}
 
 \begin{tabular}{rl}
-   CFT & Transformada contínua de Fourier (\emph{Continuous Fourier Transform})\\
-   DFT & Transformada discreta de Fourier (\emph{Discrete Fourier Transform})\\
-  EIIP & Potencial de interação elétron-íon (\emph{Electron-Ion Interaction Potentials})\\
-  STFT & Transformada de Fourier de tempo reduzido (\emph{Short-Time Fourier Transform})\\
-  ABNT & Associação Brasileira de Normas Técnicas\\
+%  ABNT & Associação Brasileira de Normas Técnicas\\
    URL & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
    IME & Instituto de Matemática e Estatística\\
    USP & Universidade de São Paulo
@@ -278,9 +220,9 @@ texto texto texto texto. Texto opcional.
 \disablenewpage{\chapter*{Lista de símbolos}}
 
 \begin{tabular}{rl}
-  $\omega$ & Frequência angular\\
-    $\psi$ & Função de análise \emph{wavelet}\\
-    $\Psi$ & Transformada de Fourier de $\psi$\\
+%  $\omega$ & Frequência angular\\
+%    $\psi$ & Função de análise \emph{wavelet}\\
+%    $\Psi$ & Transformada de Fourier de $\psi$\\
 \end{tabular}
 
 % Quebra de página manual
@@ -296,10 +238,6 @@ texto texto texto texto. Texto opcional.
 %\listoftables
 \disablenewpage{\listoftables}
 
-% Esta lista é criada "automaticamente" pela package float quando
-% definimos o novo tipo de float "program" (em utils.tex)
-% Você pode escolher se quer ou não permitir a quebra de página
-%\listof{program}{\programlistname}
 \disablenewpage{\listof{program}{\programlistname}}
 
 % Sumário (obrigatório)
@@ -341,70 +279,9 @@ texto texto texto texto. Texto opcional.
 
 % A introdução não tem número de capítulo, então os cabeçalhos também não
 \pagestyle{unnumberedchapter}
-\input{conteudo/00-exemplo-introducao}
+\input{conteudo/00-introducao}
 \pagestyle{mainmatter}
-\input{conteudo/01-exemplo-normas-ime}
-\input{conteudo/02-exemplo-usando-o-modelo}
-\input{conteudo/03-exemplo-latex}
-\input{conteudo/04-exemplo-tutorial}
-\input{conteudo/05-exemplo-exemplos}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%% APÊNDICES E ANEXOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Um apêndice é algum conteúdo adicional de sua autoria que faz parte e
-% colabora com a ideia geral do texto mas que, por alguma razão, não precisa
-% fazer parte da sequência do discurso; por exemplo, a demonstração de um
-% teorema intermediário, as perguntas usadas em uma pesquisa qualitativa etc.
-%
-% Um anexo é um documento que não faz parte da tese (em geral, nem é de sua
-% autoria) mas é relevante para o conteúdo; por exemplo, a especificação do
-% padrão técnico ou a legislação que o trabalho discute, um artigo de jornal
-% apresentando a percepção do público sobre o tema da tese etc.
-%
-% Os comandos appendix e annex reiniciam a numeração de capítulos e passam
-% a numerá-los com letras. "annex" não faz parte de nenhuma classe padrão,
-% foi criado para este modelo. Se o trabalho não tiver apêndices ou anexos,
-% remova estas linhas.
-%
-% Diferentemente de \mainmatter, \backmatter etc., \appendix e \annex não
-% forçam o início de uma nova página. Em geral isso não é importante, pois
-% o comando seguinte costuma ser "\chapter", mas pode causar problemas com
-% a formatação dos cabeçalhos. Assim, vamos forçar uma nova página antes
-% de cada um deles.
-
-%%%% Apêndices %%%%
-
-\cleardoublepage
-
-\pagestyle{appendix}
-
-\appendix
-
-% \addappheadtotoc acrescenta a palavra "Apêndice" ao sumário; se
-% só há apêndices, sem anexos, provavelmente não é necessário.
-\addappheadtotoc
-
-\input{conteudo/apendice-exemplo-faq}
-\par
-
-%%%% Anexos %%%%
-
-\cleardoublepage
-
-\pagestyle{appendix} % repete o anterior, caso você não use apêndices
-
-\annex
-
-% \addappheadtotoc acrescenta a palavra "Anexo" ao sumário; se
-% só há anexos, sem apêndices, provavelmente não é necessário.
-\addappheadtotoc
-
-\input{conteudo/anexo-exemplo-imegoodies}
-\par
-\input{conteudo/anexo-exemplo-pseudocodigo}
-\par
-
+\input{conteudo/01-grafos}
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%
 
