@@ -23,8 +23,37 @@ Now, the maximum matching problem can be described as:
 \end{theorem}
 
 \begin{proof}
+	Let \(G \coloneqq (V, E, \varphi)\) be a graph and \(M\) be a matching of \(G\).
 
-\end{proof}.
+	\noindent
+	\textit{Sufficiency:}
+	It will be proven by contradiction.
+	Suppose \(M\) is a maximum matching and \(P\) is an \(M\)-augmenting path of \(G\).
+	Note that, for \(i \in [l]\), one has: (1) \(e_i \in M\), if \(i\) is even; (2) \(e_i \not \in M\), if \(i\) is odd.
+
+	Let \(M' \coloneqq M \symdiff E(P)\), \(M'\) is a matching since \(v_0, v_l\) are \(M\)-exposed and every vertex in \(\{v_1, \dots, v_{l-1}\}\) is covered by an edge in \(M \cap E(P)\).
+	Hence, \(|M'| = |M|+1\), a contradiction. 
+
+	\noindent
+	\textit{Necessity:}
+	Suppose \(G\) has no \(M\)-augmenting paths.
+	Let \(M'\) be a maximum matching of \(G\) and \(G'\) be the graph induced by \(M \symdiff M'\).
+	Note that \(G'\) has at least one component and every component of \(G'\) is either a path or a cycle.
+	Let \(H\) be a component of \(G'\),
+	\begin{enumerate}
+		\item 
+			if \(|V_H|\) is \textbf{even}, then 
+				\(|M \cap V_H| = |M' \cap V_H|\);
+		\item 
+			if \(|V_H|\) is \textbf{odd}, then \(H\) must be a path. 
+			Note that \(M'\) being maximum implies 
+			\(|M \cap V_H| > |M' \cap V_H|\) 
+			and, consequently,
+			\(M' \cap V_H\) is a \(M\)-augmenting path of \(G\).
+			Therefore, this case is impossible.
+	\end{enumerate}
+	Thus, \(|M| = |M'|\), i.e., \(M\) is a maximum matching.
+\end{proof}
 
 \begin{definition}[Vertex cover]
 	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in in \(K\). 
