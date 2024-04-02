@@ -117,6 +117,15 @@ Now, the maximum matching problem can be described as:
 
 \end{proof}
 
+\begin{definition}[Vertex cover]
+	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in in \(K\). 
+	A vertex cover is said to be \textbf{minimal} if one has \(|K| \leq |K'|\) for every vertex cover \(K'\) of \(G\).
+\end{definition}
+
+\begin{theorem}[K"'onigs's matching theorem]
+	Let \(G\) be a bipartite graph, then the maximum size of a matching of \(G\) is equal to the minimum size of a vertex cover of \(G\).
+\end{theorem}
+
 %% Define VertexCover e MaxMatching relation?
 %% Use this relation to exemplify how odd cycles
 %% Impact the maximum matching?
