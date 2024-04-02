@@ -3,9 +3,9 @@
 \enlargethispage{.5\baselineskip}
 
 \section{Matchings}
-\label{cap:grafos}
 
 \begin{definition}[Graph]
+	\label{def:graph}
 	A \textbf{graph} \(G\) is a triple \((V, E, \varphi)\) such that
 	\begin{enumerate}[label=(\roman*)]
 		\item \(V\) is the \textbf{vertex set};
@@ -20,6 +20,7 @@
 \end{definition}
 
 \begin{definition}[Walk]
+	\label{def:walk}
 	For a graph \(G \coloneqq (V, E, \varphi)\), a \textbf{walk} is a sequence
 	\[
 		\langle v_0, e_1, v_1, \dots, a_l, v_l \rangle \eqqcolon W
@@ -45,6 +46,7 @@
 \end{definition}
 
 \begin{definition}[Matching]
+	\label{def:matching}
 	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
 	The matching \(M\) is:
 	\begin{itemize}
@@ -58,7 +60,7 @@
 Now, the maximum matching problem can be defined as follows:
 \\
 \begin{problem}{MaxMatching}
-	\label{MaxMatching}
+	\label{prob:maxmatching}
 	Given a graph \(G \coloneqq (V, E, \varphi)\) find a maximum matching of \(G\).
 \end{problem}
 
