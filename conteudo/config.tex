@@ -56,6 +56,18 @@
 {\bfseries} 
 {:} 
 {.5em} 
-{\thmname{#1} \thmnumber{ #2} (\thmnote{#3})} 
+{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
 \theoremstyle{corollary}
 \newtheorem{corollary}{Corollary}
+
+\newtheoremstyle{theorem}
+{3pt} 
+{3pt} 
+{\itshape} 
+{} 
+{\bfseries} 
+{:} 
+{.5em} 
+{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}

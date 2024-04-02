@@ -1,3 +1,5 @@
+\renewcommand*{\proofname}{Proof}
+
 \chapter{Blossom algorithm}
 
 The main algorithm\footnote{For the \textbf{bipartite graphs} case, one may search \textit{Kuhn's algorithm} and \textit{Flow Networks}.} to solve the \textbf{maximum matching} problem is the algorithm \textbf{Blossom} developed by Jack Edmonds in 1961.
@@ -24,6 +26,7 @@ Hence, this chapter intends to:
 	\(E(G)\) or \(E_G\) to denote \(E\).
 	Also, if \(e \in E(G)\) and \(\varphi(e) = (u, v)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\);
 	When the context is clear, \((u, v)\) may be abbreviated to \(uv\).
+
 \end{definition}
 
 \begin{definition}[Walk]
@@ -46,21 +49,43 @@ Hence, this chapter intends to:
 	The walk \(W\) is a:
 	\begin{itemize}
 		\item 
-			\textbf{path} if all its vertices are distinct;
+			\textbf{path}, if all its vertices are distinct;
 		\item 
-			\textbf{cycle} if \(v_0 = v_l\);
+			\textbf{cycle}, if \(v_0 = v_l\) 
+			and it is an \textbf{odd cycle} if its length is odd, else it is an \textbf{even cycle}.
 	\end{itemize}
 \end{definition}
+
+\begin{definition}[Bipartite graphs]
+	A graph \(G\) is \textbf{bipartite} if there are two sets \(U, W \in V(G)\) such that 
+	\begin{enumerate}[label=(\roman*)]
+		\item \(U \cap W = \emptyset\);
+		\item \(U \cup W = V(G)\);
+		\item every edge of \(G\) has one end at \(U\) and the other end at \(W\).
+	\end{enumerate}
+	In this case, it is said that \(G\) is \((U, W)\)-bipartite.
+\end{definition}
+
+\begin{theorem}[Characterization of bipartite graphs]
+	A graph is bipartite if and only if it has no odd cycles.
+\end{theorem}
 
 \begin{definition}[Matching]
 	\label{def:matching}
 	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
+	A vertex \(v \in V\) is \(M\)-covered if some edge of \(M\) incides in \(v\), 
+	and it is said that \(M\) covers \(v\);
+	Otherwise, \(v\) is \(M\)-exposed.
 	The matching \(M\) is:
 	\begin{itemize}
 		\item 
-			\textbf{maximal} if there is no edge \(e \in E \setminus M\) such that \(M \cup \{e\}\) is a matching of \(G\);
+			\textbf{maximal}, if there is no edge \(e \in E \setminus M\) such that \(M \cup \{e\}\) is a matching of \(G\);
+
 		\item
-			\textbf{maximum} if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\).
+			\textbf{maximum}, if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\);
+	
+		\item
+			\textbf{perfect}, if \(2|V_G| = |M|\), i.e., every vertex of \(G\) is covered.
 	\end{itemize}
 \end{definition}
 
@@ -71,4 +96,29 @@ Now, the maximum matching problem can be described as:
 	\label{prob:maxmatching}
 	Given a graph \(G \coloneqq (V, E, \varphi)\) find a maximum matching of \(G\).
 \end{problem}
+
+\begin{definition}[Alternating and augmenting paths]
+	Given a matching \(M\) of a graph \(G\).
+	A path \(P\) is \(M\)-\textbf{alternating} if its edges are alternating in and out of \(M\). 
+	Formally,
+	\[
+		e_i \in M \Longleftrightarrow e_{i+1} \not \in M \text { for each } i \in [l-1]
+		\footnote{For \(n \in \Naturals\), we denote the set \(\{1, \dots, n\}\) as \([n]\).}
+	\]
+	And \(P\) is \(M\)-\textbf{augmenting} if both \(v_0\) and \(v_l\) are \(M\)-exposed.
+\end{definition}
+
+\begin{theorem}[Berge's theorem]
+	Let \(G \coloneqq (V, E, \varphi)\) be a graph.
+	A matching \(M\) is maximum if and only if there are no \(M\)-augmenting path.
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+%% Define VertexCover e MaxMatching relation?
+%% Use this relation to exemplify how odd cycles
+%% Impact the maximum matching?
+
 
