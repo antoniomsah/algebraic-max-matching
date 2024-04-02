@@ -7,6 +7,7 @@ Now, the maximum matching problem can be described as:
 \end{problem}
 
 \begin{definition}[Alternating and augmenting paths]
+	\label{def:alt_path}
 	Given a matching \(M\) of a graph \(G\).
 	A path \(P\) is \(M\)-\textbf{alternating} if its edges are alternating in and out of \(M\). 
 	Formally,
@@ -18,6 +19,7 @@ Now, the maximum matching problem can be described as:
 \end{definition}
 
 \begin{theorem}[Berge's theorem]
+	\label{thm:berge}
 	Let \(G \coloneqq (V, E, \varphi)\) be a graph.
 	A matching \(M\) is maximum if and only if there are no \(M\)-augmenting path.
 \end{theorem}
@@ -56,12 +58,14 @@ Now, the maximum matching problem can be described as:
 \end{proof}
 
 \begin{definition}[Vertex cover]
+	\label{def:vertex_cover}
 	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in \(K\). 
 	A vertex cover is said to be \textbf{minimal} if one has \(|K| \leq |K'|\) for every vertex cover \(K'\) of \(G\).
 	Denote \(\tau(G)\) as the size of a minimum vertex cover of \(G\).
 \end{definition}
 
-\begin{corollary}[Maximum matching upperbound]
+\begin{corollary}[Matching upperbound]
+	\label{cor:match_upperbound}
 	Let \(G\) be a graph, \(M\) be a matching of \(G\) and \(K\) be a vertex cover of \(G\). 
 	Then, \(|M| \leq |K|\)..
 \end{corollary}
@@ -72,11 +76,11 @@ Now, the maximum matching problem can be described as:
 \end{proof}
 
 \begin{theorem}[K\"onig's matching theorem]
+	\label{thm:konig}
 	Let \(G\) be a bipartite graph, then the maximum size of a matching of \(G\) is equal to the minimum size of a vertex cover of \(G\).
 \end{theorem}
 
 \begin{proof}
-
 \end{proof}
 
 Note that K\"onig's theorem \textbf{does not} hold for all graphs;
