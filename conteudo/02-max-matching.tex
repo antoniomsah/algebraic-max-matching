@@ -24,12 +24,22 @@ Now, the maximum matching problem can be described as:
 
 \begin{proof}
 
-\end{proof}
+\end{proof}.
 
 \begin{definition}[Vertex cover]
 	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in in \(K\). 
 	A vertex cover is said to be \textbf{minimal} if one has \(|K| \leq |K'|\) for every vertex cover \(K'\) of \(G\).
+	Denote \(\tau(G)\) as the size of a minimum vertex cover of \(G\).
 \end{definition}
+
+\begin{corollary}[Maximum matching upperbound]
+	Let \(G\) be a graph, \(M\) be a matching of \(G\) and \(K\) be a vertex cover of \(G\). 
+	Then, \(|M| \leq |K|\)..
+\end{corollary}
+
+\begin{proof}
+	
+\end{proof}
 
 \begin{theorem}[K\"onig's matching theorem]
 	Let \(G\) be a bipartite graph, then the maximum size of a matching of \(G\) is equal to the minimum size of a vertex cover of \(G\).
@@ -41,3 +51,4 @@ Now, the maximum matching problem can be described as:
 
 Note that K\"onig's theorem \textbf{does not} hold for all graphs;
 It suffices to consider a single odd cycle.
+
