@@ -56,7 +56,7 @@ Now, the maximum matching problem can be described as:
 \end{proof}
 
 \begin{definition}[Vertex cover]
-	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in in \(K\). 
+	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in \(K\). 
 	A vertex cover is said to be \textbf{minimal} if one has \(|K| \leq |K'|\) for every vertex cover \(K'\) of \(G\).
 	Denote \(\tau(G)\) as the size of a minimum vertex cover of \(G\).
 \end{definition}
@@ -67,7 +67,8 @@ Now, the maximum matching problem can be described as:
 \end{corollary}
 
 \begin{proof}
-	
+	By definition, every edge of \(M\) has at least one end in \(K\) and no edge in \(M\) share an end.
+	Hence, \(|K| \geq |M|\).
 \end{proof}
 
 \begin{theorem}[K\"onig's matching theorem]
