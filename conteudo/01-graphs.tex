@@ -26,7 +26,12 @@ Hence, this chapter intends to:
 	\(E(G)\) or \(E_G\) to denote \(E\).
 	Also, if \(e \in E(G)\) and \(\varphi(e) = (u, v)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\);
 	When the context is clear, \((u, v)\) may be abbreviated to \(uv\).
+\end{definition}
 
+\begin{definition}[Subgraph]
+	\label{def:subgraph}
+	A graph \(H\) is a \textbf{subgraph} of a graph \(G\) if 
+	\(V_H \subseteq V_G, E_H \subseteq E_G\) and every edge in \(E_H\) has the same ends in \(H\) and \(G\).
 \end{definition}
 
 \begin{definition}[Walk]
@@ -54,7 +59,15 @@ Hence, this chapter intends to:
 			\textbf{cycle}, if \(v_0 = v_l\) 
 			and it is an \textbf{odd cycle} if its length is odd, else it is an \textbf{even cycle}.
 	\end{itemize}
+	A vertex \(u \in V\) \textbf{reaches} \(v \in V\) if there is a \((u,v)\)-walk in \(G\). 
 \end{definition}
+
+\begin{definition}[Components]
+	\label{def:components}
+	A \textbf{(connected) component} of \(G\) is a subgraph \(H\) such that every vertex of \(V_H\) reaches every vertex of \(V_H\), but does not reach any vertex in \(V_G \setminus V_H\).
+	If \(G\) has \textbf{exactly} one component, then \(G\) is \textbf{connected}; Else, \(G\) is \textbf{disconnected}.
+\end{definition}
+
 
 \begin{definition}[Bipartite graphs]
 	A graph \(G\) is \textbf{bipartite} if there are two sets \(U, W \in V(G)\) such that 
