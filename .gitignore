@@ -1,0 +1,19 @@
+# Required files to generate pdf
+mkidxhead.ist
+tese.aux
+tese.bbl
+tese.bcf
+tese.blg
+tese.fdb_latexmk
+tese.fls
+tese.idx
+tese.ilg
+tese.ind
+tese.lof
+tese.log
+tese.lop
+tese.lot
+tese.out
+tese.run.xml
+tese.synctex.gz
+tese.toc
