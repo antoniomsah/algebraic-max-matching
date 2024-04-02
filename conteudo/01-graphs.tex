@@ -70,6 +70,10 @@ Hence, this chapter intends to:
 	A graph is bipartite if and only if it has no odd cycles.
 \end{theorem}
 
+\begin{proof}
+
+\end{proof}
+
 \begin{definition}[Matching]
 	\label{def:matching}
 	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
@@ -88,46 +92,4 @@ Hence, this chapter intends to:
 			\textbf{perfect}, if \(2|V_G| = |M|\), i.e., every vertex of \(G\) is covered.
 	\end{itemize}
 \end{definition}
-
-\noindent
-Now, the maximum matching problem can be described as:
-\\
-\begin{problem}{MaxMatching}
-	\label{prob:maxmatching}
-	Given a graph \(G \coloneqq (V, E, \varphi)\) find a maximum matching of \(G\).
-\end{problem}
-
-\begin{definition}[Alternating and augmenting paths]
-	Given a matching \(M\) of a graph \(G\).
-	A path \(P\) is \(M\)-\textbf{alternating} if its edges are alternating in and out of \(M\). 
-	Formally,
-	\[
-		e_i \in M \Longleftrightarrow e_{i+1} \not \in M \text { for each } i \in [l-1]
-		\footnote{For \(n \in \Naturals\), we denote the set \(\{1, \dots, n\}\) as \([n]\).}
-	\]
-	And \(P\) is \(M\)-\textbf{augmenting} if both \(v_0\) and \(v_l\) are \(M\)-exposed.
-\end{definition}
-
-\begin{theorem}[Berge's theorem]
-	Let \(G \coloneqq (V, E, \varphi)\) be a graph.
-	A matching \(M\) is maximum if and only if there are no \(M\)-augmenting path.
-\end{theorem}
-
-\begin{proof}
-
-\end{proof}
-
-\begin{definition}[Vertex cover]
-	For a graph \(G \coloneqq (V, E, \varphi)\), a subset \(K \subseteq V(G)\) is a \textbf{vertex cover} of \(G\) if every edge of \(E(G)\) has an end in in \(K\). 
-	A vertex cover is said to be \textbf{minimal} if one has \(|K| \leq |K'|\) for every vertex cover \(K'\) of \(G\).
-\end{definition}
-
-\begin{theorem}[K"'onigs's matching theorem]
-	Let \(G\) be a bipartite graph, then the maximum size of a matching of \(G\) is equal to the minimum size of a vertex cover of \(G\).
-\end{theorem}
-
-%% Define VertexCover e MaxMatching relation?
-%% Use this relation to exemplify how odd cycles
-%% Impact the maximum matching?
-
 
