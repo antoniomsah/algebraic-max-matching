@@ -35,31 +35,6 @@
 % {\thmname{#1}\space(?)\thmnumber{ #2}\thmnote{ (#3)}} % formato do título
 % % vazio significa {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
 
-%% Definition style
-\newtheoremstyle{definition} 
-{3pt} 
-{3pt} 
-{} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thesection.\thmnumber{#2} \thmnote{#3}} 
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}
-
-\newtheoremstyle{corollary}
-{3pt} 
-{3pt} 
-{\itshape} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
-\theoremstyle{corollary}
-\newtheorem{corollary}{Corollary}
-
 \newtheoremstyle{theorem}
 {3pt} 
 {3pt} 
@@ -71,3 +46,28 @@
 {\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
 \theoremstyle{theorem}
 \newtheorem{theorem}{Theorem}
+
+%% Definition style
+\newtheoremstyle{definition} 
+{3pt} 
+{3pt} 
+{} 
+{} 
+{\bfseries} 
+{:} 
+{.5em} 
+{\thesection.\thmnumber{#2} \thmnote{#3}} 
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newtheoremstyle{corollary}
+{3pt} 
+{3pt} 
+{\itshape} 
+{} 
+{\bfseries} 
+{:} 
+{.5em} 
+{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
+\theoremstyle{corollary}
+\newtheorem{corollary}[theorem]{Corollary}
