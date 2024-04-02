@@ -1,0 +1,61 @@
+\usepackage{mdframed}
+
+%%%%%%%%%%%%%% Definitions %%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Naturals}{\mathbb{N}}
+\newcommand{\Reals}{\mathbb{R}}
+
+\newcommand{\SC}[1]{\textsc{#1}}
+
+\newmdenv[linecolor=black,linewidth=1pt]{problembox}
+
+\newenvironment{problem}[1]
+{
+    \begin{problembox}
+    \begin{center}
+        \Large\SC{#1}
+    \end{center}
+	\itshape
+	\noindent
+}
+{
+    \end{problembox}
+}
+
+%%%%%%%%%%%%% Theorems, lemmas, etc. %%%%%%%%%%%%
+
+% Hints
+% \newtheoremstyle{maybe} % nome do estilo
+% {3pt} % espaço antes
+% {3pt} % espaço depois
+% {\itshape} % fonte do corpo
+% {} % Indentação
+% {\bfseries} % fonte do título
+% {:} % pontuação após o título
+% {.5em} % espaço após o título
+% {\thmname{#1}\space(?)\thmnumber{ #2}\thmnote{ (#3)}} % formato do título
+% % vazio significa {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+
+%% Definition style
+\newtheoremstyle{definition} 
+{3pt} 
+{3pt} 
+{} 
+{} 
+{\bfseries} 
+{:} 
+{.5em} 
+{\thesection.\thmnumber{#2}. \thmnote{#3}} 
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newtheoremstyle{corollary}
+{3pt} 
+{3pt} 
+{\itshape} 
+{} 
+{\bfseries} 
+{:} 
+{.5em} 
+{\thmname{#1} \thmnumber{ #2} (\thmnote{#3})} 
+\theoremstyle{corollary}
+\newtheorem{corollary}{Corollary}

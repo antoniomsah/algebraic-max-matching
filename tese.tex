@@ -147,6 +147,9 @@
 % Basta copiar e colar o resultado aqui.
 \fichacatalografica{}
 
+% Configurações para teoremas, definições, etc.
+\input{conteudo/config.tex}
+
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% CAPA E PÁGINAS INICIAIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -279,9 +282,10 @@ texto texto texto texto. Texto opcional.
 
 % A introdução não tem número de capítulo, então os cabeçalhos também não
 \pagestyle{unnumberedchapter}
-\input{conteudo/00-introducao}
+\input{conteudo/00-introduction}
 \pagestyle{mainmatter}
-\input{conteudo/01-grafos}
+\input{conteudo/01-graphs}
+\input{conteudo/02-blossom}
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%
 

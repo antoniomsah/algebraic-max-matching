@@ -1,0 +1,59 @@
+\chapter{Blossom algorithm}
+
+\enlargethispage{.5\baselineskip}
+
+\section{Matchings}
+\label{cap:grafos}
+
+\begin{definition}[Graph]
+	A \textbf{graph} \(G\) is a triple \((V, E, \varphi)\) such that
+	\begin{enumerate}[label=(\roman*)]
+		\item \(V\) is the \textbf{vertex set};
+		\item \(E\) is the \textbf{edge set};
+		\item \(\varphi: E \to V \times V\) is a relation between each edge and a pair of vertices, called the \textbf{incidence function} of \(G\).
+	\end{enumerate}
+\end{definition}
+
+\begin{definition}[Walk]
+	For a graph \(G \coloneqq (V, E, \varphi)\), a \textbf{walk} is a sequence
+	\[
+		\langle v_0, e_1, v_1, \dots, a_l, v_l \rangle \eqqcolon W
+	\]
+	such that
+	\begin{enumerate}[label=(\roman*)]
+		\item \(l \in \Naturals\) is the \textit{length} of \(W\);
+		\item \(v_0, v_1, \dots, v_l \in V\);
+		\item \(e_1, \dots, e_l \in E\).
+	\end{enumerate}
+	It is denoted that \(V(W) 
+	\coloneqq \{v_0, \dots, v_l\}\) 
+	and 
+	\(E(W) \coloneqq \{e_1, \dots, e_l\}\). 
+	It is said that \(W\) is walk from \(v_0\) to \(v_l\) (\((v_0, v_l)\)-walk).
+	The walk \(W\) is a:
+	\begin{itemize}
+		\item 
+			\textbf{path} if all its vertices are distinct;
+		\item 
+			\textbf{cycle} if \(v_0 = v_l\);
+	\end{itemize}
+\end{definition}
+
+\begin{definition}[Matching]
+	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
+
+	The matching \(M\) is:
+	\begin{itemize}
+		\item 
+			\textbf{maximal} if there is no edge \(e \in E \setminus M\) such that \(M \cup \{e\}\) is a matching of \(G\);
+		\item
+			\textbf{maximum} if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\).
+	\end{itemize}
+\end{definition}
+
+Now, the maximum matching problem can be defined as follows:
+\\
+\begin{problem}{MaxMatching}
+	Given a graph \(G \coloneqq (V, E, \varphi)\) find a maximum matching of \(G\).
+\end{problem}
+
