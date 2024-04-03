@@ -119,7 +119,7 @@ END {
       print("LaTeX messages:\n\n");
 
       my $cmd = "";
-      my $givenpath = File::Spec->catfile('log', 'texlogsieve');
+      my $givenpath = File::Spec->catfile('packages', 'texlogsieve');
       if (-s 'texlogsieve') {
           $cmd = 'texlua texlogsieve';
       } elsif (-s $givenpath) {
@@ -133,7 +133,7 @@ END {
 
       my $showed_something = 0;
       if ($cmd ne "") {
-          my $conffile = File::Spec->catfile('log', 'texlogsieverc');
+          my $conffile = File::Spec->catfile('packages', 'texlogsieverc');
           if (-e $conffile) { $cmd = $cmd . ' -c ' . $conffile; };
           Run_subst($cmd . ' %R.log');
           $showed_something = 1;
