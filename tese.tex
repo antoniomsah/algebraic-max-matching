@@ -1,20 +1,3 @@
-% Arquivo LaTeX de exemplo de dissertação/tese a ser apresentada à CPG do IME-USP
-%
-% Criação: Jesús P. Mena-Chalco
-% Revisão: Fabio Kon e Paulo Feofiloff
-% Adaptação para UTF8, biblatex e outras melhorias: Nelson Lago
-%
-% Except where otherwise indicated, these files are distributed under
-% the MIT Licence. The example text, which includes the tutorial and
-% examples as well as the explanatory comments in the source, are
-% available under the Creative Commons Attribution International
-% Licence, v4.0 (CC-BY 4.0) - https://creativecommons.org/licenses/by/4.0/
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREÂMBULO LaTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % A opção twoside (frente-e-verso) significa que a aparência das páginas pares
 % e ímpares pode ser diferente. Por exemplo, as margens podem ser diferentes ou
 % os números de página podem aparecer à direita ou à esquerda alternadamente.
@@ -27,25 +10,9 @@
 % preciso fornecer o resumo nessas duas línguas. LaTeX aceita alguns nomes
 % diferentes para a língua portuguesa; dentre as opções, prefira sempre
 % "brazilian" para português brasileiro e "portuguese" para português europeu.
-%\documentclass[a4paper,12pt,twoside,brazilian,english]{book}
-\documentclass[a4paper,12pt,twoside,english,brazilian]{book}
+\documentclass[a4paper,12pt,twoside,brazilian,english]{book}
+%\documentclass[a4paper,12pt,twoside,english,brazilian]{book}
 
-% O preâmbulo de um documento LaTeX pode ser razoavelmente longo. Neste
-% modelo, optamos por reduzi-lo, colocando praticamente tudo do preâmbulo
-% nas packages "imegoodies" e "imelooks".
-%
-% imegoodies carrega diversas packages muito úteis e populares (algumas
-% são praticamente obrigatórias, como amsmath, babel, array etc.). É
-% uma boa ideia usá-la com outros documentos também. Ela inclui vários
-% comentários explicativos e dicas de uso; não tenha medo de alterá-la
-% conforme a necessidade.
-%
-% imelooks carrega algumas packages e configurações que definem a
-% aparência do documento; você também pode querer usá-la (ou partes
-% dela) com outros documentos para obter as mesmas fontes, margens
-% etc. Tal como "imegoodies", pode valer a pena ler os comentários
-% e fazer modificações nessa package. Com a opção "thesis", imelooks
-% também define os comandos para capa, folha de rosto etc.
 \usepackage{packages/imegoodies}
 \usepackage[thesis]{packages/imelooks}
 
@@ -80,24 +47,12 @@
 \babelhyphenation[brazilian]{Fu-la-no}
 \babelhyphenation[english]{what-ever}
 
-% Estes comandos definem o título e autoria do trabalho e devem sempre ser
-% definidos, pois além de serem utilizados para criar a capa, também são
-% armazenados nos metadados do PDF. O subtítulo é opcional.
-\title{Título do trabalho}[um subtítulo]
-\translatedtitle{Title of the document}[a subtitle]
+\title{Maximum matching}[Maximum matching algorithms]
+\translatedtitle{Emparelhamento máximo}[Algoritmos para emparelhamento máximo]
 
 \author{Antonio Marcos Shiro Arnauts Hachisuca}
 
-\def\profa{Prof\kern.02em.\kern-.07emª\kern.07em}
-\def\dra{Dr\kern-.04em.\kern-.11emª\kern.07em}
-
-% Para TCCs, este comando define o supervisor
 \orientador{Prof. Dr. Marcel Kenji de Carli Silva}
-
-% Se não houver, remova; se houver mais de um, basta
-% repetir o comando quantas vezes forem necessárias
-%\coorientador{Prof. Dr. Ciclano de Tal}
-%\coorientador[fem]{\profa{} \dra{} Beltrana de Tal}
 
 \banca{
   \profa{} \dra{} Fulana de Tal (orientadora) -- IME-USP [sem ponto final],
