@@ -1,4 +1,4 @@
-@default_files = ('tese');
+@default_files = ('conteudo/tese');
 
 # TeXLive até no mínimo 2023 produz PDFs identificados como versão 1.5.
 # Ao incorporar arquivos PDF de imagem com versões mais novas, isso faz
@@ -119,7 +119,7 @@ END {
       print("LaTeX messages:\n\n");
 
       my $cmd = "";
-      my $givenpath = File::Spec->catfile('extras', 'texlogsieve');
+      my $givenpath = File::Spec->catfile('packages', 'texlogsieve');
       if (-s 'texlogsieve') {
           $cmd = 'texlua texlogsieve';
       } elsif (-s $givenpath) {
@@ -133,7 +133,7 @@ END {
 
       my $showed_something = 0;
       if ($cmd ne "") {
-          my $conffile = File::Spec->catfile('extras', 'texlogsieverc');
+          my $conffile = File::Spec->catfile('packages', 'texlogsieverc');
           if (-e $conffile) { $cmd = $cmd . ' -c ' . $conffile; };
           Run_subst($cmd . ' %R.log');
           $showed_something = 1;

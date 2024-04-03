@@ -754,7 +754,7 @@
   \ifdefvoid{\@IMEbibStyle}
     {
       \iftoggle{IMEreport}{
-        \gdef\@IMEbibStyle{plainnat-ime}
+        \gdef\@IMEbibStyle{packages/plainnat-ime}
       }{
         \ifboolexpr{togl {IMEslides} or togl {IMEposter}}
           {\gdef\@IMEbibStyle{beamer-ime}}
@@ -766,7 +766,7 @@
   \iftoggle{IMEmanualRaggedbib}
     {}
     {
-        \ifdefstring{\@IMEbibStyle}{plainnat-ime}
+        \ifdefstring{\@IMEbibStyle}{packages/plainnat-ime}
             {}
             {\toggletrue{IMEraggedbib}}
     }
@@ -1125,8 +1125,8 @@
   \usepackage{listings}
   \usepackage{lstautogobble}
   % Carrega a "linguagem" pseudocode para listings
-  \appto{\lstaspectfiles}{,lstpseudocode.sty}
-  \appto{\lstlanguagefiles}{,lstpseudocode.sty}
+  \appto{\lstaspectfiles}{,packages/lstpseudocode.sty}
+  \appto{\lstlanguagefiles}{,packages/lstpseudocode.sty}
   \lstloadaspects{simulatex,invisibledelims,pseudocode}
   \lstloadlanguages{[base]pseudocode,[english]pseudocode,[brazilian]pseudocode}
 
