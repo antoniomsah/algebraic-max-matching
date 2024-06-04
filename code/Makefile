@@ -1,17 +1,18 @@
-CC=g++
-CFLAGS=-c -Wall
-LDFLAGS=
-SOURCES=main.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=main
+# Variables
+CXX := g++
+CXXFLAGS := -Wall -Wextra -std=c++17
+TARGET := main
+SRC := main.cpp
 
-all: $(SOURCES) $(EXECUTABLE)
+# Rules
+all: $(TARGET)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
-
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+.PHONY: $(TARGET)
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
 
 clean:
-	rm -rf $(OBJECTS) $(EXECUTABLE)
+	rm -f $(TARGET)
+
+# Phony targets
+.PHONY: all clean

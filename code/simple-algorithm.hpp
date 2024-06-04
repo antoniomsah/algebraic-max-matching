@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 
+#include "matching-verifier.hpp"
 #include "tutte-matrix.hpp"
 
 namespace SimpleAlgorithm {
@@ -12,9 +13,18 @@ const int MOD = 998244353;
 
 using namespace std;
 
-void solve(const int& n, const vector<pair<int, int>>& edges) {
-  const int m = edges.size();
-  map<vector<pair<int, int>>, int> res;
+/**
+ * @brief Finds a perfect matching. Complexity: O(n^{\omega+2}).
+ *
+ * @param n number of vertices
+ * @param edges std::vector of edges
+ */
+vector<pair<int, int>> solve(const vector<vector<int>> graph,
+                             const vector<pair<int, int>>& edges,
+                             bool test = false) {
+  const int n = graph.size(), m = edges.size();
+
+  map<vector<pair<int, int>>, int> found;
   for (int it = 0; it < MAX_IT; it++) {
     vector<bool> is_matching_edge(m);
     TutteMatrix<MOD> T(n, edges);
@@ -30,13 +40,26 @@ void solve(const int& n, const vector<pair<int, int>>& edges) {
     for (int i = 0; i < m; i++) {
       if (is_matching_edge[i]) matching.push_back(edges[i]);
     }
-    res[matching] += 1;
+    found[matching] += 1;
   }
 
-  for (auto [matching, ocr] : res) {
-    cout << "ocurred " << ocr << " times: ";
-    for (auto [u, v] : matching) cout << "(" << u << ", " << v << ") ";
+  vector<pair<int, int>> res;
+  for (auto [matching, ocr] : found) {
+    if (MatchingValidator::validate(graph, matching, true)) res = matching;
   }
-  cout << '\n';
+
+  if (test) {  // for testing purposes
+    int correct_outputs = 0;
+    for (auto [matching, ocr] : found) {
+      if (MatchingValidator::validate(graph, matching, true))
+        correct_outputs += ocr;
+    }
+
+    cout << "generated " << correct_outputs << " correct outputs out of "
+         << MAX_IT << " iterations (prob = " << double(correct_outputs) / MAX_IT
+         << ")\n";
+  }
+  return res;
 }
+
 }  // namespace SimpleAlgorithm
