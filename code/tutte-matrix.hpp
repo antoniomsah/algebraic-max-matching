@@ -4,6 +4,7 @@
 #include <random>
 
 #include "matrix.hpp"
+#include "modular-integer.hpp"
 
 std::mt19937 rng(
     (int)std::chrono::steady_clock::now().time_since_epoch().count());
@@ -13,8 +14,10 @@ std::mt19937 rng(
  *
  * @tparam P an integer such that Z_{P} is a field.
  */
-template <class F, const int P>
+template <const int P>
 class TutteMatrix {
+  using F = modular_int<P>;
+
  private:
   Matrix<F> T;
   std::vector<std::pair<int, int>> edges;
@@ -32,7 +35,7 @@ class TutteMatrix {
       : T(num_vertices, num_vertices), edges(edges), val(edges.size()) {
     for (unsigned int i = 0; i < edges.size(); i++) {
       while (val[i] == 0) {
-        val[i] = rng() % P;
+        val[i] = rng();
       }
       add_edge(i);
     }
