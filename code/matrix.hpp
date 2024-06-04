@@ -225,9 +225,10 @@ std::tuple<Matrix<T>, Matrix<T>, vector<int>> decompose(const Matrix<T>& M) {
 
   Matrix<T> A(M);
   for (int k = 0; k < n; k++) {
-    int p = 0, id = 0;
+    int id = 0;
+    T p = 0;
     for (int i = k; i < n; i++) {
-      if (fabs(A[i][k]) > p) {
+      if (A[i][k] > p) {
         p = A[i][k], id = i;
       }
     }
@@ -244,7 +245,7 @@ std::tuple<Matrix<T>, Matrix<T>, vector<int>> decompose(const Matrix<T>& M) {
     for (int i = 0; i < n; i++) {
       A[i][k] = A[i][k] / A[k][k];
       for (int j = k + 1; j < n; j++) {
-        A[i][j] = A[i][j] - A[i][k] / A[k][j];
+        A[i][j] = A[i][j] - A[i][k] * A[k][j];
       }
     }
   }
@@ -299,6 +300,7 @@ std::vector<T> solve(const Matrix<T>& L, const Matrix<T>& U,
     for (int j = n - 1; j > i; j--) {
       x[i] -= U[i][j] * x[j];
     }
+    assert(U[i][i] != 0);
     x[i] /= U[i][i];
   }
   return x;
@@ -326,12 +328,12 @@ Matrix<T> Matrix<T>::inverse() {
   Matrix<T> X(n, n);
   vector<T> b(n);
   for (int i = 0; i < n; i++) {
-    if (i > 0) b[i - 1] = 0;
     b[i] = 1;
     vector<T> x = LUP::solve(L, U, perm, b);
     for (int j = 0; j < n; j++) {
       X[i][j] = x[j];
     }
+    b[i] = 0;
   }
   return X;
 }
