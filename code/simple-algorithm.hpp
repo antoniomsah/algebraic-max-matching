@@ -55,9 +55,9 @@ vector<pair<int, int>> solve(const vector<vector<int>> graph,
         correct_outputs += ocr;
     }
 
-    cout << "generated " << correct_outputs << " correct outputs out of "
-         << MAX_IT << " iterations (prob = " << double(correct_outputs) / MAX_IT
-         << ")\n";
+    cout << "found " << found.size() << " different outputs and generated "
+         << correct_outputs << " correct outputs out of " << MAX_IT
+         << " iterations (prob = " << double(correct_outputs) / MAX_IT << ")\n";
   }
   return res;
 }
