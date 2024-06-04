@@ -242,7 +242,7 @@ std::tuple<Matrix<T>, Matrix<T>, vector<int>> decompose(const Matrix<T>& M) {
       std::swap(A[k][i], A[id][i]);
     }
 
-    for (int i = 0; i < n; i++) {
+    for (int i = k + 1; i < n; i++) {
       A[i][k] = A[i][k] / A[k][k];
       for (int j = k + 1; j < n; j++) {
         A[i][j] = A[i][j] - A[i][k] * A[k][j];
