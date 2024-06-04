@@ -4,9 +4,6 @@
 
 using namespace std;
 
-const int MOD = 998244353;
-const int IT_SIZE = 1000;
-
 int main() {
   int n, m;
   cin >> n >> m;

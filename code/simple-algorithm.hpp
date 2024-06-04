@@ -3,13 +3,11 @@
 #include <map>
 #include <vector>
 
+#include "config.hpp"
 #include "matching-verifier.hpp"
 #include "tutte-matrix.hpp"
 
 namespace SimpleAlgorithm {
-
-const int MAX_IT = 100;
-const int MOD = 998244353;
 
 using namespace std;
 
