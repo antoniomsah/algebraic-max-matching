@@ -46,8 +46,8 @@ class Matrix {
   vector<T>& operator[](const int& index) { return M[index]; }
   const vector<T>& operator[](const int& index) const { return M[index]; }
 
-  const int num_rows() const { return n; }
-  const int num_columns() const { return m; }
+  int num_rows() const { return n; }
+  int num_columns() const { return m; }
 
   /**
    * @brief Matrix addition.
@@ -263,7 +263,7 @@ std::tuple<Matrix<T>, Matrix<T>, vector<int>> decompose(const Matrix<T>& M) {
     }
   }
 
-  return std::tuple(L, U, perm);
+  return {L, U, perm};
 }
 
 template <class T>
@@ -281,7 +281,7 @@ std::vector<T> solve(const Matrix<T>& A, const vector<T>& b) {
  */
 template <class T>
 std::vector<T> solve(const Matrix<T>& L, const Matrix<T>& U,
-                     const vector<T>& perm, const vector<T>& b) {
+                     const vector<int>& perm, const vector<T>& b) {
   const int n = L.num_rows();
 
   // Ly = PA
@@ -289,7 +289,7 @@ std::vector<T> solve(const Matrix<T>& L, const Matrix<T>& U,
   for (int i = 0; i < n; i++) {
     y[i] = b[perm[i]];
     for (int j = 0; j < i; j++) {
-      y[i] -= L[i][j] * y[j];
+      y[i] -= y[j] * L[i][j];
     }
   }
 
@@ -298,7 +298,7 @@ std::vector<T> solve(const Matrix<T>& L, const Matrix<T>& U,
   for (int i = n - 1; i >= 0; i--) {
     x[i] = y[i];
     for (int j = n - 1; j > i; j--) {
-      x[i] -= U[i][j] * x[j];
+      x[i] -= x[j] * U[i][j];
     }
     assert(U[i][i] != 0);
     x[i] /= U[i][i];
@@ -329,7 +329,7 @@ Matrix<T> Matrix<T>::inverse() {
   vector<T> b(n);
   for (int i = 0; i < n; i++) {
     b[i] = 1;
-    vector<T> x = LUP::solve(L, U, perm, b);
+    auto x = LUP::solve(L, U, perm, b);
     for (int j = 0; j < n; j++) {
       X[i][j] = x[j];
     }

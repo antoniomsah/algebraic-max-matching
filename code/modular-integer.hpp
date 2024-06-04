@@ -26,25 +26,25 @@ struct modular_int {
 
   void operator/=(modular_int rhs) { *this *= rhs.inv(); }
 
-  modular_int operator+(modular_int rhs) {
+  modular_int operator+(const modular_int& rhs) {
     modular_int res = *this;
     res += rhs;
     return res;
   }
 
-  modular_int operator-(modular_int rhs) {
+  modular_int operator-(const modular_int& rhs) {
     modular_int res = *this;
     res -= rhs;
     return res;
   }
 
-  modular_int operator*(modular_int rhs) {
+  modular_int operator*(const modular_int& rhs) {
     modular_int res = *this;
     res *= rhs;
     return res;
   }
 
-  modular_int operator/(modular_int rhs) {
+  modular_int operator/(const modular_int& rhs) {
     modular_int res = *this;
     res /= rhs;
     return res;
@@ -59,13 +59,15 @@ struct modular_int {
     return res;
   }
 
-  bool operator<(int y) { return x < y; }
-  bool operator>(int y) { return x > y; }
-  bool operator==(int y) { return x == y; }
+  bool operator<(int y) const { return x < y; }
+  bool operator>(int y) const { return x > y; }
+  bool operator==(int y) const { return x == y; }
+  bool operator!=(int y) const { return x != y; }
 
-  bool operator<(modular_int y) { return x < y.x; }
-  bool operator>(modular_int y) { return x > y.x; }
-  bool operator==(modular_int y) { return x == y.x; }
+  bool operator<(modular_int y) const { return x < y.x; }
+  bool operator>(modular_int y) const { return x > y.x; }
+  bool operator==(modular_int y) const { return x == y.x; }
+  bool operator!=(modular_int y) const { return x != y.x; }
 
   friend std::ostream& operator<<(std::ostream& os, modular_int x) {
     return (os << x.x);

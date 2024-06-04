@@ -41,6 +41,8 @@ class TutteMatrix {
     }
   }
 
+  vector<F> operator[](const int& index) { return T[index]; }
+
   void add_edge(int i) {
     auto [u, v] = edges[i];
     T[u][v] = val[i];
@@ -49,9 +51,24 @@ class TutteMatrix {
 
   void remove_edge(int i) {
     auto [u, v] = edges[i];
-    T[u][v] = 0;
-    T[v][u] = 0;
+    T[u][v] = F();
+    T[v][u] = F();
   }
+
+  /**
+   * @brief Removes a vertex.
+   * CAUTION: At the moment cannot add a vertex back!
+   *
+   * @param u
+   */
+  void remove_vertice(int u) {
+    for (int i = 0; i < T.num_rows(); i++) {
+      T[u][i] = T[i][u] = F();
+    }
+    T[u][u] = 1;
+  }
+
+  Matrix<F> inverse() { return T.inverse(); }
 
   bool has_perfect_matching() { return T.is_nonsingular(); }
 };
