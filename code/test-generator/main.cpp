@@ -9,6 +9,10 @@ int random_with_probability(double p) {
   return d(gen);
 }
 
+/**
+ * @brief Generates a random test with n vertices and probability argv[2] of
+ * adding an edge between two vertices.
+ */
 int main(int argc, char* argv[]) {
   assert(argc == 3);
   int n = stoi(argv[1]);

@@ -3,8 +3,8 @@
 #include <map>
 #include <vector>
 
-#include "config.hpp"
-#include "tutte-matrix.hpp"
+#include "../../config.hpp"
+#include "../../matrix/tutte-matrix.hpp"
 
 namespace SimpleAlgorithm {
 
