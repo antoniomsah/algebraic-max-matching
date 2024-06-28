@@ -26,25 +26,25 @@ struct modular_int {
 
   void operator/=(modular_int rhs) { *this *= rhs.inv(); }
 
-  modular_int operator+(const modular_int& rhs) {
+  modular_int operator+(const modular_int& rhs) const {
     modular_int res = *this;
     res += rhs;
     return res;
   }
 
-  modular_int operator-(const modular_int& rhs) {
+  modular_int operator-(const modular_int& rhs) const {
     modular_int res = *this;
     res -= rhs;
     return res;
   }
 
-  modular_int operator*(const modular_int& rhs) {
+  modular_int operator*(const modular_int& rhs) const {
     modular_int res = *this;
     res *= rhs;
     return res;
   }
 
-  modular_int operator/(const modular_int& rhs) {
+  modular_int operator/(const modular_int& rhs) const {
     modular_int res = *this;
     res /= rhs;
     return res;

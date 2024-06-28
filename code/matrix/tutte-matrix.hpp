@@ -41,18 +41,20 @@ class TutteMatrix {
     }
   }
 
+  Matrix<F> get_matrix() { return T; }
+
   vector<F> operator[](const int& index) { return T[index]; }
 
   void add_edge(int i) {
     auto [u, v] = edges[i];
-    T[u][v] = val[i];
-    T[v][u] = val[i] * -1;
+    T(u, v) = val[i];
+    T(v, u) = val[i] * -1;
   }
 
   void remove_edge(int i) {
     auto [u, v] = edges[i];
-    T[u][v] = F();
-    T[v][u] = F();
+    T(u, v) = F();
+    T(v, u) = F();
   }
 
   /**
@@ -63,9 +65,9 @@ class TutteMatrix {
    */
   void remove_vertice(int u) {
     for (int i = 0; i < T.num_rows(); i++) {
-      T[u][i] = T[i][u] = F();
+      T(u, i) = T(i, u) = F();
     }
-    T[u][u] = 1;
+    T(u, u) = 1;
   }
 
   Matrix<F> inverse() { return T.inverse(); }
