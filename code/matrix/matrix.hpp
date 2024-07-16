@@ -215,7 +215,9 @@ class Matrix {
   Matrix<T> operator/=(const T& t) { return (*this) / t; }
 
   bool operator==(const Matrix<T>& B) {
-    if (n != B.num_rows() or m != B.num_columns()) return false;
+    if ((*this).num_rows() != B.num_rows() or
+        (*this).num_columns() != B.num_columns())
+      return false;
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < m; j++) {
         if ((*this)(i, j) != B(i, j)) return false;
