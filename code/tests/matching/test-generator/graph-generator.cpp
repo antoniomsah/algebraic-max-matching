@@ -16,18 +16,7 @@ int random_with_probability(double p) {
 int main(int argc, char* argv[]) {
   assert(argc == 3);
   int n = stoi(argv[1]);
-
-  vector<int> p(n);
-  iota(p.begin(), p.end(), 0);
-  random_shuffle(p.begin(), p.end());
-
   set<pair<int, int>> edges;
-  for (int i = 0; i < n; i++) {
-    int u = i, v = p[i];
-    if (u > v) swap(u, v);
-    edges.emplace(u, v);
-  }
-
   double prob = stod(argv[2]);
   for (int u = 0; u < n; u++) {
     for (int v = u + 1; v < n; v++) {

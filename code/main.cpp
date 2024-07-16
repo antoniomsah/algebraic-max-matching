@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 
+#include "algorithms/rank2/rank2-algorithm.hpp"
 #include "algorithms/simple/simple-algorithm.hpp"
 #include "matching-verifier.hpp"
 
@@ -24,11 +25,17 @@ int main(int argc, char* argv[]) {
   for (int it = 0; it < MAX_IT; it++) {
     vector<pair<int, int>> matching;
     if (argc == 1) {
+      cout << "Using simple algorithm." << endl;
       matching = SimpleAlgorithm::solve(graph, edges);
     } else {
       switch (stoi(argv[1])) {
-        default:
+        case 1:
+          cout << "Using simple algorithm." << endl;
           matching = SimpleAlgorithm::solve(graph, edges);
+          break;
+        default:
+          cout << "Using rank-2 algorithm." << endl;
+          matching = Rank2Algorithm::solve(graph, edges);
           break;
       }
     }
