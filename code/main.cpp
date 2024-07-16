@@ -2,9 +2,8 @@
 #include <map>
 #include <vector>
 
+#include "algorithms/simple/simple-algorithm.hpp"
 #include "matching-verifier.hpp"
-#include "rabin-vazirani-algorithm.hpp"
-#include "simple-algorithm.hpp"
 
 using namespace std;
 
@@ -28,11 +27,9 @@ int main(int argc, char* argv[]) {
       matching = SimpleAlgorithm::solve(graph, edges);
     } else {
       switch (stoi(argv[1])) {
-        case 0:
+        default:
           matching = SimpleAlgorithm::solve(graph, edges);
           break;
-        default:
-          matching = RabinVaziraniAlgorithm::solve(graph, edges);
       }
     }
     found[matching] += 1;
@@ -44,6 +41,8 @@ int main(int argc, char* argv[]) {
     for (auto [matching, ocr] : found) {
       if (MatchingValidator::validate(graph, matching, true))
         correct_outputs += ocr;
+      cout << '\n';
+      for (auto [u, v] : matching) cout << u << ' ' << v << '\n';
     }
 
     cout << "found " << found.size() << " different outputs and generated "
