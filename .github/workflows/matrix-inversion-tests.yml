@@ -17,7 +17,7 @@ jobs:
           
       - name: Compile
         run: |
-          cd tests/matrix-inverse
+          cd code/tests/matrix-inverse
           echo "Compiling..."
           make
           echo "Compiled."
@@ -25,13 +25,13 @@ jobs:
       - name: Run
         run: |
           echo "Running..."
-          cd tests/matrix-inverse
+          cd code/tests/matrix-inverse
           make run
           echo "Completed."
 
       - name: Compare
         run: |
           echo "Comparing..."
-          cd tests/matrix-inverse
+          cd code/tests/matrix-inverse
           make compare
           echo "Success."
