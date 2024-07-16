@@ -23,6 +23,13 @@ class Matrix {
   vector<T> M;
   std::shared_ptr<IMatrixMultiplicationStrategy<T>> multiplicationStrategy;
 
+  /**
+   * @brief Computes a matrix inverse using matrix multiplication.
+   * Caution: matrix A must be positive semi-definite.
+   * Complexity: O(O(multiply)).
+   *
+   * @return the inverse of matrix A.
+   */
   Matrix<T> invert(const Matrix<T>& A) {
     const int n = A.num_rows(), m = A.num_columns();
 
@@ -50,7 +57,7 @@ class Matrix {
 
     for (int i = n / 2; i < n; i++) {
       for (int j = m / 2; j < m; j++) {
-        D(i - n / 2, j - n / 2) = A(i, j);
+        D(i - n / 2, j - m / 2) = A(i, j);
       }
     }
 
@@ -67,15 +74,15 @@ class Matrix {
       }
     }
 
-    for (int i = n / 2; i < n; i++) {
-      for (int j = 0; j < m / 2; j++) {
-        NA(i, j) = top_right(i - n / 2, j);
+    for (int i = 0; i < n / 2; i++) {
+      for (int j = m / 2; j < m; j++) {
+        NA(i, j) = top_right(i, j - m / 2);
       }
     }
 
-    for (int i = 0; i < n / 2; i++) {
-      for (int j = m / 2; j < m; j++) {
-        NA(i, j) = bot_left(i, j - m / 2);
+    for (int i = n / 2; i < n; i++) {
+      for (int j = 0; j < m / 2; j++) {
+        NA(i, j) = bot_left(i - n / 2, j);
       }
     }
 
@@ -96,7 +103,7 @@ class Matrix {
    *	Complexity: O(nm)
    **/
   Matrix(int n, int m) : n(n), m(m), M(n * m) {
-    setStrategy(std::make_shared<DefaultMultiplicationStrategy<T>>());
+    set_strategy(std::make_shared<DefaultMultiplicationStrategy<T>>());
   }
 
   /**
@@ -116,7 +123,6 @@ class Matrix {
    * to the number of rows.
    *
    * @return true, if it is; False, otherwise
-   *
    **/
   bool is_square() { return (n == m); };
 
@@ -126,7 +132,8 @@ class Matrix {
   int num_rows() const { return n; }
   int num_columns() const { return m; }
 
-  void setStrategy(std::shared_ptr<IMatrixMultiplicationStrategy<T>> strategy) {
+  void set_strategy(
+      std::shared_ptr<IMatrixMultiplicationStrategy<T>> strategy) {
     multiplicationStrategy = strategy;
   }
 
@@ -248,7 +255,7 @@ class Matrix {
   /**
    * @brief
    * This function calculates a matrix's inverse using divider and conquer with
-   * matrix multiplication. Complexity: O(n^3).
+   * matrix multiplication. Complexity: O(O(multiply)).
    *
    * @return The matrix's inverse
    *
