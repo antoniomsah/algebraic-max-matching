@@ -43,7 +43,8 @@ class TutteMatrix {
 
   Matrix<F> get_matrix() { return T; }
 
-  vector<F> operator[](const int& index) { return T[index]; }
+  F& operator()(const int& i, const int& j) { return T(i, j); }
+  F operator()(const int& i, const int& j) const { return T(i, j); }
 
   void add_edge(int i) {
     auto [u, v] = edges[i];
@@ -70,7 +71,12 @@ class TutteMatrix {
     T(u, u) = 1;
   }
 
+  // Matrices operations
   Matrix<F> inverse() { return T.inverse(); }
+
+  Matrix<F> operator()(const vector<int>& R, const vector<int>& C) const {
+    return T(R, C);
+  }
 
   bool has_perfect_matching() { return T.is_nonsingular(); }
 };

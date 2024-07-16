@@ -11,10 +11,8 @@ namespace SimpleAlgorithm {
 using namespace std;
 
 /**
- * @brief Finds a perfect matching. Complexity: O(n^{\omega+2}).
- *
- * @param n number of vertices
- * @param edges std::vector of edges
+ * @brief Finds a perfect matching.
+ * Complexity: O(n^{\omega+2}).
  */
 vector<pair<int, int>> solve(const vector<vector<int>>& graph,
                              const vector<pair<int, int>>& edges) {

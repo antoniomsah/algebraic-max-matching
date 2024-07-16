@@ -8,9 +8,9 @@ class DefaultMultiplicationStrategy : public IMatrixMultiplicationStrategy<T> {
   Matrix<T> multiply(const Matrix<T>& A, const Matrix<T>& B) const override {
     assert(A.num_columns() == B.num_rows());
     Matrix<T> C(A.num_rows(), B.num_columns());
-    for (int i = 0; i < A.num_rows(); i++) {
-      for (int j = 0; j < B.num_columns(); j++) {
-        for (int k = 0; k < A.num_columns(); k++) {
+    for (size_t i = 0; i < A.num_rows(); i++) {
+      for (size_t j = 0; j < B.num_columns(); j++) {
+        for (size_t k = 0; k < A.num_columns(); k++) {
           C(i, j) += A(i, k) * B(k, j);
         }
       }
