@@ -1,3 +1,6 @@
+# C++ object files
+*.o
+
 # Required files to generate pdf
 mkidxhead.ist
 tese.aux
