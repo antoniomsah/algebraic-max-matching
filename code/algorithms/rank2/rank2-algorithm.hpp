@@ -35,7 +35,7 @@ class Rank2AlgorithmStrategy : public IAlgorithmStrategy {
     TutteMatrix<MOD> T(n, edges);
 
     if (not T.has_perfect_matching()) {
-      return {pair(-1, -1)};
+      return {};
     }
 
     auto N = T.inverse();

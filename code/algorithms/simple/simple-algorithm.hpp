@@ -20,7 +20,7 @@ class SimpleAlgorithmStrategy : public IAlgorithmStrategy {
     TutteMatrix<MOD> T(n, edges);
 
     if (not T.has_perfect_matching()) {
-      return {{-1, -1}};
+      return {};
     }
 
     vector<bool> is_matching_edge(m);
