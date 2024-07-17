@@ -128,8 +128,8 @@ class Matrix {
   T& operator()(const int& i, const int& j) { return M[i * m + j]; }
   const T& operator()(const int& i, const int& j) const { return M[i * m + j]; }
 
-  int num_rows() const { return n; }
-  int num_columns() const { return m; }
+  size_t num_rows() const { return n; }
+  size_t num_columns() const { return m; }
 
   void set_strategy(
       std::shared_ptr<IMatrixMultiplicationStrategy<T>> strategy) {
@@ -215,7 +215,9 @@ class Matrix {
   Matrix<T> operator/=(const T& t) { return (*this) / t; }
 
   bool operator==(const Matrix<T>& B) {
-    if (n != B.num_rows() or m != B.num_columns()) return false;
+    if ((*this).num_rows() != B.num_rows() or
+        (*this).num_columns() != B.num_columns())
+      return false;
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < m; j++) {
         if ((*this)(i, j) != B(i, j)) return false;
@@ -225,6 +227,62 @@ class Matrix {
   }
 
   bool operator!=(const Matrix<T>& B) { return not((*this) == B); }
+
+  friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& M) {
+    for (size_t i = 0; i < M.num_rows(); i++) {
+      for (size_t j = 0; j < M.num_columns(); j++) {
+        os << M(i, j) << ' ';
+      }
+      os << '\n';
+    }
+    return os;
+  }
+
+  /**
+   * @brief Computes matrix M[R, C].
+   * Complexity: O(|R|*|C|).
+   */
+  Matrix<T> operator()(const vector<int>& R, const vector<int>& C) const {
+    Matrix<T> M(R.size(), C.size());
+    for (size_t i = 0; i < R.size(); i++) {
+      for (size_t j = 0; j < C.size(); j++) {
+        M(i, j) = (*this)(R[i], C[j]);
+      }
+    }
+    return M;
+  }
+
+  /**
+   * @brief Computes matrix M[*, S].
+   * Important: M[*, S] column entries will be in S order.
+   * Complexity: O(n*|S|).
+   */
+  Matrix<T> operator()(char c, const vector<int>& S) const {
+    assert(c == '*');
+    Matrix<T> M(num_rows(), S.size());
+    for (size_t i = 0; i < num_rows(); i++) {
+      for (size_t j = 0; j < S.size(); j++) {
+        M(i, j) = (*this)(i, S[j]);
+      }
+    }
+    return M;
+  }
+
+  /**
+   * @brief Computes matrix M[S, *].
+   * Important: M[S, *] row entries will be in S order.
+   * Complexity: O(|S|*m).
+   */
+  Matrix<T> operator()(const vector<int>& S, char c) const {
+    assert(c == '*');
+    Matrix<T> M(S.size(), num_columns());
+    for (size_t i = 0; i < S.size(); i++) {
+      for (size_t j = 0; j < num_columns(); j++) {
+        M(i, j) = (*this)(S[i], j);
+      }
+    }
+    return M;
+  }
 
   /**
    * @brief Computes the matrix's transpose. Complexity: O(n^2)
@@ -263,10 +321,10 @@ class Matrix {
     assert(num_rows() == num_columns());
 
     // First power of two NOT smaller than num_rows()
-    int n = std::__bit_ceil(num_rows());
+    const size_t n = std::__bit_ceil(num_rows());
     Matrix<T> A(n, n);
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
+    for (size_t i = 0; i < n; i++) {
+      for (size_t j = 0; j < n; j++) {
         if (i < num_rows() and j < num_columns()) {
           A(i, j) = (*this)(i, j);
         } else {
@@ -279,11 +337,10 @@ class Matrix {
 
     Matrix<T> NA = invert(B) * A.transpose();
 
-    Matrix<T> N(num_rows(), num_columns()), I(num_rows(), num_columns());
-    for (int i = 0; i < num_rows(); i++) {
-      for (int j = 0; j < num_columns(); j++) {
+    Matrix<T> N(num_rows(), num_columns());
+    for (size_t i = 0; i < num_rows(); i++) {
+      for (size_t j = 0; j < num_columns(); j++) {
         N(i, j) = NA(i, j);
-        I(i, j) = T(1);
       }
     }
     return N;

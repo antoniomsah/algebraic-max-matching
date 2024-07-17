@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 
-#include "algorithms/solver.hpp"
+#include "../../algorithms/solver.hpp"
 
 using namespace std;
 
