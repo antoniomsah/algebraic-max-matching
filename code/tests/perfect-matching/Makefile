@@ -31,7 +31,7 @@ run: $(OUT)
 	for file in $(INPUT_DIR)/*; do \
 		basefile=$$(basename $$file); \
 		echo "starting $$basefile"; \
-		./$(OUT) < $$file > $(OUTPUT_DIR)/$$basefile; \
+		./$(OUT) $(arg) < $$file > $(OUTPUT_DIR)/$$basefile; \
 		echo "concluded $$basefile"; \
 	done
 
