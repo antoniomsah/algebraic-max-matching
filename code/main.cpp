@@ -23,9 +23,9 @@ int main(int argc, char* argv[]) {
 
   assert(argc >= 2);
 
-  MatchingSolver solver;
+  MatchingSolver solver(graph, edges);
   solver.set_strategy(stoi(argv[1]));
-  solver.solve(graph, edges);
+  solver.solve();
 
   return 0;
 }

@@ -14,7 +14,13 @@ using std::cout;
 using std::pair;
 using std::vector;
 
+/**
+ * @brief Class that solves perfect/maximum matching in general graphs.
+ */
 class MatchingSolver {
+  vector<vector<int>> graph;
+  vector<pair<int, int>> edges;
+
   std::shared_ptr<IAlgorithmStrategy> algorithmStrategy;
 
  public:
@@ -35,20 +41,31 @@ class MatchingSolver {
     }
   }
 
-  MatchingSolver() { set_strategy(0); }
+  /**
+   * @brief MatchingSolver's constructor.
+   * Default strategy is the naive one.
+   * @param graph vector<vector<int>> that represents a graph
+   * @param edges vector<pair<int,int>> of edges
+   * @param strategy_id id of the selected strategy (default is 0).
+   */
+  MatchingSolver(vector<vector<int>> graph, vector<pair<int, int>> edges,
+                 int strategy_id = 0)
+      : graph(graph), edges(edges) {
+    set_strategy(strategy_id);
+  }
 
   /**
    * @brief Given a graph prints the maximum matching size.
    * If perfect=true, it prints "YES" iff the matching is perfect.
+   * If print_matching=true, it prints the matching that was found.
    */
-  void solve(const vector<vector<int>>& graph,
-             const vector<pair<int, int>>& edges, bool perfect = true) {
+  void solve(bool perfect = true, bool print_matching = false) {
     vector<pair<int, int>> matching;
 
     size_t matching_size = 0;
     for (int it = 0; it < MAX_IT; it++) {
       matching = algorithmStrategy->solve(graph, edges);
-      if (validate(graph, matching, perfect)) {
+      if (validate(matching, perfect)) {
         matching_size = max(matching_size, matching.size());
         if (2 * matching_size == graph.size()) break;
       }
@@ -60,10 +77,12 @@ class MatchingSolver {
       } else {
         cout << matching_size << '\n';
       }
-      // Uncomment if desires to output the matching.
-      // for (const auto& [u, v] : matching) {
-      //   cout << u << ' ' << v << '\n';
-      // }
+
+      if (print_matching) {
+        for (const auto& [u, v] : matching) {
+          cout << u << ' ' << v << '\n';
+        }
+      }
     } else {
       cout << "NO\n";
     }
@@ -74,8 +93,7 @@ class MatchingSolver {
    * otherwise), checks if a matching is valid (and if wants perfect matching,
    * checks that as well).
    */
-  bool validate(const vector<vector<int>> graph,
-                const vector<pair<int, int>>& matching,
+  bool validate(const vector<pair<int, int>>& matching,
                 bool want_perfect = false) {
     set<int> matched_vertices;
     for (auto [u, v] : matching) {
