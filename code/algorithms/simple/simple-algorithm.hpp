@@ -4,6 +4,7 @@
 
 #include "../../config.hpp"
 #include "../algorithm-strategy-interface.hpp"
+#include "../../matrix/tutte-matrix.hpp"
 
 using namespace std;
 
@@ -16,24 +17,34 @@ class SimpleAlgorithmStrategy : public IAlgorithmStrategy {
   vector<pair<int, int>> solve(
       const vector<vector<int>>& graph,
       const vector<pair<int, int>>& edges) const override {
-    const int n = graph.size(), m = edges.size();
-    TutteMatrix<MOD> T(n, edges);
+    const size_t n = graph.size(), m = edges.size();
 
-    if (not T.has_perfect_matching()) {
+    TutteMatrix T = build_tutte_matrix<MOD>(n, edges);
+
+    if (T.is_singular()) {
       return {};
     }
 
     vector<bool> is_matching_edge(m);
-    for (int i = 0; i < m; i++) {
-      T.remove_edge(i);
-      if (not T.has_perfect_matching()) {
+    for (size_t i = 0; i < m; i++) {
+      const auto& [u, v] = edges[i];
+      const modular_int<MOD> val = T(u, v);
+
+      // remove edge uv 
+      T(u, v) = 0;
+      T(v, u) = 0;
+
+      if (T.is_singular()) {
         is_matching_edge[i] = true;
-        T.add_edge(i);
+
+        // add edge uv
+        T(u, v) = val;
+        T(v, u) = val * (-1);
       }
     }
 
     vector<pair<int, int>> matching;
-    for (int i = 0; i < m; i++) {
+    for (size_t i = 0; i < m; i++) {
       if (is_matching_edge[i]) matching.push_back(edges[i]);
     }
     return matching;
