@@ -36,14 +36,15 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       S[0].reserve(n / 2);
       S[1].reserve(n - n / 2);
       for (size_t i = 0; i < n; i++) {
-        S[i < n / 2].push_back(V[i]);
+        S[i >= n / 2].push_back(V[i]);
       }
       return S;
     };
 
     std::function<void(const vector<int> &R, const vector<int>&S)> 
     delete_edges_crossing = [&](const vector<int> &R, const vector<int> &S) {
-      if (R.size() == 1) {
+
+      if (min(R.size(), S.size()) == 1) {
         for (const int& r : R) {
           for (const int& s : S) {
             if (T(r, s).x != 0 and N(r, s) != T(r, s).inv() * (-1)) {
@@ -73,7 +74,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
             // save state
             vector<int> RMSM(RM[i].size() + SM[j].size());
             for (size_t k = 0; k < RMSM.size(); k++) {
-              if (k < RM.size()) {
+              if (k < RM[i].size()) {
                 RMSM[k] = RM[i][k];
               } else {
                 RMSM[k] = SM[j][k - RM[i].size()];
@@ -84,7 +85,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
             delete_edges_crossing(RM[i], SM[j]);
 
-            TutteMatrix<MOD> Delta = T(RS, RS) - TRMSM,
+            TutteMatrix<MOD> Delta = T(RMSM, RMSM) - TRMSM,
                              I(RMSM.size(), RMSM.size());
 
             for (size_t k = 0; k < RMSM.size(); k++) {
@@ -92,7 +93,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
             }
             
             // update N[R \cup S, R \cup S]
-            TutteMatrix<MOD> NRS = NRS - N(RS, RMSM) * (I + Delta * N(RMSM, RMSM)).inverse() * Delta * N(RMSM, RS);
+            TutteMatrix<MOD> NRS = N(RS, RS) - N(RS, RMSM) * (I + Delta * N(RMSM, RMSM)).inverse() * Delta * N(RMSM, RS);
 
             // update N
             for (size_t k = 0; k < RS.size(); k++) {
@@ -126,7 +127,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         }
     
         // updated N[S, S]
-        TutteMatrix<MOD> NVV = N(V, V) - N(V, S[i]) * (I + Delta * (TS)).inverse() * Delta * N(S[i], V);
+        TutteMatrix<MOD> NVV = N(V, V) - N(V, S[i]) * (I + Delta * N(S[i], S[i])).inverse() * Delta * N(S[i], V);
 
         // update N
         for (size_t j = 0; j < V.size(); j++) {
@@ -135,7 +136,6 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
           }
         }
       }
-
       delete_edges_crossing(S[0], S[1]);
     };
 
