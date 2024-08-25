@@ -1,0 +1,37 @@
+\chapter{Maximum matching}
+
+\section{Perfect Matching}
+
+\begin{definition}[Indeterminates]
+
+\end{definition}
+
+
+\begin{definition}[Tutte Matrix]
+    Given a graph \(G\) and a function that maps every edge of \(G\) to an indeterminate.
+    Then, a tutte matrix is a matrix such that, for each \(uv \in E(G)\), one has \(T_{uv} = -T_{vu} = f(vu)\).
+\end{definition}
+
+\begin{fact}[Tutte matrix perfect matching condition]
+    \label{fact:matching_condition}
+    A graph \(G\) has a perfect matching iff \(T_G\) is non-singular.
+\end{fact}
+
+\subsection{Basic perfect matching algorithm}
+
+By fact \ref{fact:matching_condition}, one can achieve a very direct algorithm.
+The idea is try to remove an edge \(e\), if \(G - e\) has a perfect matching, 
+then this edge can be removed; Else, \(e\) belongs to a perfect matching of \(G\).
+Repeat this step until only the perfect matching edges are left.
+Such approach achieves an \(O(n^{\omega + 2})\) time complexity.
+
+\subsection{Rank-2 update perfect matching algorithm}
+
+One of the bottlenecks of the previous algorithm is the necessity to check after each
+edge if the matrix is non-singular, each of these checks is \(O(n^{\omega})\).
+Thus, one can maintain the inverse through rank-2 updates.
+Achieving a time complexity of \(O(n^{4})\).
+For each edge, it suffices to check if \(N_{ij} \neq -1/T_{ij}\).
+This condition is direct from corollary \ref{cor:1}.
+
+\subsection{Harvey's perfect matching algorithm}
