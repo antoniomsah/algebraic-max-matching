@@ -2,10 +2,13 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -O3
+CXXFLAGS = -O3 -std=c++20
 
 # Source file
 SRC = main.cpp
+
+# Algorithm paths
+ALG_PATH = ../../algorithms
 
 # Output executable
 OUT = main
@@ -24,6 +27,8 @@ all: $(OUT)
 # Build the executable
 $(OUT): $(SRC)
 	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(SRC): $(ALG_PATH)/harvey/harvey-algorithm.hpp $(ALG_PATH)/simple/simple-algorithm.hpp $(ALG_PATH)/rank2/rank2-algorithm.hpp
 
 # Run the program with each file in the input directory
 run: $(OUT)
@@ -52,4 +57,4 @@ compare:
 clean:
 	rm -f $(OUT) $(OUTPUT_DIR)/*
 
-.PHONY: compare
+.PHONY: compare all
