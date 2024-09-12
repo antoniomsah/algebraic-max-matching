@@ -107,38 +107,38 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       }
     };
 
-    std::function<void(const vector<int>&V)> 
-    delete_edges_within = [&](const vector<int> &V) {
-      if (V.size() == 1) return;
+    std::function<void(const vector<int>&S)>
+    delete_edges_within = [&](const vector<int> &S) {
+      if (S.size() == 1) return;
 
-      array<vector<int>, 2> S = divide_in_half(V);
+      array<vector<int>, 2> S_ = divide_in_half(S);
       for (size_t i = 0; i < 2; i++) {
         // save state
-        TutteMatrix<MOD> TS = T(S[i], S[i]);
-        TutteMatrix<MOD> oldNV = N(V, V);
+        TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
+        TutteMatrix<MOD> oldNSS = N(S, S);
 
-        delete_edges_within(S[i]);
+        delete_edges_within(S_[i]);
 
-        // update N[S, S]
-        TutteMatrix<MOD> Delta = T(S[i], S[i]) - TS,
-                        I(S[i].size(), S[i].size());
+        // update N[S,S]
+        TutteMatrix<MOD> Delta = T(S_[i], S_[i]) - TSi,
+          ISi(S_[i].size(), S_[i].size());
 
         // Identity matrix, maybe add to matrix constructor?
-        for (size_t j = 0; j < S[i].size(); j++) {
-          I(j, j) = 1;
+        for (size_t j = 0; j < S_[i].size(); j++) {
+          ISi(j, j) = 1;
         }
     
-        // updated N[S, S]
-        TutteMatrix<MOD> newNVV = oldNV(V, V) - oldNV(V, S[i]) * (I + Delta * oldNV(S[i], S[i])).inverse() * Delta * oldNV(S[i], V);
+        // updated N[S,S]
+        TutteMatrix<MOD> newNSS = oldNSS(S, S) - oldNSS(S, S_[i]) * (ISi + Delta * oldNSS(S_[i], S_[i])).inverse() * Delta * oldNSS(S_[i], S);
 
         // update N
-        for (size_t j = 0; j < V.size(); j++) {
-          for (size_t k = 0; k < V.size(); k++) {
-            N(V[j], V[k]) = newNVV(j, k);
+        for (size_t j = 0; j < S.size(); j++) {
+          for (size_t k = 0; k < S.size(); k++) {
+            N(S[j], S[k]) = newNSS(j, k);
           }
         }
       }
-      delete_edges_crossing(S[0], S[1]);
+      delete_edges_crossing(S_[0], S_[1]);
     };
 
     vector<int> V(n);
