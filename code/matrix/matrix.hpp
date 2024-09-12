@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <exception>
+#include <iomanip>
 #include <tuple>
 #include <vector>
 
@@ -229,12 +230,22 @@ class Matrix {
   bool operator!=(const Matrix<T>& B) { return not((*this) == B); }
 
   friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& M) {
+    // Save the original format state
+    std::ios_base::fmtflags original_flags = os.flags();
+    std::streamsize original_width = os.width();
+
     for (size_t i = 0; i < M.num_rows(); i++) {
+      os << "[";
       for (size_t j = 0; j < M.num_columns(); j++) {
-        os << M(i, j) << ' ';
+        os << std::setw(2) << M(i, j) << ' ';
       }
-      os << '\n';
+      os << "]\n";
     }
+
+    // Restore the original format state
+    os.flags(original_flags);
+    os.width(original_width);
+
     return os;
   }
 
