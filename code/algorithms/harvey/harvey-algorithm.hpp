@@ -82,6 +82,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
             }
 
             TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
+            TutteMatrix<MOD> oldNRS = N(RS, RS);
 
             delete_edges_crossing(RM[i], SM[j]);
 
@@ -93,12 +94,12 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
             }
             
             // update N[R \cup S, R \cup S]
-            TutteMatrix<MOD> NRS = N(RS, RS) - N(RS, RMSM) * (I + Delta * N(RMSM, RMSM)).inverse() * Delta * N(RMSM, RS);
+            TutteMatrix<MOD> newNRS = oldNRS(RS, RS) - oldNRS(RS, RMSM) * (I + Delta * oldNRS(RMSM, RMSM)).inverse() * Delta * oldNRS(RMSM, RS);
 
             // update N
             for (size_t k = 0; k < RS.size(); k++) {
               for (size_t l = 0; l < RS.size(); l++) {
-                N(RS[k], RS[l]) = NRS(k, l);
+                N(RS[k], RS[l]) = newNRS(k, l);
               }
             }
           }
@@ -114,6 +115,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       for (size_t i = 0; i < 2; i++) {
         // save state
         TutteMatrix<MOD> TS = T(S[i], S[i]);
+        TutteMatrix<MOD> oldNV = N(V, V);
 
         delete_edges_within(S[i]);
 
@@ -127,12 +129,12 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         }
     
         // updated N[S, S]
-        TutteMatrix<MOD> NVV = N(V, V) - N(V, S[i]) * (I + Delta * N(S[i], S[i])).inverse() * Delta * N(S[i], V);
+        TutteMatrix<MOD> newNVV = oldNV(V, V) - oldNV(V, S[i]) * (I + Delta * oldNV(S[i], S[i])).inverse() * Delta * oldNV(S[i], V);
 
         // update N
         for (size_t j = 0; j < V.size(); j++) {
           for (size_t k = 0; k < V.size(); k++) {
-            N(V[j], V[k]) = NVV(j, k);
+            N(V[j], V[k]) = newNVV(j, k);
           }
         }
       }
