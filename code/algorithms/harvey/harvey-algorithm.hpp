@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 
 #include "../../config.hpp"
 #include "../algorithm-strategy-interface.hpp"
@@ -28,7 +29,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       for (size_t i = 0; i < 2; i++) {
         // save state
         TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
-        TutteMatrix<MOD> oldNSS = N(S, S);
+        TutteMatrix<MOD> oldNSS = N;
 
         delete_edges_within(S_[i], T, N);
 
@@ -60,8 +61,14 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     const vector<int> &S,
     TutteMatrix<MOD> &T,
     TutteMatrix<MOD> &N) const {
+    // There are no edges in this case
+    if (min(R.size(), S.size()) == 0) {
+      return;
+    }
 
-    if (min(R.size(), S.size()) == 1) {
+    // Need to check a SINGLE edge for the update to be valid
+    // Not sufficient to be |R| = 1
+    if (max(R.size(), S.size()) == 1) {
       for (const int& r : R) {
         for (const int& s : S) {
           if (T(r, s).x != 0 and N(r, s) != T(r, s).inv() * (-1)) {
@@ -76,9 +83,6 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return;
     } 
 
-    array<vector<int>, 2> RM = divide_in_half(R),
-                          SM = divide_in_half(S);
-    
     vector<int> RS(R.size() + S.size());
     for (size_t i = 0; i < RS.size(); i++) {
       if (i < R.size()) {
@@ -87,6 +91,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         RS[i] = S[i - R.size()];
       }
     }
+
+    array<vector<int>, 2> RM = divide_in_half(R),
+                          SM = divide_in_half(S);
 
     for (size_t i = 0; i < 2; i++) {
       for (size_t j = 0; j < 2; j++) {
@@ -101,7 +108,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         }
 
         TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
-        TutteMatrix<MOD> oldNRS = N(RS, RS);
+        TutteMatrix<MOD> oldNRS = N;
 
         delete_edges_crossing(RM[i], SM[j], T, N);
 
@@ -116,6 +123,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix<MOD> newNRS = oldNRS(RS, RS) - oldNRS(RS, RMSM) * (I + Delta * oldNRS(RMSM, RMSM)).inverse() * Delta * oldNRS(RMSM, RS);
 
         // update N
+        // This update is FAILING
         for (size_t k = 0; k < RS.size(); k++) {
           for (size_t l = 0; l < RS.size(); l++) {
             N(RS[k], RS[l]) = newNRS(k, l);
