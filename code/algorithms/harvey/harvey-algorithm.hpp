@@ -29,7 +29,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       for (size_t i = 0; i < 2; i++) {
         // save state
         TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
-        TutteMatrix<MOD> oldNSS = N;
+        TutteMatrix<MOD> oldNSS = N(S, S);
 
         delete_edges_within(S_[i], T, N);
 
@@ -41,9 +41,15 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         for (size_t j = 0; j < S_[i].size(); j++) {
           ISi(j, j) = 1;
         }
+
+        // Get order of elements
+        vector<int> Si(S_[i].size());
+        for (int j = 0, k = 0; j < S.size() and k < S_[i].size(); j++) {
+          if (S[j] == S_[i][k]) Si[k++] = j;
+        }
     
         // updated N[S,S]
-        TutteMatrix<MOD> newNSS = oldNSS(S, S) - oldNSS(S, S_[i]) * (ISi + Delta * oldNSS(S_[i], S_[i])).inverse() * Delta * oldNSS(S_[i], S);
+        TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
 
         // update N
         for (size_t j = 0; j < S.size(); j++) {
@@ -108,7 +114,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         }
 
         TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
-        TutteMatrix<MOD> oldNRS = N;
+        TutteMatrix<MOD> oldNRS = N(RS, RS);
 
         delete_edges_crossing(RM[i], SM[j], T, N);
 
@@ -118,9 +124,15 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         for (size_t k = 0; k < RMSM.size(); k++) {
           I(k, k) = 1;
         }
-        
+
+        // Get order of elements
+        vector<int> RMSMi(RMSM.size());
+        for (size_t j = 0, k = 0; j < RS.size() and k < RMSM.size(); j++) {
+          if (RS[j] == RMSM[k]) RMSMi[k++] = j;
+        }
+
         // update N[R \cup S, R \cup S]
-        TutteMatrix<MOD> newNRS = oldNRS(RS, RS) - oldNRS(RS, RMSM) * (I + Delta * oldNRS(RMSM, RMSM)).inverse() * Delta * oldNRS(RMSM, RS);
+        TutteMatrix<MOD> newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
 
         // update N
         // This update is FAILING
