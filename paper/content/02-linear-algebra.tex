@@ -1,4 +1,5 @@
 \section{Linear algebra}
+\label{sec:linear_algebra}
 
 \begin{definition}[Rings]
 
@@ -53,3 +54,19 @@
         M'^{-1} = N - N_{*, S}(I + \Delta N_{S, S})^{-1}\Delta N_{S, *}.
     \]
 \end{corollary}
+
+\begin{definition}[Schur complement]
+    Let \(M\) be a square matrix of the form
+    \[
+        M = 
+        \begin{pmatrix}
+            W & X \\
+            Y & Z 
+        \end{pmatrix}
+    \]
+    where \(Z\) is a square matrix; Then, if \(Z\) is non-singular, the matrix
+    \[
+        C = W - X Z^{-1} Y
+    \]
+    is the \textit{Schur complement} of \(Z\) in \(M\).
+\end{definition}
