@@ -7,7 +7,10 @@ on:
     paths:
       - 'paper/**'  # Only trigger when files inside 'paper/' change
   workflow_dispatch:  # Allows manual triggering
-  
+
+permissions:
+  contents: write  # Allow write access to repository contents
+
 jobs:
   build:
     runs-on: ubuntu-latest
