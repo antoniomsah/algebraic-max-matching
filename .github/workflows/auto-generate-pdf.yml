@@ -6,6 +6,7 @@ on:
       - main  # You can change this to your preferred branch
     paths:
       - 'paper/**'  # Only trigger when files inside 'paper/' change
+  workflow_dispatch:  # Allows manual triggering
   
 jobs:
   build:
