@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main  # You can change this to your preferred branch
-  workflow_dispatch:  # Allows manual triggering of the workflow
-
+    paths:
+      - 'paper/**'  # Only trigger when files inside 'paper/' change
+  
 jobs:
   build:
     runs-on: ubuntu-latest
