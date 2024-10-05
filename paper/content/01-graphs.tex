@@ -1,0 +1,52 @@
+\renewcommand*{\proofname}{Proof}
+
+\chapter{Preliminaries}
+
+The purpose of this chapter is to introduce key concepts related to the maximum matching algorithm. 
+The chapter covers important topics such as the definition of graph maximum matching, the Sherman-Morrison-Woodbury formula, and the Schur complement. 
+These concepts are fundamental for understanding the algorithm's correctness and time complexity.
+
+\enlargethispage{.5\baselineskip}
+
+\section{Graph theory}
+\label{sec:graph}
+
+\begin{definition}[Graph]
+	\label{def:graph}
+	A \textbf{graph} \(G\) is a triple \((V, E, \varphi)\) such that
+	\begin{enumerate}[label=(\roman*)]
+		\item \(V\) is the \textbf{vertex set};
+		\item \(E\) is the \textbf{edge set};
+		\item \(\varphi: E \to V \times V\) is a relation between each edge and a pair of vertices, called the \textbf{incidence function} of \(G\).
+	\end{enumerate}
+	Usually, it is used 
+	\(V(G)\) or \(V_G\) to denote \(V\) and 
+	\(E(G)\) or \(E_G\) to denote \(E\).
+	Also, if \(e \in E(G)\) and \(\varphi(e) = (u, v)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\);
+	When the context is clear, \((u, v)\) may be abbreviated to \(uv\).
+\end{definition}
+
+\begin{definition}[Matching]
+	\label{def:matching}
+	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
+	A vertex \(v \in V\) is \(M\)-covered if some edge of \(M\) incides in \(v\), 
+	and it is said that \(M\) covers \(v\);
+	Otherwise, \(v\) is \(M\)-exposed.
+	A matching \(M\) is:
+	\begin{itemize}
+		\item 
+			\textbf{maximal}, if there is no edge \(e \in E \setminus M\) such that \(M \cup \{e\}\) is a matching of \(G\);
+
+		\item
+			\textbf{maximum}, if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\);
+	
+		\item
+			\textbf{perfect}, if \(2|V_G| = |M|\), i.e., every vertex of \(G\) is covered.
+	\end{itemize}
+	Now, the following problem can be introduced.
+	\\
+\end{definition}
+\begin{problem}{Maximum matching}
+	Given a graph, find a maximum matching of this graph.
+\end{problem}
+
