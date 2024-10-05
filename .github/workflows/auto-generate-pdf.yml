@@ -19,7 +19,9 @@ jobs:
     - name: Install LaTeX (BasicTeX)
       run: |
         sudo apt-get update
-        sudo apt-get install -y texlive-full latexmk
+        sudo apt install biber latexmk texlive-plain-generic texlive-latex-base texlive-luatex lmodern \
+          fonts-lmodern texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
+          texlive-bibtex-extra texlive-science texlive-lang-english texlive-lang-portuguese
 
     - name: Compile LaTeX to PDF
       working-directory: ./paper  # Navigate to the 'paper' directory
@@ -30,6 +32,17 @@ jobs:
       with:
         name: tese-pdf
         path: paper/tese.pdf  # Adjust the path to the correct PDF location
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+
+    - name: Create Git Tag
+      run: |
+        VERSION=$(date +'%Y%m%d%H%M%S')  # You can use another versioning system
+        git tag -a "v$VERSION" -m "Release v$VERSION"
+        git push origin "v$VERSION"
 
   release:
     needs: build
@@ -45,6 +58,7 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ github.ref_name }}  # Use the created tag
         files: paper/tese.pdf  # Ensure this path is correct for the release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
