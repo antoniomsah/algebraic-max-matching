@@ -1,6 +1,12 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to main
+    paths:
+      - 'code/**'  # Only trigger when files in 'code/' are changed
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   matrix-inversion-tests:
