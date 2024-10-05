@@ -1,0 +1,50 @@
+name: Compile and Release LaTeX PDF
+
+on:
+  push:
+    branches:
+      - main  # You can change this to your preferred branch
+    paths:
+      - 'paper/**'  # Only trigger when files inside 'paper/' change
+  workflow_dispatch:  # Allows manual triggering
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install LaTeX (BasicTeX)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-full latexmk
+
+    - name: Compile LaTeX to PDF
+      working-directory: ./paper  # Navigate to the 'paper' directory
+      run: latexmk -pdf tese.tex  # Replace tese.tex with the name of your main .tex file
+
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: tese-pdf
+        path: paper/tese.pdf  # Adjust the path to the correct PDF location
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: tese-pdf
+        path: .
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: paper/tese.pdf  # Ensure this path is correct for the release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
