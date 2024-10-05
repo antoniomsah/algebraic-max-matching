@@ -8,6 +8,10 @@
 
 using namespace std;
 
+/**
+ * @brief Strategy that uses the algorithm proposed by Harvey. 
+ * Solves perfect matching in O(n^\omega). 
+ */
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
   array<vector<int>, 2> divide_in_half(const vector<int>& V) const {
       const size_t n = V.size();
@@ -27,31 +31,31 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
       array<vector<int>, 2> S_ = divide_in_half(S);
       for (size_t i = 0; i < 2; i++) {
-        // save state
         TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
         TutteMatrix<MOD> oldNSS = N(S, S);
 
         delete_edges_within(S_[i], T, N);
 
-        // update N[S,S]
+        // Update N[S,S]
         TutteMatrix<MOD> Delta = T(S_[i], S_[i]) - TSi,
           ISi(S_[i].size(), S_[i].size());
 
-        // Identity matrix, maybe add to matrix constructor?
+        // Identity matrix
         for (size_t j = 0; j < S_[i].size(); j++) {
           ISi(j, j) = 1;
         }
 
-        // Get order of elements
+        // Array mapping elements to their indices in S,
+        // e.g. S = {1, 2, 3, 4} and S_[i] = {2, 4}, then Si = {1, 3}.
         vector<int> Si(S_[i].size());
         for (int j = 0, k = 0; j < S.size() and k < S_[i].size(); j++) {
           if (S[j] == S_[i][k]) Si[k++] = j;
         }
     
-        // updated N[S,S]
+        // Updated N[S,S]
         TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
 
-        // update N
+        // Update N
         for (size_t j = 0; j < S.size(); j++) {
           for (size_t k = 0; k < S.size(); k++) {
             N(S[j], S[k]) = newNSS(j, k);
@@ -89,6 +93,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return;
     } 
 
+    // R \cup S
     vector<int> RS(R.size() + S.size());
     for (size_t i = 0; i < RS.size(); i++) {
       if (i < R.size()) {
@@ -103,7 +108,6 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
     for (size_t i = 0; i < 2; i++) {
       for (size_t j = 0; j < 2; j++) {
-        // save state
         vector<int> RMSM(RM[i].size() + SM[j].size());
         for (size_t k = 0; k < RMSM.size(); k++) {
           if (k < RM[i].size()) {
@@ -121,21 +125,22 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix<MOD> Delta = T(RMSM, RMSM) - TRMSM,
                           I(RMSM.size(), RMSM.size());
 
+        // Identity matrix
         for (size_t k = 0; k < RMSM.size(); k++) {
           I(k, k) = 1;
         }
 
-        // Get order of elements
+        // Array mapping elements to their indices in RS,
+        // e.g. RS = {2, 3, 4} and RMSM = {3, 4} then RMSMi = {1, 2}.
         vector<int> RMSMi(RMSM.size());
         for (size_t j = 0, k = 0; j < RS.size() and k < RMSM.size(); j++) {
           if (RS[j] == RMSM[k]) RMSMi[k++] = j;
         }
 
-        // update N[R \cup S, R \cup S]
+        // Update N[R \cup S, R \cup S]
         TutteMatrix<MOD> newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
 
-        // update N
-        // This update is FAILING
+        // Update N
         for (size_t k = 0; k < RS.size(); k++) {
           for (size_t l = 0; l < RS.size(); l++) {
             N(RS[k], RS[l]) = newNRS(k, l);
