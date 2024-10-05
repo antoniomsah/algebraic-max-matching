@@ -9,6 +9,7 @@
 #include "algorithm-strategy-interface.hpp"
 #include "rank2/rank2-algorithm.hpp"
 #include "simple/simple-algorithm.hpp"
+#include "harvey/harvey-algorithm.hpp"
 
 using std::cout;
 using std::pair;
@@ -30,6 +31,7 @@ class MatchingSolver {
   static void initialize() {
     strategies[0] = std::make_shared<SimpleAlgorithmStrategy>();
     strategies[1] = std::make_shared<Rank2AlgorithmStrategy>();
+    strategies[2] = std::make_shared<HarveyAlgorithmStrategy>();
   }
 
   void set_strategy(const size_t& id) {

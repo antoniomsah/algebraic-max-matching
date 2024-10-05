@@ -1,6 +1,6 @@
 # Variables
 CXX := g++
-CXXFLAGS := -Wall -g -Wextra -std=c++17
+CXXFLAGS := -Wall -g -Wextra -std=c++20
 TARGET := main
 SRC := main.cpp
 
