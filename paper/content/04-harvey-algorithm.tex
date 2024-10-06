@@ -18,6 +18,49 @@ As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 The algorithm will maintain two matrices: \(T\), a Tutte Matrix of the graph, and \(N\), which is initialized as \(T^{-1}\).
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
 
+\subsubsection*{\(\SC{DeleteEdgesCrossing}\)}
+
+$\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) and \(S\) and 
+deletes non-essential\footnote{Essential and non-essential edges will be defined in the previous chapter.} 
+edges that connect a vertex in \(R\) to a vertex in \(S\).
+The following invariant must be preserved:
+\begin{itemize}
+    \item \(\SC{DeleteEdgesCrossing}(R, S)\): intially has \(N_{R \cup S, R \cup S} = {T^{-1}}_{R \cup S, R \cup S}\) and this property is restored after each call 
+    of \(\SC{DeleteEdgesCrossing}(R_i, S_j)\).
+\end{itemize}
+To maintain this invariant the following updates are done. 
+
+TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
+
+\begin{theorem}[Update 1]
+    Given two disjoint sets \(R\) and \(S\) such that \(|R| = |S| = 1\).
+    Let \(N \coloneqq T^{-1}\), \(r \in R\) and \(s \in S\).
+    If \(rs\) is non-essential, let \(T'\) be the Tutte matrix of \(G\) without edge \(rs\), then one has
+    \[
+        T'^{-1}_{r, s} = N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})
+    \]
+    and
+    \[
+        T'^{-1}_{s, r} = N_{s, r} (1 - T_{s, r} N_{s, r}) / (1 + T_{s, r} N_{s, r}) = -T'^{-1}_{r, s}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    TODO
+\end{proof}
+
+\begin{theorem}[Update 2]
+    Given two disjoint sets \(R\) and \(S\). Let \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) that connects vertices from \(R_i\) to vertices in \(S_j\).
+    Then, let \(N := T^{-1}\) and \(\Delta := T - T'\), one has:
+    \[
+        T'^{-1}_{R \cup S, R \cup S} = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    TODO
+\end{proof}
+
 \begin{programruledcaption}{Harvey's algorithm: DeleteEdgesCrossing}
     \begin{lstlisting}[
       language={pseudocode},
@@ -47,7 +90,7 @@ It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{Del
                     $T', N'$ := $T, N$
                     $\SC{DeleteEdgesCrossing}(R_i, S_j)$
                     $\Delta$ := $T_{R_i \cup S_j, R_i \cup S_j} - {T'}_{R_i \cup S_j, R_i \cup S_j}$
-                    $N_{RS, RS}$ := ${N'}_{RS, RS} - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ /
+                    $N_{RS, RS}$ := ${N'}_{RS, RS} - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // Update 2
                 end
             end
         end
@@ -70,7 +113,7 @@ It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{Del
                 $T', N'$ := $T, N$ // Save current T and N states
                 $\SC{DeleteEdgesWithin}(S_i)$
                 $\Delta$ := $T_{S_i, S_i} - {T'}_{S_i, S_i}$
-                $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S, S})^{-1} \Delta {N'}_{S_i, S}$ 
+                $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S, S})^{-1} \Delta {N'}_{S_i, S}$ // Update 3
             end
             $\SC{DeleteEdgesCrossing}(S_1, S_2)$
         end
