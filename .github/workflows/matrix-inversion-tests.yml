@@ -6,6 +6,7 @@ on:
       - main  # Trigger on pushes to main
     paths:
       - 'code/**'  # Only trigger when files in 'code/' are changed
+
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
