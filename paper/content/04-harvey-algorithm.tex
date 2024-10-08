@@ -2,11 +2,11 @@
 
 TODO: Introduction.
 
-\begin{enumerate}
-    \item Brief of the idea;
-    \item Pseudo-algorithm;
-    \item Corretude;
-\end{enumerate}
+% \begin{enumerate}
+%     \item Brief of the idea;
+%     \item Pseudo-algorithm;
+%     \item Corretude;
+% \end{enumerate}
 
 The main bottleneck in the previous algorithm was the need to update the entire inverse matrix at each step. 
 Harvey's algorithm addresses this limitation by employing a divide-and-conquer strategy combined with lazy updates. 
@@ -18,7 +18,7 @@ As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 The algorithm will maintain two matrices: \(T\), a Tutte Matrix of the graph, and \(N\), which is initialized as \(T^{-1}\).
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
 
-\subsubsection*{\(\SC{DeleteEdgesCrossing}\)}
+% \subsubsection*{\(\SC{DeleteEdgesCrossing}\)}
 
 $\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) and \(S\) and 
 deletes non-essential\footnote{Essential and non-essential edges will be defined in the previous chapter.} 
@@ -37,31 +37,49 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
     Let \(N \coloneqq T^{-1}\), \(r \in R\) and \(s \in S\).
     If \(rs\) is non-essential, let \(T'\) be the Tutte matrix of \(G\) without edge \(rs\), then one has
     \[
-        T'^{-1}_{r, s} = N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})
+        {T'}^{-1}_{r, s} = N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})
     \]
     and
     \[
-        T'^{-1}_{s, r} = N_{s, r} (1 - T_{s, r} N_{s, r}) / (1 + T_{s, r} N_{s, r}) = -T'^{-1}_{r, s}.
+        {T'}^{-1}_{s, r} = N_{s, r} (1 - T_{s, r} N_{s, r}) / (1 + T_{s, r} N_{s, r}) = -{T'}^{-1}_{r, s}.
     \]
 \end{theorem}
 
 \begin{proof}
-    TODO
+    The inverse of a Tutte Matrix is skew-symmetric, thus \(N_{s, r} = -N_{r, s}\).
+    Let \(V \coloneqq R \cup S\)
+    By corollary \ref{cor:1}, one has:
+    \begin{align*}
+        {T'}^{-1}_{V, V} &= N_{V, V} - N_{V, V} (I + \Delta N_{V, V})^{-1} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \bigg(I + \begin{bmatrix} 0 & -T_{r, s} \\ -T_{s, r} & 0 \end{bmatrix} \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix}\bigg)^{-1} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \bigg(I + \begin{bmatrix} -T_{r, s} N_{s, r} & 0 \\ 0 & -T_{s, r} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \bigg(I + \begin{bmatrix} T_{r, s} N_{r, s} & 0 \\ 0 & T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \bigg(\begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{V, V} \\
+        &= N_{V, V} - N_{V, V} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{r, s} & 0 \\ 0 & T_{r, s} N_{r, s} \end{bmatrix} \\
+        &= N_{V, V} - N_{V, V} \begin{bmatrix} \frac{T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
+        &= N_{V, V} - \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix} \begin{bmatrix} \frac{T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
+        &= N_{V, V} - \begin{bmatrix} 0 & \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
+        &= \begin{bmatrix} 0 & N_{r, s} - \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} - \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} 
+        = \begin{bmatrix} 0 & N_{r, s} - \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} - \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
+    \end{align*}
 \end{proof}
 
 \begin{theorem}[Update 2]
     Given two disjoint sets \(R\) and \(S\). Let \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) that connects vertices from \(R_i\) to vertices in \(S_j\).
-    Then, let \(N := T^{-1}\) and \(\Delta := T - T'\), one has:
+    Then, let \(N := T^{-1}\) and \(\Delta := T' - T\), one has:
     \[
-        T'^{-1}_{R \cup S, R \cup S} = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
+        {T'}^{-1}_{R \cup S, R \cup S} = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
     \]
 \end{theorem}
 
 \begin{proof}
-    TODO
+    TODO: Direct from \ref{cor:1}.
 \end{proof}
 
-\begin{programruledcaption}{Harvey's algorithm: DeleteEdgesCrossing}
+We have the following algorithm.
+
+\begin{programruledcaption}{Harvey's algorithm: \(\SC{DeleteEdgesCrossing}\)}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
@@ -69,7 +87,7 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
       functions={},
       specialidentifiers={},
     ]
-        function DeleteEdgesCrossing(R, S)
+        function DeleteEdgesCrossing(R, S) // R and S are \textbf{disjoint} sets
             if $|R| = 0$ or $|S| = 0$ then return $\emptyset$ // There are no edges
 
             if $|R| = 1$ and $|S| = 1$ then // There is at most \textbf{one} edge
@@ -87,7 +105,7 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
             $S_1, S_2$ := divide S in two
             for i \textbf{in} {1, 2} do
                 for j \textbf{in} {1, 2} do
-                    $T', N'$ := $T, N$
+                    $T', N'$ := $T, N$ // Save current T and N states
                     $\SC{DeleteEdgesCrossing}(R_i, S_j)$
                     $\Delta$ := $T_{R_i \cup S_j, R_i \cup S_j} - {T'}_{R_i \cup S_j, R_i \cup S_j}$
                     $N_{RS, RS}$ := ${N'}_{RS, RS} - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // Update 2
@@ -97,7 +115,30 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
     \end{lstlisting}
 \end{programruledcaption}
 
-\begin{programruledcaption}{Harvey's algorithm: DeleteEdgesWithin}
+% \subsection*{\(\SC{DeleteEdgesWithin}\)}
+
+\(\SC{DeleteEdgesWithin}\): receives a set of vertices \(S\) and deletes non-essential edges that have both ends in \(V\).
+The following invariant must be preserved:
+\begin{itemize}
+    \item \(\SC{DeleteEdgesWithin}(S)\): initially has \(N_{S, S} = T^{-1}_{S, S}\) and this property is restored after each call of \(\SC{DeleteEdgesWithin}\)
+    and \(\SC{DeleteEdgesCrossing}\).
+\end{itemize}
+To maintain this invariant the following update is done.
+\begin{theorem}[Update 3]
+    Given a set \(S\). Let \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) that connects vertices from \(V\) to vertices in \(V\).
+    Then, let \(N \coloneqq T^{-1}\) and \(\Delta \coloneqq T' - T\), one has
+    \[
+        {T'}^{-1}_{S, S} = N_{S, S} - N_{S, S_i}(I + \Delta N_{S_i, S_i})^{-1} \Delta N_{S_i, S}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    TODO: Direct from \ref{cor:1}.
+\end{proof}
+
+We have the following algorithm.
+
+\begin{programruledcaption}{Harvey's algorithm: \(\SC{DeleteEdgesWithin}\)}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
@@ -105,23 +146,30 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
       functions={},
       specialidentifiers={},
     ]
-        function DeleteEdgesWithin(V)
-            if |V| = 1 return
+        function DeleteEdgesWithin(S)
+            if |S| = 1 return
 
-            S_1, S_2 := divide S in the middle
+            $S_1, S_2$ := divide S in the middle
             for i \textbf{in} {1, 2} do
                 $T', N'$ := $T, N$ // Save current T and N states
                 $\SC{DeleteEdgesWithin}(S_i)$
                 $\Delta$ := $T_{S_i, S_i} - {T'}_{S_i, S_i}$
-                $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S, S})^{-1} \Delta {N'}_{S_i, S}$ // Update 3
+                $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S_i, S_i})^{-1} \Delta {N'}_{S_i, S}$ // Update 3
             end
             $\SC{DeleteEdgesCrossing}(S_1, S_2)$
         end
     \end{lstlisting}
 \end{programruledcaption}
 
+% \subsection*{\(\SC{PerfectMatching}\)}
 
-\begin{programruledcaption}{Harvey's algorithm: Perfect Matching}
+\(\SC{PerfectMatching}\): Receives a graph \(G\) and finds a perfect matching, or returns \(\emptyset\) if one does not exist.
+It creates a tutte matrix of \(G\) using constructor\footnote{I want to properly define a tutte matrix constructor and such in the previous chapter}.
+Note that calling \(\SC{DeleteEdgesWithin}(V(G))\) is equivalent to deleting every non-essential edge from \(G\).
+Thus, after this call, the graph only has essential edges, i.e., edges from the perfect matching. 
+Consequently, there is the following implementation:
+
+\begin{programruledcaption}{Harvey's algorithm: \(\SC{Perfect Matching}\)}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
@@ -136,9 +184,11 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
             $\SC{DeleteEdgesWithin(V)}$
             M := $\emptyset$
             for uv \textbf{in} E(G) do
-                if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$
+                if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
             end
             return M
         end
     \end{lstlisting}
 \end{programruledcaption}
+
+\section{Time complexity}
