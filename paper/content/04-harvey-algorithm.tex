@@ -8,17 +8,19 @@ TODO: Introduction.
 %     \item Corretude;
 % \end{enumerate}
 
+
+\section{Algorithm}
+
 The main bottleneck in the previous algorithm was the need to update the entire inverse matrix at each step. 
 Harvey's algorithm addresses this limitation by employing a divide-and-conquer strategy combined with lazy updates. 
 After each recursive step, only the necessary portions of the inverse matrix are updated.
 As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 
-\section{Algorithm}
-
 The algorithm will maintain two matrices: \(T\), a Tutte Matrix of the graph, and \(N\), which is initialized as \(T^{-1}\).
+Remember that using Tutte matrices implies that the algorithm is \textbf{probabilistic}\footnote{I want to add a reminder, but I want to explain in the previous section}.
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
 
-% \subsubsection*{\(\SC{DeleteEdgesCrossing}\)}
+\subsection{\(\SC{DeleteEdgesCrossing}\)}
 
 $\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) and \(S\) and 
 deletes non-essential\footnote{Essential and non-essential edges will be defined in the previous chapter.} 
@@ -49,7 +51,7 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
     The inverse of a Tutte Matrix is skew-symmetric, thus \(N_{s, r} = -N_{r, s}\).
     Let \(V \coloneqq R \cup S\)
     By corollary \ref{cor:1}, one has:
-    \begin{align*}
+    \begin{align}
         {T'}^{-1}_{V, V} &= N_{V, V} - N_{V, V} (I + \Delta N_{V, V})^{-1} \Delta N_{V, V} \\
         &= N_{V, V} - N_{V, V} \bigg(I + \begin{bmatrix} 0 & -T_{r, s} \\ -T_{s, r} & 0 \end{bmatrix} \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix}\bigg)^{-1} \Delta N_{V, V} \\
         &= N_{V, V} - N_{V, V} \bigg(I + \begin{bmatrix} -T_{r, s} N_{s, r} & 0 \\ 0 & -T_{s, r} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{V, V} \\
@@ -62,7 +64,7 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
         &= N_{V, V} - \begin{bmatrix} 0 & \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
         &= \begin{bmatrix} 0 & N_{r, s} - \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} - \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} 
         = \begin{bmatrix} 0 & N_{r, s} - \frac{N_{r, s} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} - \frac{N_{s, r} T_{r, s} N_{r, s}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
-    \end{align*}
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Update 2]
@@ -74,7 +76,7 @@ TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
 \end{theorem}
 
 \begin{proof}
-    TODO: Direct from \ref{cor:1}.
+    Direct from \ref{cor:1}.
 \end{proof}
 
 We have the following algorithm.
@@ -84,7 +86,7 @@ We have the following algorithm.
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={},
+      functions={DeleteEdgesCrossing},
       specialidentifiers={},
     ]
         function DeleteEdgesCrossing(R, S) // R and S are \textbf{disjoint} sets
@@ -106,7 +108,7 @@ We have the following algorithm.
             for i \textbf{in} {1, 2} do
                 for j \textbf{in} {1, 2} do
                     $T', N'$ := $T, N$ // Save current T and N states
-                    $\SC{DeleteEdgesCrossing}(R_i, S_j)$
+                    DeleteEdgesCrossing($R_i, S_j$)
                     $\Delta$ := $T_{R_i \cup S_j, R_i \cup S_j} - {T'}_{R_i \cup S_j, R_i \cup S_j}$
                     $N_{RS, RS}$ := ${N'}_{RS, RS} - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // Update 2
                 end
@@ -115,7 +117,17 @@ We have the following algorithm.
     \end{lstlisting}
 \end{programruledcaption}
 
-% \subsection*{\(\SC{DeleteEdgesWithin}\)}
+\textbf{Time complexity:} Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when \(|R| = r\) and \(|S| = s\).
+Let \(n = r + s\). Clearly, \(f(r, s) = O(1)\) for either base case;
+Otherwise, one has:
+\begin{align}
+    f(r, s) &= O(r + s) + O(r) + O(s) + 4(2O(n^2) + T(r / 2, s / 2) + O(n^\omega))  \\
+    &= 8O(n^2) + f(r / 2, s / 2) + 4O(n^\omega) \\
+    &= f(r / 2, s / 2) + O(n^\omega) = 2O(n^\omega) = O(n^\omega). \label{alg:delcrossing}
+\end{align}
+
+
+\subsection{\(\SC{DeleteEdgesWithin}\)}
 
 \(\SC{DeleteEdgesWithin}\): receives a set of vertices \(S\) and deletes non-essential edges that have both ends in \(V\).
 The following invariant must be preserved:
@@ -133,7 +145,7 @@ To maintain this invariant the following update is done.
 \end{theorem}
 
 \begin{proof}
-    TODO: Direct from \ref{cor:1}.
+    Direct from \ref{cor:1}.
 \end{proof}
 
 We have the following algorithm.
@@ -143,7 +155,7 @@ We have the following algorithm.
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={},
+      functions={DeleteEdgesCrossing, DeleteEdgesWithin},
       specialidentifiers={},
     ]
         function DeleteEdgesWithin(S)
@@ -152,16 +164,26 @@ We have the following algorithm.
             $S_1, S_2$ := divide S in the middle
             for i \textbf{in} {1, 2} do
                 $T', N'$ := $T, N$ // Save current T and N states
-                $\SC{DeleteEdgesWithin}(S_i)$
+                DeleteEdgesWithin($S_i$)
                 $\Delta$ := $T_{S_i, S_i} - {T'}_{S_i, S_i}$
                 $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S_i, S_i})^{-1} \Delta {N'}_{S_i, S}$ // Update 3
             end
-            $\SC{DeleteEdgesCrossing}(S_1, S_2)$
+            DeleteEdgesCrossing($S_1, S_2$)
         end
     \end{lstlisting}
 \end{programruledcaption}
 
-% \subsection*{\(\SC{PerfectMatching}\)}
+\textbf{Time complexity:} Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
+The base case is direct.
+Then, 
+\begin{align}
+    g(n) &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + f(n / 2, n / 2) &  \\
+    &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + f(n / 2, n / 2) & \\ 
+    &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + O(n^\omega) & \text{by \ref{alg:delcrossing}} \\ 
+    &= 2g(n / 2) + 3O(n^\omega) = O(n^\omega) & \label{alg:delwithin}
+\end{align}
+
+\subsection{\(\SC{PerfectMatching}\)}
 
 \(\SC{PerfectMatching}\): Receives a graph \(G\) and finds a perfect matching, or returns \(\emptyset\) if one does not exist.
 It creates a tutte matrix of \(G\) using constructor\footnote{I want to properly define a tutte matrix constructor and such in the previous chapter}.
@@ -174,21 +196,42 @@ Consequently, there is the following implementation:
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={},
+      functions={DeleteEdgesWithin},
       specialidentifiers={},
     ]
         function PerfectMatching(G)
             T := $\SC{TutteMatrix}(G)$
             if T \textbf{ is singular} then return $\emptyset$ // The graph has no perfect matching
-            N := $T^{-1}$
-            $\SC{DeleteEdgesWithin(V)}$
-            M := $\emptyset$
-            for uv \textbf{in} E(G) do
-                if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
+            while true do
+                N := $T^{-1}$
+                DeleteEdgesWithin($V$)
+                M := $\emptyset$
+                for uv \textbf{in} E(G) do
+                    if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
+                end
+                if $2|M| = |V|$ // Matching is perfect
+                    return M
+                end
             end
-            return M
         end
     \end{lstlisting}
 \end{programruledcaption}
 
-\section{Time complexity}
+\textbf{Time complexity: } Let \(T(n)\) be the running time of \(\SC{PerfectMatching(G)}\) when \(|V| = n\) and \(E(n)\) be the expected number of iterations
+until a perfect matching is found. Then,
+\begin{align}
+    T(n) &= O(n^2) + O(n^\omega) + E(n)(O(n^\omega) + g(n) + O(n^2) + O(1)) & \\
+    &= E(n)(O(n^\omega) + g(n)) &  \\
+    &= E(n)(O(n^\omega + O(n^\omega))) & \text{by \ref{alg:delwithin}} \\ 
+    &= E(n)O(n^\omega) & 
+\end{align}
+
+From section x\footnote{prove probability of failure}, deciding if an edge can be deleted fails with probability \(n / q\) where \(q\) is the size of the field. 
+Thus, the algorithm fails with probability \(\delta < n^3 / q\). 
+
+Note that the \textbf{corretude} of the algorithm is direct from updates performed. 
+
+\section{Analysis}
+
+In this section, Harvey's algorithm will be compared with other versions of perfect matching algorithms: the ones implemented in the previous section\footnote{If possible, desired to have Edmonds-Blossoms}.
+The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
