@@ -43,9 +43,16 @@ These concepts are fundamental for understanding the algorithm's correctness and
 		\item
 			\textbf{perfect}, if \(2|V_G| = |M|\), i.e., every vertex of \(G\) is covered.
 	\end{itemize}
-	Now, the following problem can be introduced.
-	\\
 \end{definition}
+
+\begin{definition}[Essential and non-essential edges]\footnote{Maybe rename this}
+    Let \(G \coloneqq (V, E)\) be a graph that has a perfect matching.
+    An edge \(e \in E(G)\) is considered \textbf{essential} if and only if removing \(e\) results in a graph that does not have a perfect matching.
+    Conversely, an edge is \textbf{non-essential} if removing \(e\) results in a graph that has a perfect matching.
+\end{definition}
+
+Now, the following problem can be introduced.
+\\
 \begin{problem}{Maximum matching}
 	Given a graph, find a maximum matching of this graph.
 \end{problem}

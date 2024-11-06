@@ -1,5 +1,7 @@
 \chapter{Perfect matching}
 
+\section{Tutte Matrix}
+
 \begin{definition}[Indeterminates]
 
 \end{definition}
@@ -18,19 +20,31 @@
     This is direct from Pffafian.
 \end{proof}
 
-\section{Basic algorithm}
+\subsection{Probabilistic representation of a Tutte Matrix}
 
-By fact \ref{fact:matching_condition}, one can achieve a very direct algorithm.
-The idea is try to remove an edge \(e\), if \(G - e\) has a perfect matching, 
-then this edge can be removed; Else, \(e\) belongs to a perfect matching of \(G\).
-Repeat this step until only the perfect matching edges are left.
-Such approach achieves an \(O(n^{\omega + 2})\) time complexity.
+\section{Basic\footnote{Rename} algorithm}
+
+Using fact \ref{fact:matching_condition}, the following algorithm finds a perfect matching in \(O(n^{\omega+2})\).
+We iterate through each edge from \(G\) and 
+an edge \(e\) is removed if the resulting graph \(G' \coloneqq (V_G, E_G - \{e\})\) still has a perfect matching, indicating that \(e\) is not essential.
+Otherwise, \(e\) belongs to a perfect matching of \(G\).
 
 \section{Rank-2 update algorithm}
 
-One of the bottlenecks of the previous algorithm is the necessity to check after each
-edge if the matrix is non-singular, each of these checks is \(O(n^{\omega})\).
-Thus, one can maintain the inverse through rank-2 updates.
-Achieving a time complexity of \(O(n^{4})\).
-For each edge, it suffices to check if \(N_{ij} \neq -1/T_{ij}\).
-This condition is direct from corollary \ref{cor:1}.
+The bottleneck of the previous algorithm is the necessity to recompute the whole matrix inverse after each iteration.
+By using the following corollary, a more efficient \(O(n^4)\) algorithm is achieved.
+
+\begin{corollary}[Condition for edge removal\footnote{Maybe rename this.}]
+    \label{cor:condition_edge_removal}
+    Let \(G\) be a graph, \(T\) be a Tutte matrix of \(G\) and \(N \coloneqq T^{-1}\)
+    An edge \(ij\) is essential if and only if \(N_{ij} = -1/T_{ij}\).
+\end{corollary}
+
+\begin{proof}
+    TODO(amsah): equation (3.6) shows this necessity.
+\end{proof}
+
+We use Corollary \ref{cor:condition_edge_removal} to quickly decide if an edge is essential. 
+If it's not, we remove it and update the matrix using a rank-2 update. 
+This removes the necessity to recompute the whole inverse in each iteration.
+Since there are at most \(n^2\) edges and each update takes \(O(n^2)\) time, the total time complexity is \(O(n^4)\).
