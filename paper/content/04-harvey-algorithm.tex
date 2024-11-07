@@ -202,16 +202,14 @@ Consequently, there is the following implementation:
         function PerfectMatching(G)
             T := $\SC{TutteMatrix}(G)$
             if T \textbf{ is singular} then return $\emptyset$ // The graph has no perfect matching
-            while true do
-                N := $T^{-1}$
-                DeleteEdgesWithin($V$)
-                M := $\emptyset$
-                for uv \textbf{in} E(G) do
-                    if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
-                end
-                if $2|M| = |V|$ // Matching is perfect
-                    return M
-                end
+            N := $T^{-1}$
+            DeleteEdgesWithin($V$)
+            M := $\emptyset$
+            for uv \textbf{in} E(G) do
+                if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
+            end
+            if $2|M| = |V|$ // Matching is perfect
+                return M
             end
         end
     \end{lstlisting}
