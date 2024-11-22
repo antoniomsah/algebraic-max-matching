@@ -7,9 +7,22 @@
 \end{definition}
 
 \begin{definition}[Tutte Matrix]
-    Given a graph \(G\) and a function that maps \(f\) every edge of \(G\) to an indeterminate.
-    Then, a tutte matrix is a matrix such that, for each \(uv \in E(G)\), one has \(T_{uv} = -T_{vu} = f(vu)\).
+\label{def:tutte_matrix}
+    Let \(G\) be a graph and \(n \coloneqq |V_G|\).
+    For each edge \(\{u,v\} \in E_G\) associate an indeterminate \(t_{\{u,v\}}\).
+    The Tutte matrix is the \(n \times n\) skew-symmetric matrix such that \(T_{u,v} = \pm t_{\{u, v\}}\) if \(\{u,v\} \in E_G\) and \(0\), otherwise.
+    The sign is chosen such that \(T\) is skew-symmetric.
+    The Tutte matrix of \(G\) is denoted as \(T_G\).
 \end{definition}
+
+For a Tutte matrix \(T\), its Pfaffian, denoted \(Pf(T)\), is a polynomial whose complete mathematical definition involves sophisticated algebraic concepts beyond our current scope. 
+However, two fundamental properties of the Pfaffian are crucial:
+\begin{enumerate}
+    \item The Pfaffian \(Pf(T)\) equals the number of perfect matchings in the underlying graph of \(T\);
+    \item There exists a fundamental relationship between the Pfaffian and the determinant of a Tutte matrix: \(\det(T) = Pf(T)^2\). 
+\end{enumerate}
+
+For a comprehensive treatment of this remarkable polynomial and its properties, we refer the reader to Chapter 7 of \cite{Godsil:1993}.
 
 \begin{fact}[Tutte matrix perfect matching condition]
     \label{fact:matching_condition}
@@ -17,26 +30,93 @@
 \end{fact}
 
 \begin{proof}
-    Reference Godsil.
+    Direct from the property \(\det(T) = Pf(T)^2\).
 \end{proof}
 
+While this property of Tutte matrices is powerful, it presents a computational challenge for algorithmic applications. 
+The issue stems from the relationship \(\det(T) = Pf(T)^2\), where \(Pf(T)\) contains a term for each perfect matching in graph (G). 
+Since a graph may contain exponentially many perfect matchings, direct computation becomes infeasible.
+
 \subsection{Probabilistic representation of a Tutte Matrix}
+A breakthrough came from \cite{Lovasz:Random}, who demonstrated a probabilistic solution: If we replace the non-zero entries of (T) with random values from a sufficiently large field, the matrix's rank is preserved with \textbf{high} probability. 
+This provides a computationally feasible approach.
 
-\section{Basic\footnote{Rename} algorithm}
+\begin{lemma}[Schwartz-Zippel]
+\label{lemma:schwartz-zippel}
+    \textbf{[Find the reference itself]}
+    Should state that if we evaluate this polynomial at a random point in \(F^{|E|}_q\), then the evaluation is zero with probabilty at most \(n/q\).
+    That is something non-zero in indeterminates is zero with random values with probabily at most \(n/q\).
+\end{lemma}
 
-Using fact \ref{fact:matching_condition}, the following algorithm finds a perfect matching in \(O(n^{\omega+2})\).
-We iterate through each edge from \(G\) and 
-an edge \(e\) is removed if the resulting graph \(G' \coloneqq (V_G, E_G - \{e\})\) still has a perfect matching, indicating that \(e\) is not essential.
-Otherwise, \(e\) belongs to a perfect matching of \(G\).
+\begin{proof}
+    Reference Schwartz-Zippel lemma.
+\end{proof}
 
-\section{Rank-2 update algorithm}
+According to \cref{lemma:schwartz-zippel}, selecting a sufficiently large field significantly reduces the probability of failure.
+Constructing such a field is straightforward. 
+For any prime number \(p\), the set of integers modulo \(p\), denoted as \(\Integers_{p}\), forms a field of size \(p\).
+
+% A tutte matrix to refer to randomized tutte matrix
+
+\section{Naive algorithm}
+
+Using \cref{fact:matching_condition}, the following algorithm finds a perfect matching in time \(O(n^{\omega+2})\).
+\begin{programruledcaption}{\(\SC{NaiveAlgorithm}\)}
+    \begin{lstlisting}[
+      language={pseudocode},
+      style=pseudocode,
+      style=wider,
+      functions={},
+      specialidentifiers={},
+    ]
+        function NaiveAlgorithm(G)
+            for \textbf{ each } $e \in E_G$ do
+                $G'$ := $(V_G, E_G \setminus \{e\})$
+                if $T_{G'}$ is singular then // By \cref{fact:matching_condition}, edge $e$ is inessential.
+                    $G$ := $G'$ 
+                end
+            end
+            return $E_G$ // Only the essential edges remain in $G$.
+        end
+    \end{lstlisting}
+\end{programruledcaption}
+\noindent
+Let \(f(n)\) be the running time of \(\SC{NaiveAlgorithm}\) when \(|V_G| \eqcolon n\).
+The running time can be expressed as:
+\[
+    f(n) = \binom{n}{2} O(n^\omega) = O(n^2) O(n^\omega) = O(n^{\omega+2}).
+\]
+
+\section{Rank-two update algorithm}
 
 The bottleneck of the previous algorithm is the necessity to recompute the whole matrix inverse after each iteration.
-By using the following corollary, a more efficient \(O(n^4)\) algorithm is achieved.
 
-\begin{corollary}[Condition for edge removal\footnote{Maybe rename this.}]
+\begin{theorem}[Rank-two update]
+\label{thm:rank-two}
+    Let \(G\) be a graph, \(N \coloneqq T_G^{-1}\) and \(S \subseteq V_G\) such that \(|S| = 2\). 
+    Let \(\tilde{T}\) be a matrix which is identical to \(T_G\) except that \(\tilde{T}_{S, S} = 0\).
+    If \(\tilde{T}\) is non-singular, then
+    \[
+        \tilde{T}^{-1} \coloneqq N + N_{*, S} \cdot 
+        \begin{pmatrix}
+            1 / (1 + T_{u, v}N_{u, v}) & 0 \\
+            0 &  1 / (1 + T_{v, u}N_{v, u})
+        \end{pmatrix}
+        \cdot T_{S, S} \cdot N_{S, *}.
+    \]
+\end{theorem}
+
+\begin{proof}
+TODO: amsah - Prove \((I - T_{S, S}N_{S, S})^{-1} = 
+        \begin{pmatrix}
+            1 / (1 + T_{\{u, v\}}N_{\{u, v\}}) & 0 \\
+            0 &  1 / (1 + T_{\{v, u\}}N_{\{v, u\}})
+        \end{pmatrix} \)
+\end{proof}
+
+\begin{corollary}[Edge removal condition]
     \label{cor:condition_edge_removal}
-    Let \(G\) be a graph, \(T\) be a Tutte matrix of \(G\) and \(N \coloneqq T^{-1}\)
+    Let \(G\) be a graph, \(T\) be the Tutte matrix of \(G\) and \(N \coloneqq T^{-1}\).
     An edge \(ij\) is essential if and only if \(N_{ij} = -1/T_{ij}\).
 \end{corollary}
 
@@ -44,7 +124,48 @@ By using the following corollary, a more efficient \(O(n^4)\) algorithm is achie
     TODO(amsah): equation (3.6) shows this necessity.
 \end{proof}
 
-We use Corollary \ref{cor:condition_edge_removal} to quickly decide if an edge is essential. 
+We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essential. 
 If it's not, we remove it and update the matrix using a rank-2 update. 
 This removes the necessity to recompute the whole inverse in each iteration.
-Since there are at most \(n^2\) edges and each update takes \(O(n^2)\) time, the total time complexity is \(O(n^4)\).
+
+\begin{programruledcaption}{\(\SC{Rank-2 update algorithm}\)}
+    \begin{lstlisting}[
+      language={pseudocode},
+      style=pseudocode,
+      style=wider,
+      functions={Rank2Update},
+      specialidentifiers={},
+    ]
+        function Rank2Update(S, T, N) // $|S| = 2$
+            return $N + N_{*, S} \cdot \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0 \\ 0 & 1 / (1 + T_{v, u}N_{v, u})\end{pmatrix} \cdot  T_{S, S} \cdot N_{S, *}$ // \cref{thm:rank-two}.
+        end
+
+        function Rank2Algorithm(G)
+            $T$ := $T_G$
+            $N$ := $T^{-1}$
+            for \textbf{ each } $\{u,v\} \in E_G$ do
+                if $N_{\{u,v\}} = - 1 / T_{\{u, v\}}$ then // \cref{cor:condition_edge_removal}
+                    $N$ := Rank2Update($\{u, v\}, T, N$)
+                    $T_{u, v}$ := 0
+                    $T_{v, u}$ := 0
+                end
+            end
+            return $E_G$ // Only the essential edges remain in $G$.
+        end
+    \end{lstlisting}
+\end{programruledcaption}
+
+First, let \(t(n)\) be the running time of \(\SC{Rank2Update}\) when \(|V_G| \eqcolon n\).
+Let \(A\) be a \(n \times m\) matrix and let \(B\) be a \(m \times o\).
+In this context, note that \(\tilde{N}T_{S, S}\) is a \(2 \times 2\) matrix.
+Therefore, \(N_{*, S}\tilde{N}T_{S, S}\) is a \(n \times 2\) matrix.
+Consequently,
+\[
+    t(n) = O(2n^2) = O(n^2).
+\]
+
+Let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
+The running time can be expressed as:
+\begin{align*}
+    g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
+\end{align*}
