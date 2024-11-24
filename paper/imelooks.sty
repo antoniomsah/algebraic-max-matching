@@ -2,7 +2,7 @@
 \NeedsTeXFormat{LaTeX2e}[2017/01/01]
 \ProvidesPackage{imelooks}[2023/05/03 1.0 IME/USP-style theses, articles etc.]
 
-\RequirePackage{packages/imegoodies}
+\RequirePackage{imegoodies}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -754,7 +754,7 @@
   \ifdefvoid{\@IMEbibStyle}
     {
       \iftoggle{IMEreport}{
-        \gdef\@IMEbibStyle{packages/plainnat-ime}
+        \gdef\@IMEbibStyle{plainnat-ime}
       }{
         \ifboolexpr{togl {IMEslides} or togl {IMEposter}}
           {\gdef\@IMEbibStyle{beamer-ime}}
@@ -766,7 +766,7 @@
   \iftoggle{IMEmanualRaggedbib}
     {}
     {
-        \ifdefstring{\@IMEbibStyle}{packages/plainnat-ime}
+        \ifdefstring{\@IMEbibStyle}{plainnat-ime}
             {}
             {\toggletrue{IMEraggedbib}}
     }
@@ -1125,8 +1125,8 @@
   \usepackage{listings}
   \usepackage{lstautogobble}
   % Carrega a "linguagem" pseudocode para listings
-  \appto{\lstaspectfiles}{,packages/lstpseudocode.sty}
-  \appto{\lstlanguagefiles}{,packages/lstpseudocode.sty}
+  \appto{\lstaspectfiles}{,lstpseudocode.sty}
+  \appto{\lstlanguagefiles}{,lstpseudocode.sty}
   \lstloadaspects{simulatex,invisibledelims,pseudocode}
   \lstloadlanguages{[base]pseudocode,[english]pseudocode,[brazilian]pseudocode}
 
