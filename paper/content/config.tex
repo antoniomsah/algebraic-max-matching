@@ -9,6 +9,7 @@
 \newcommand*{\symdiff}{\mathbin{\Delta}}
 
 \newcommand{\SC}[1]{\textsc{#1}}
+\newcommand{\rank}{rank}
 
 \newmdenv[linecolor=black,linewidth=1pt]{problembox}
 
@@ -41,19 +42,27 @@
 % {\thmname{#1}\space(?)\thmnumber{ #2}\thmnote{ (#3)}} % formato do título
 % % vazio significa {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
 \newtheorem{theorem}{Theorem}[section]
+\newtheorem{theorem*}{Theorem}
 
 % Lemma style
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{lemma*}{Lemma}
 
 %% Definition style
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{definition*}{Definition}
 
 % Corollary style
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{corollary*}{Corollary}
 
 % Fact style
 \newtheorem{fact}[theorem]{Fact}
-\newtheorem*{fact*}{Fact}
+\newtheorem{fact*}{Fact}
+
+% Algorithm style
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{algorithm*}{Algorithm}
 
 % Proof style
 \makeatletter

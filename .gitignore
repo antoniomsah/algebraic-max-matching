@@ -22,6 +22,7 @@ tese.synctex.gz
 tese.toc
 tese.pdf
 tese.bcf-SAVE-ERROR
+tese.bbl-SAVE-ERROR
 poster.aux
 poster.bbl
 poster.bcf
@@ -41,3 +42,4 @@ poster.synctex.gz
 poster.toc
 poster.pdf
 poster.bcf-SAVE-ERROR
+poster.bbl-SAVE-ERROR

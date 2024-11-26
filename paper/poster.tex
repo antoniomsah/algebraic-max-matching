@@ -1,110 +1,17 @@
 % Author: Nelson Lago
 % This file is distributed under the MIT Licence
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREÂMBULO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% A língua padrão é a última da lista
 \documentclass[a1paper,brazilian,english]{article}
 
-% Vários pacotes e opções de configuração genéricos
 \usepackage{imegoodies}
-\usepackage[poster,hidelinks]{imelooks}
+\usepackage[poster,hidelinks,bluey]{imelooks}
 \input{content/config.tex}
-% \tcbposterset{fontsize = 32pt} % default, mude se necessário
 
 \graphicspath{{figuras/},{fig/},{conteudo/logos/},{img/},{images/},{imagens/},{content/images/}}
 
-% Comandos rápidos para mudar de língua:
-% \en -> muda para o inglês
-% \br -> muda para o português
-% \texten{blah} -> o texto "blah" é em inglês
-% \textbr{blah} -> o texto "blah" é em português
 \babeltags{br = brazilian, en = english}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% METADADOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% O arquivo com os dados bibliográficos para biblatex; você pode usar
-% este comando mais de uma vez para acrescentar múltiplos arquivos
-\addbibresource{bibliografia.bib}
-
-% Este comando permite acrescentar itens à lista de referências sem incluir
-% uma referência de fato no texto (pode ser usado em qualquer lugar do texto)
-%\nocite{bronevetsky02,schmidt03:MSc, FSF:GNU-GPL, CORBA:spec, MenaChalco08}
-% Com este comando, todos os itens do arquivo .bib são incluídos na lista
-% de referências
-%\nocite{*}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INÍCIO DO POSTER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% Existem várias packages para criar pôsteres com LaTeX (a0poster, baposter,
-% tikzposter, sciposter...). As mais comuns atualmente são beamerposter
-% e tcolorbox (com sua biblioteca "poster"). Ambas funcionam muito bem;
-% beamerposter é mais familiar (ela simplesmente utiliza beamer com alguns
-% ajustes no tamanho das fontes e do papel), mas com tcolorbox o alinhamento
-% vertical dos elementos é MUITO mais simples, e esta é a solução adotada
-% aqui. Vale muito a pena ler a documentação com "texdoc tcolorbox" e
-% "texdoc tcolorbox-tutorial-poster".
-
-% Um pôster com tcolorbox é composto por blocos (posterboxes) coloridos
-% de tamanho variável; cada bloco pode conter textos ou imagens e um
-% título opcional. O pôster utiliza uma grade de dimensões definidas em
-% \begin{tcposter} com "rows=" e "columns=" para fazer o alinhamento:
-% para cada posterbox, podemos dizer "row=X, column=Y" para definir sua
-% posição. Além disso, podemos dizer "span=A, rowspan=B" para fixar
-% seu tamanho. Sem "span" e "rowspan", uma posterbox tem pelo menos o
-% tamanho de uma célula da grade, mas se seu tamanho natural for maior
-% ela extrapola esse tamanho. "span" e "rowspan" podem ser números
-% não-inteiros (como 0.8 ou 1.4).
-%
-% "\begin{posterbox}" recebe um conjunto de parâmetros opcional e um
-% conjunto de parâmetros obrigatório:
-%
-% "\begin{posterbox}[opcional]{obrigatório}".
-%
-% O conjunto de parâmetros opcional é onde inserimos os parâmetros comuns
-% de tcolorbox, como "adjusted title", "coltext", "titlerule" etc.; o
-% conjunto de parâmetros obrigatório é usado para determinar as dimensões
-% e a posição da posterbox, ou seja, as opções "name", "column", "below",
-% "span" etc.
-%
-% ALINHAMENTO HORIZONTAL
-%
-% É possível definir um poster com 2 colunas e fazer algo como
-%
-% \posterbox{column=1, span=1.3}{blah}
-% \posterbox{column*=2, span=0.7}{blah}
-%
-% A segunda posterbox será alinhada à direita ("column*="), então as
-% duas serão colocadas lado-a-lado sem sobreposições.
-%
-% Na prática, no entanto, é mais fácil fazer como no exemplo abaixo:
-% definimos que o poster tem 12 colunas, o que nos permite dividir
-% sua largura em 2, 3, 4 ou 6 colunas iguais ou diferentes (como
-% 1/2 + 1/2, 2/3 + 1/3, 1/4 + 1/4 + 1/2, 1/4 + 1/6 + 1/4 + 1/3 etc).
-%
-% ALINHAMENTO VERTICAL
-%
-% Embora seja possível alinhar as posterboxes em função da grade na
-% vertical, uma outra possibilidade é utilizar "above", "below" e
-% "between", como no exemplo abaixo: basta associar um nome "blah" a
-% uma determinada posterbox e, em outra, dizer "below=blah". Lembre-se
-% que a posterbox de nome "blah" deve ser definida *antes* que outra
-% possa fazer referência a ela. Também é possível fazer "below=top",
-% "above=bottom" etc. A opção "equal height group" também é muito útil.
-% Nada impede que você use estratégias de alinhamento diferentes para
-% cada posterbox.
-
-% Este modelo define a opção "smallmargins", que diminui a distância
-% entre o conteúdo de uma posterbox e suas bordas. Use com parcimônia!
+\addbibresource{poster.bib}
 
 \begin{document}
 
@@ -121,72 +28,28 @@
 ]
 
 \posterbox[titlebox]{name=titlebox, below=top, column=1, span=12}{
-  An Algebraic Algorithm for Maximum Matchings
+  \begin{center}
+    \huge{\textbf{An Algebraic Algorithm for Maximum Matchings}}
+  \end{center}
+  \begin{multicols}{2}
+    \begin{center}
+      Author: Antonio Marcos Shiro Arnauts Hachisuca
+    \end{center}
+
+    \begin{center}
+      Supervisor: Marcel K. de Carli Silva
+    \end{center}
+  \end{multicols}
 }
-
-\posterbox{name=subtitlebox, below=titlebox, column=1, span=12}{
-  Author: Antonio Marcos Shiro Arnauts Hachisuca \\
-  Supervisor: Marcel K. de Carli Silva
-}
-
-%%%%%%%% Duas colunas %%%%%%%%
-
-% Como temos 2 caixas à esquerda e uma caixa à direita, não podemos
-% simplesmente usar "equal height group" aqui, então definimos
-% manualmente a altura das caixas de maneira que as duas colunas
-% tenham o mesmo tamanho.
 
 %%% Esquerda
-\posterbox[adjusted title = Graph, smallmargins]
-          {name=graph, below=subtitlebox,
-           column=1, span=6, rowspan=1.3}{
-  A \textbf{graph} \(G\) is a pair \((V,E)\) such that
-    \begin{enumerate}
-      \item \(V\) is a finite set, whose elements are called \textbf{vertices};
-      \item \(E\) is a set of unordered pairs of vertices, whose elements are called \textbf{edges}.
-    \end{enumerate}
-  The image below illustrates a graph, where the circles represent the vertices, and the lines represent the edges.
-  \begin{center}
-    \begin{tikzpicture}[scale=3, every node/.style={circle, draw, inner sep=2.5pt}]
-
-    % Outer cycle vertices
-    \node (A) at (90:1) {};
-    \node (B) at (162:1) {};
-    \node (C) at (234:1) {};
-    \node (D) at (306:1) {};
-    \node (E) at (18:1) {};
-    
-    % Inner star vertices
-    \node (F) at (90:0.5) {};
-    \node (G) at (162:0.5) {};
-    \node (H) at (234:0.5) {};
-    \node (I) at (306:0.5) {};
-    \node (J) at (18:0.5) {};
-    
-    % Edges
-    % Outer cycle
-    \draw (A) -- (B) -- (C) -- (D) -- (E) -- (A);
-    
-    % Inner star
-    \draw (F) -- (G) -- (H) -- (I) -- (J) -- (F);
-    
-    % Connecting edges
-    \draw (A) -- (F);
-    \draw (B) -- (G);
-    \draw (C) -- (H);
-    \draw (D) -- (I);
-    \draw (E) -- (J);
-    
-    \end{tikzpicture}
-  \end{center}
-}
 \posterbox[adjusted title = Matching, smallmargins]
-          {name=matching, below=graph,
-           column=1, span=6, rowspan=2.15}{
+          {name=matching, below=titlebox,
+           column=1, span=6, rowspan=1.45}{
 
     
   A \textbf{matching} \(M\) of a graph \(G\) is a subset of edges from \(G\) such that no two edges share an end.
-  There are a few classifications for matchings: A matching is \textbf{maximum} if there is no other matching whose size is greater;
+  A matching is \textbf{maximum} if there is no other matching whose size is greater;
   A matching is \textbf{perfect} if every vertex touches an edge from the matching.
   \\~\\
   The red edges in the graphs below represent two different matchings.
@@ -248,13 +111,43 @@
     
     \end{tikzpicture}
   \end{center}
-  Note that the matching on the left is a \textbf{maximum} but not \textbf{perfect} matching, whereas the matching on the right is a \textbf{perfect} matching.
+  Note that the matching on the left is a \textbf{maximum} but not perfect matching, whereas the matching on the right is a \textbf{perfect} matching.
+
+  Now, there is the following problem:
+  \begin{problem}{Maximum Matching}
+    Given a graph \(G\), find a maximum matching of \(G\).
+  \end{problem}
+}
+
+\posterbox[adjusted title = Linear Algebra, smallmargins]{
+  name=LinearAlgebra, below=matching, column=1, span=6, rowspan=0.98
+}{
+  \textbf{Submatrix notation used: } For a matrix \(M\), \(M_{R, S}\) is the submatrix of \(M\) with 
+
+  rows \(R\) and columns \(S\). \(M_{*, S}\) denotes the submatrix of \(M\) with all rows and 
+  
+  columns \(S\) (resp. \(M_{R, *}\)).
+  \\~\\
+  The following corollary is used to update a matrix inverse.
+  \begin{corollary*}[Simplified version of corollary 2.1 from Harvey's paper]
+    \label{cor:2.1}
+    Let \(M\) be a non-singular matrix and let \(N\) be its inverse.
+    Let \(\tilde{M}\) be a matrix that is identical to \(M\) except \(M_{S, S} \neq \tilde{M}_{S, S}\) for a set \(S\).
+    Let \(\Delta \coloneqq \tilde{M}_{S, S} - M_{S, S}\).
+    Then, if \(\tilde{M}\) is non-singular, one has
+    \[
+      \tilde{M}^{-1} = N - N_{*, S}(I + \Delta N_{S, S})^{-1}\Delta N_{S, *}.
+    \]
+  \end{corollary*}
 }
 
 \posterbox[adjusted title = Tutte Matrix, smallmargins]{
-  name=TutteMatrix, below=matching, column=1, span=6, rowspan=1.65
+  name=TutteMatrix, below=LinearAlgebra, column=1, span=6, rowspan=2.77
 }{
-The \textbf{Tutte Matrix} of a graph is a matrix where every edge is assigned an indeterminate.
+An \textbf{indeterminate} is a symbol or expression denoting an unspecified value.
+Unlike a variable, it maintains a fixed, inherently unique identity (meaning two indeterminates, \(a\) and \(b\), can never be equal).
+\\~\\
+The \textbf{Tutte Matrix} of a graph \(G\), denoted as \(T_G\), is a skew-symmetric matrix (i.e. \(T_G = -T_G^{\mathsf{T}}\)) where every edge is assigned an indeterminate.
 For example, 
 \begin{center}
   \begin{tikzpicture}[scale=2, every node/.style={inner sep=3pt}]
@@ -284,53 +177,162 @@ For example,
     \end{bmatrix}
     $};
   \end{tikzpicture}
+  \\
+  \textit{\scriptsize Figure 1: Example of a graph and its corresponding Tutte Matrix.}
 \end{center}
-\begin{fact*}
-  Let \(G\) be a graph, \(G\) has a perfect matching if and only if the Tutte matrix of \(G\) is non-singular.
+\begin{fact*}[\citet{Tutte}]
+  Let \(G\) be a graph, \(G\) has a perfect matching iff \(T_G\) is non-singular.
 \end{fact*}
-Unfortunately, it isnt viable to represent a Tutte matrix with indeterminates.
-Because, the number of monomials is proportial to the number of perfect matchings of \(G\), and there can be \textbf{exponentially} many of those.
+
+\begin{center}
+\begin{tcolorbox}[width=0.95\textwidth, top=-5mm, bottom=-5mm]
+  \textbf{Reminder: } A matrix is singular if and only if its determinant is zero.
+\end{tcolorbox}
+\end{center}
+
+\textbf{Computational Challenge:} While this fact provides a necessary and sufficient condition for the existence of a perfect matching, it does not immediately yield a polynomial-time algorithm to find one. 
+The determinant of a Tutte Matrix has a monomial for each perfect matching of \(G\),
+and the number of perfect matchings can grow \emph{exponentially} with the graph's size.
+
+\textbf{Probabilistic solution:} \citet{Lovasz:Random} proposed a probabilistic solution:
+\begin{itemize}
+  \item Replace the indeterminates of \(T_G\) with random values from a large field.
+\end{itemize}
+
+\begin{lemma*}[Schwartz-Zippel]
+Let \(\mathbb{F}\) be a field, and let \(p(x_1, x_2, \dots, x_n)\) be a non-zero polynomial in \(\mathbb{F}[x_1, x_2, \dots, x_n]\) of total degree \(d\). 
+Suppose \(S \subseteq \mathbb{F}\) is a finite subset of the field \( \mathbb{F} \). 
+If the variables \(x_1, x_2, \dots, x_n\) are chosen independently and uniformly at random from \( S \), then
+
+\[
+\Pr\big[p(x_1, x_2, \dots, x_n) = 0\big] \leq \frac{d}{|S|}.
+\]
+\end{lemma*}
+
+This approach together with Schwartz-Zippel lemma is a solution that fails 
+
+with \textbf{low} probability.
+
+\textbf{How to select the field:} For a prime \(p\), \(\Integers_{p}\) is a field of size \(|p|\).
+Thus, choosing a sufficiently large field is reduced to choosing a sufficiently large prime.
 }
 
-\posterbox{
-  name=TutteMatrix, below=subtitlebox, column=7, span=6, rowspan=1.65
+\posterbox[smallmargins]{
+  name=TutteMatrix2, below=titlebox, column=7, span=6, rowspan=0.71
 }{
-  Fortunately, \citep{Lovasz:Random} presented a probabilistic solution:
-  If we replace the non-zero entries of (T) with random values from a sufficiently large field, the matrix's rank is preserved with \textbf{high} probability. 
+Nonetheless, it is \textbf{probabilistic}. 
+For example, the Tutte matrix from Figure 1 can be represented with the following values from \(\Integers_{53}\):
+\[
+  \begin{bmatrix}
+  0 & a & 0 & b \\
+  -a & 0 & c & 0 \\
+  0 & -c & 0 & d \\
+  -b & 0 & -d & 0
+  \end{bmatrix}
+  \longrightarrow
+  \begin{bmatrix}
+  0 & 7 & 0 & 28 \\
+  46 & 0 & 14 & 0 \\
+  0 & 39 & 0 & 50 \\
+  25 & 0 & 3 & 0
+  \end{bmatrix}
+\]
+Note that this matrix is singular! \textbf{But}, the graph from Figure 1 \textbf{has} 
+
+a perfect matching.
 }
 
+\posterbox[adjusted title = Matrix Algorithms, smallmargins]{
+  name=Matrix, below=TutteMatrix2, column=7, span=6, rowspan=0.66
+}{
+  Let \(\omega\) denote the \textbf{matrix multiplication exponent}, defined as the \textbf{smallest} exponent such that an \(O(n^\omega)\) matrix multiplication algorithm exists.
+  Then,
+  \begin{itemize}
+    \item There is a \textbf{matrix inversion algorithm} with \(O(n^\omega)\) time complexity;
+    \item There is a \textbf{matrix rank algorithm} with \(O(n^\omega)\) time complexity.
+  \end{itemize}
 
-% %%%%%%% Colunas assimétricas (2/3 + 1/3) %%%%%%%%
-% 
-% %%% Esquerda. Como usamos "between", a altura desta caixa
-% %             é definida pela posição das outras duas.
-% \posterbox[adjusted title = Bibliography (assimetrical
-%            columns -- two thirds width), smallmargins]
-%           {name=bibbox, between=halflogo and footerbox, column=1, span=8}{
-% 
-%     \nocite{FSF:GNU-GPL, MenaChalco08, biblatex,
-%             waz:09, alves03:simi, carlis:09}
-%     \printbibliography
-% }
-% 
-% %%% Direita, acima; aqui, ajustamos as margens manualmente
-% \posterbox[adjusted title = A Table (one third width),
-%           top=.5\baselineskip, bottom=.5\baselineskip]
-%           {name=tablebox, below=, column=9, span=4}{
-% 
-%     \centering
-%     \singlespacing\vspace{-\baselineskip} % \singlespacing adiciona uma linha
-%     \begin{tabular}{ccl}
-%       \toprule
-%       Code        & Abbreviation & Name       \\
-%       \midrule
-%       \texttt{A}  & Ala          & Alanine    \\
-%       \texttt{C}  & Cys          & Cysteine   \\
-%       \texttt{W}  & Trp          & Tryptophan \\
-%       \texttt{Y}  & Tyr          & Tyrosine   \\
-%       \bottomrule
-%     \end{tabular}
-% }
+  \begin{center}
+  \begin{tcolorbox}[width=0.95\textwidth, top=-5mm, bottom=-5mm]
+    \textbf{Important: } Currently, it is known that \(\omega < 2.38\).
+  \end{tcolorbox}
+  \end{center}
+}
+
+\posterbox[adjusted title = Perfect Matching Algorithms, smallmargins]{
+  name=PerfectMatching, below=Matrix, column=7, span=6, rowspan=2
+}{
+  Now, algorithms can be introduced. 
+  The more direct one is the following:
+  \begin{algorithm*}[Naive Algorithm]
+    Given a graph \(G \coloneqq (V, E)\). 
+    Set \(M \coloneqq \emptyset\).
+    For each edge \(uv \in E\), check if a Tutte matrix of graph \(G' \coloneqq (V, E \setminus \{uv\})\) is singular.
+    If \(T_{G'}\) is singular, then \(M \leftarrow M \cup \{uv\}\) and \(G \leftarrow G - \{u, v\}\); Else, \(G \leftarrow G'\).
+    After all iterations, return \(M\).
+  \end{algorithm*}
+  The algorithm above yields a time complexity of \(O(n^{\omega + 2})\), 
+  because a graph has \(O(n^2)\) edges and it checks if a matrix is singular in \(O(n^\omega)\) for each edge.
+
+  The main bottleneck of the algorithm above is the necessity to recalculate the inverse for each edge check.
+
+  \begin{corollary*}[Edge removal condition]
+  \label{cor:edge_rem}
+    Let \(G \coloneqq (V, E)\) be a graph such that \(G\) has a perfect matching.
+    Let \(T\) be the Tutte Matrix of \(G\).
+    Then, an edge \(uv \in E\) can be removed from \(G\) (i.e. graph \((V, E \setminus \{uv\})\) has a perfect matching) iff 
+    \[
+      T^{-1}_{uv} \neq -1/T_{uv}.
+    \]
+  \end{corollary*}
+
+  By using corollaries \ref{cor:2.1} and \ref{cor:edge_rem}, \citet{Harvey:Paper} developed an algorithm that computes the perfect matching in \(O(n^\omega)\).
+  The algorithm uses a \textbf{divide and conquer approach} together with \textbf{lazy updates} to find a perfect matching.
+  \\~\\
+  It maintains two matrices, \(T\) and \(N\), such that they are initially set as
+  \begin{itemize}
+    \item \(T \coloneqq \) a Tutte matrix of graph \(G\) where the entries are randomly chosen;
+    \item \(N \coloneqq T^{-1}\).
+  \end{itemize}
+  By using \textbf{lazy updates}, for an edge \(uv \in E\), one has \(T_{uv}^{-1} = N_{uv}\) when the value is \textbf{needed} (this value \textbf{can be incorrect} while not required).
+  This approach ensures that \cref{cor:edge_rem} holds when checking an edge \(uv\).
+  Then, when an edge is removed it uses divide and conquer and \cref{cor:2.1} to update \textbf{only} the required submatrix.
+}
+
+\posterbox[adjusted title = Extension to Maximum Matchings, smallmargins]{
+  name=MaxMatching, below=PerfectMatching, column=7, span=6, rowspan=1.05
+}{
+  The following theorem is the basis for the extension.
+  \begin{theorem*}[\citet{plummer1986matching}]
+  \label{thm:rank_matching}
+    Let \(G\) be a graph and let \(\nu(G)\) be the size of a maximum matching of \(G\).
+    Then, \(\rank(T_G) = 2\nu(G)\).
+    \end{theorem*}
+    The extension to maximum matching proceeds by first determining the rank of the Tutte matrix \(T_G\). 
+    The number of unmatched vertices is calculated as \(|V| - \rank(T_G)\).
+    To obtain a graph with a perfect matching, we add \(|V| - \rank(T_G)\) new vertices each of which 
+    is connected to \textbf{all} original vertices of \(G\).
+    \\~\\
+    This new graph construction guarantees the existence of a perfect matching, because of \cref{thm:rank_matching}.
+    Computing the matrix rank can be done in \(O(n^\omega)\) and building the auxiliary graph can be done in \(O(n^2)\) (\(O(n)\) for each of the \(n\) vertices).
+}
+
+\posterbox[adjusted title = References, smallmargins]{
+  name=References, below=MaxMatching, column=7, span=6, rowspan=0.78
+}{
+  \printbibliography
+}
+
+\posterbox[footerbox]{name=footerbox, above=bottom, column=1, span=12}{
+    linux.ime.usp.br/\textasciitilde amsah/mac0499\par
+    \small\ttfamily
+    amsah@usp.br\par
+    \vspace{4pt}
+    \footnotesize\rmfamily
+    \textcolor{imesoftblue!30!white}
+      {Department of Computer Science --- Institute of Mathematics and Statistics, University of São Paulo}
+}
+
 
 \end{tcbposter}
 
