@@ -180,7 +180,7 @@ For example,
   \\
   \textit{\scriptsize Figure 1: Example of a graph and its corresponding Tutte Matrix.}
 \end{center}
-\begin{fact*}[\citet{Tutte}]
+\begin{fact*}[\citep{Tutte}]
   Let \(G\) be a graph, \(G\) has a perfect matching iff \(T_G\) is non-singular.
 \end{fact*}
 
@@ -279,10 +279,10 @@ a perfect matching.
   \begin{corollary*}[Edge removal condition]
   \label{cor:edge_rem}
     Let \(G \coloneqq (V, E)\) be a graph such that \(G\) has a perfect matching.
-    Let \(T\) be the Tutte Matrix of \(G\).
+    Let \(T\) be the Tutte Matrix of \(G\) and let \(N \coloneqq T^{-1}\).
     Then, an edge \(uv \in E\) can be removed from \(G\) (i.e. graph \((V, E \setminus \{uv\})\) has a perfect matching) iff 
     \[
-      T^{-1}_{uv} \neq -1/T_{uv}.
+      N_{uv} \neq -1/T_{uv}.
     \]
   \end{corollary*}
 

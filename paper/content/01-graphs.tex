@@ -1,6 +1,7 @@
 \renewcommand*{\proofname}{Proof}
 
 \chapter{Preliminaries}
+\label{chap:preliminaries}
 
 The purpose of this chapter is to introduce key concepts related to the maximum matching algorithm. 
 The chapter covers important topics such as the definition of graph maximum matching, the Sherman-Morrison-Woodbury formula, and the Schur complement. 
@@ -12,7 +13,7 @@ These concepts are fundamental for understanding the algorithm's correctness and
 \label{sec:graph}
 
 \begin{definition}[Graph]
-	\label{def:graph}
+\label{def:graph}
 	A \textbf{graph} \(G\) is a pair \((V, E)\) such that
 	\begin{enumerate}[label=(\roman*)]
 		\item \(V\) is a finite set, whose elements are called \textbf{vertices};
@@ -26,7 +27,7 @@ If \(\{u,v\} \in E(G)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\) and
 When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 
 \begin{definition}[Matching]
-	\label{def:matching}
+\label{def:matching}
 	For a graph \(G \coloneqq (V, E)\), a subset \(M \subseteq E\) is a \textbf{matching} of \(G\) if no two edges in \(M\) share an end.
 	A vertex \(v \in V\) is \(M\)-covered if some edge of \(M\) incides in \(v\), 
 	and it is said that \(M\) covers \(v\);
@@ -40,6 +41,7 @@ When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 		\item
 			\textbf{perfect}, if \(|V_G| = |M|\), i.e., every vertex of \(G\) is \(M\)-covered.
 	\end{itemize}
+	The \textbf{matching number}, denoted as \(\nu(G)\), is the size of a maximum matching of \(G\).
 \end{definition}
 
 \begin{definition}[Essential edges]

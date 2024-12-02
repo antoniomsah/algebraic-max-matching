@@ -1,9 +1,21 @@
 \section{Linear algebra}
 \label{sec:linear_algebra}
 
-\begin{definition}[Fields]
-\label{def:fields}
-\end{definition}
+% \begin{definition}[Fields]
+% \label{def:fields}
+% A \textbf{field} is a set with two binary operations on \(\mathbb{F}\) called \textit{addition} and \textit{multiplication}.
+% The addition of two elements \(a\) and \(b\) from \(\mathbb{F}\) is denoted as \(a + b\).
+% The multiplication of two elements \(a\) and \(b\) from \(\mathbb{F}\) is denoted as \(a \cdot b\).
+% These operations must satisfy the following properties:
+% \begin{enumerate}
+%     \item Associativity: \(a + (b + c) = (a + b) + c\) and \(a \cdot (b \cdot c) = (a \cdot b) \cdot c\);
+%     \item Commutativity: \(a + b = b + a\) and \(a \cdot b = b \cdot a\);
+%     \item Additive and multiplicative identity: there exists two elements \(0\) and \(1\) in \(\mathbb{F}\) such that \(a + 0 = a\) and \(a \cdot 1 = a\);
+%     \item Additive inverse: there exists an element \(-a\) such that \(a + (-a) = 0\);
+%     \item Multiplicative inverse: there exists an element \(a^{-1}\) such that \(a \cdot a^{-1} = 1\);
+%     \item Distributivity: 
+% \end{enumerate}
+% \end{definition}
 
 \begin{definition}[Submatrix]
     Let \(M\) be a matrix, we say that \(M'\) is a \textbf{submatrix} of \(M\) if we can obtain \(M'\) by removing zero or more rows and/or columns from \(M\).
@@ -67,7 +79,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 \end{corollary}
 
 \begin{proof}
-    TODO: amsah - Add proof.
+    TODO - Prove.
 \end{proof}
 
 \begin{definition}[Skew-symmetric matrix]
@@ -83,7 +95,8 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 \subsection{Time complexities of Matrix algorithms}
 \label{matrix:time_complexity}
 Let \(M\) be a \(n \times n\) matrix. 
-The following matrix algorithms can be computed in time complexity \(O(n^\omega)\):
+Let \(\omega\) denote the \textbf{matrix multiplication exponent}, defined as the infimum of the exponent over all matrix multiplication algorithms. 
+Then, the following matrix algorithms can be computed in time complexity \(O(n^\omega)\):
 \begin{itemize}
     \item \textit{Matrix inversion:} Computing the inverse of M, if it exists.
     \item \textit{Matrix rank:} Determining the rank of M.

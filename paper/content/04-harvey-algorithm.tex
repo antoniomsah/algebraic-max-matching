@@ -1,13 +1,12 @@
 \chapter{Harvey's algorithm}
-
-TODO: Introduction.
+\label{chap:harvey}
 
 % \begin{enumerate}
 %     \item Brief of the idea;
 %     \item Pseudo-algorithm;
 %     \item Corretude;
 % \end{enumerate}
-
+This chapter presents the probabilistic algorithm proposed by \citet{Harvey:Paper} that finds a perfect matching in general graphs with time complexity \(O(n^\omega)\).
 
 \section{Algorithm}
 
@@ -16,8 +15,12 @@ Harvey's algorithm addresses this limitation by employing a divide-and-conquer s
 After each recursive step, only the necessary portions of the inverse matrix are updated.
 As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 
-The algorithm will maintain two matrices: \(T\), the Tutte Matrix of the graph, and \(N\), which is initialized as \(T^{-1}\).
-Remember that using Tutte matrices implies that the algorithm is \textbf{probabilistic}\footnote{I want to add a reminder, but I want to explain in the previous section}.
+For a graph \(G\) and \(n = |V(G)|\). 
+The algorithm maintains two matrices, \(T\) and \(N\), such that they are initialized as
+\begin{enumerate}
+    \item \(T \coloneqq \) a Tutte matrix where the entries were randomly chosen\footnote{\cref{sec:prob_tutte}};
+    \item \(N \coloneqq T^{-1}\).
+\end{enumerate}
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
 
 \subsection{\(\SC{DeleteEdgesCrossing}\)}
@@ -31,7 +34,7 @@ The following invariant must be preserved:
 \end{itemize}
 To maintain this invariant the following updates are done. 
 
-TODO: explicit that in both update theorems \(T\) is a Tutte Matrix.
+TODO - Explicit that in both update theorems \(T\) is a Tutte Matrix.
 
 \begin{theorem}[Update 1]
 \label{update:1}
@@ -87,7 +90,7 @@ We have the following algorithm.
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={DeleteEdgesCrossing},
+      functions={DeleteEdgesCrossing, RemoveEdge},
       specialidentifiers={},
     ]
         function DeleteEdgesCrossing(R, S) // R and S are \textbf{disjoint} sets of vertices.
@@ -99,7 +102,7 @@ We have the following algorithm.
                 if $T_{r, s} \neq 0$ \textbf{ and } $T_{r, s} \neq -1 / N_{r, s}$ then // This edge can be removed.
                     $N_{r, s}$ := $N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})$ // \cref{update:1}.
                     $N_{s, r}$ := $-N_{r, s}$
-                    $T_{rs}, T_{sr}$ := 0, 0 // Edge has been removed.
+                    RemoveEdge($T, rs$)
                 end
                 return
             end
@@ -224,7 +227,7 @@ until a perfect matching is found. Then,
     T(n) &= O(n^2) + O(n^\omega) + (O(n^\omega) + g(n) + O(n^2) + O(1)) & \\
     &= (O(n^\omega) + g(n)) &  \\
     &= O(n^\omega + O(n^\omega)) & \text{by \ref{alg:delwithin}} \\ 
-    &= O(n^\omega) & 
+    &= O(n^\omega) & \numberthis \label{alg:harvey_complexity}
 \end{align*}
 
 From \cref{lemma:schwartz-zippel}, deciding if an edge can be deleted fails with probability \(n / q\) where \(q\) is the size of the field. 
