@@ -3,4 +3,19 @@
 
 \enlargethispage{.5\baselineskip}
 
-Something.
+The Maximum Matching problem is a fundamental problem in graph theory. Key milestones include:
+\begin{itemize}
+    \item In 1965, \citet{Edmonds} introduced an \(O(nm)\) algorithm that solves this problem using graph theory techniques;
+    \item In 1989, \citet{Rabin1989} developed a probabilistic \(O(n^{\omega+1})\) algorithm that solved the problem through algebraic methods;
+    \item In 2009, \citet{Harvey:Paper} created a probabilistic \(O(n^\omega)\) algebraic algorithm using a divide-and-conquer approach with lazy updates.
+\end{itemize}
+These developments show how researchers have progressively improved algorithms to solve the Maximum Matching problem, reducing computational complexity over time.
+
+This paper implements the algorithm developed by \citet{Harvey:Paper}. The paper is structured as follows:
+\begin{enumerate}
+    \item \cref{chap:preliminaries} covers the foundational concepts necessary to understand the subsequent work;
+    \item \cref{chap:perfect_matching} explores Tutte matrices and algebraic methods for solving perfect matching problems;
+    \item \cref{chap:harvey} presents a detailed explanation of Harvey's algorithm;
+    \item \cref{chap:maximum_matching} demonstrates how to extend perfect matching algorithms to maximum matching scenarios.
+%    \item \cref{chap:implementation} discusses practical approaches to implementing matrix-based algorithms.
+\end{enumerate}

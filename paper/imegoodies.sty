@@ -8,7 +8,7 @@
 %       which includes file hooks, and make the corresponding
 %       adjustments (in particular, the AtEndDvi fix further below).
 \NeedsTeXFormat{LaTeX2e}[2017/01/01]
-\ProvidesPackage{packages/imegoodies}[2022/11/13 1.0 Load several common
+\ProvidesPackage{imegoodies}[2022/11/13 1.0 Load several common
                                             and useful packages]
 
 
@@ -251,7 +251,7 @@
 \gappto{\FlushRight}{\hbadness=\@M}
 \gappto{\Center}{\hbadness=\@M} % not \center
 
-\RequirePackage{packages/evenragged}
+\RequirePackage{evenragged}
 
 % Espaçamento entre linhas configurável (\singlespacing, \onehalfspacing etc.)
 \RequirePackage{setspace}
@@ -838,7 +838,7 @@
 % geração do PDF final.
 %
 % ATENÇÃO: varioref, hyperref e cleveref devem ser carregadas nessa ordem!
-%\RequirePackage{varioref}
+\RequirePackage{varioref}
 
 %\labelformat{figure}{Figura~#1}
 %\labelformat{table}{Tabela~#1}
@@ -865,7 +865,7 @@
 }
 \ExplSyntaxOff
 
-%\RequirePackage[nameinlink,noabbrev,capitalise]{cleveref}
+\RequirePackage[nameinlink,noabbrev,capitalise]{cleveref}
 %% cleveref não tem tradução para o português
 %\crefname{figure}{Figura}{Figuras}
 %\crefname{table}{Tabela}{Tabelas}

@@ -1,11 +1,16 @@
 \usepackage{mdframed}
 
+\setlist{itemsep=0.5pt, parsep=0pt, topsep=0pt, partopsep=0pt}
+
 %%%%%%%%%%%%%% Definitions %%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\Naturals}{\mathbb{N}}
+\newcommand{\Integers}{\mathbb{Z}}
 \newcommand{\Reals}{\mathbb{R}}
 \newcommand*{\symdiff}{\mathbin{\Delta}}
 
 \newcommand{\SC}[1]{\textsc{#1}}
+
+\DeclareMathOperator{\rank}{rank}
 
 \newmdenv[linecolor=black,linewidth=1pt]{problembox}
 
@@ -22,6 +27,8 @@
     \end{problembox}
 }
 
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
 %%%%%%%%%%%%% Theorems, lemmas, etc. %%%%%%%%%%%%
 
 % Hints
@@ -35,52 +42,48 @@
 % {.5em} % espaço após o título
 % {\thmname{#1}\space(?)\thmnumber{ #2}\thmnote{ (#3)}} % formato do título
 % % vazio significa {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{theorem*}{Theorem}
 
-\newtheoremstyle{theorem}
-{3pt} 
-{3pt} 
-{\itshape} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
-\theoremstyle{theorem}
-\newtheorem{theorem}{Theorem}
+% Lemma style
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{lemma*}{Lemma}
 
 %% Definition style
-\newtheoremstyle{definition} 
-{3pt} 
-{3pt} 
-{} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thesection.\thmnumber{#2} \thmnote{#3}} 
-\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{definition*}{Definition}
 
-\newtheoremstyle{corollary}
-{3pt} 
-{3pt} 
-{\itshape} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
-\theoremstyle{corollary}
+% Corollary style
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{corollary*}{Corollary}
 
-\newtheoremstyle{fact} 
-{3pt} 
-{3pt} 
-{} 
-{} 
-{\bfseries} 
-{:} 
-{.5em} 
-{\thmname{#1} \thesection.\thmnumber{#2} (\thmnote{#3})} 
-\theoremstyle{fact}
+% Fact style
 \newtheorem{fact}[theorem]{Fact}
+\newtheorem{fact*}{Fact}
+
+% Algorithm style
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{algorithm*}{Algorithm}
+
+% Proof style
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep0pt \partopsep0pt % Removes extra vertical space before proof
+  \trivlist
+  \item[\hskip\labelsep
+        \itshape
+    #1\@addpunct{.}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+\makeatother
+
+\BeforeBeginEnvironment{theorem}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{lemma}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{fact}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{proposition}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{corollary}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{definition}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{example}{\vspace{0.4\baselineskip}}
+\BeforeBeginEnvironment{remark}{\vspace{0.4\baselineskip}}

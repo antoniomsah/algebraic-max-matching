@@ -1,20 +1,45 @@
 \section{Linear algebra}
 \label{sec:linear_algebra}
 
-\begin{definition}[Rings]
+% \begin{definition}[Fields]
+% \label{def:fields}
+% A \textbf{field} is a set with two binary operations on \(\mathbb{F}\) called \textit{addition} and \textit{multiplication}.
+% The addition of two elements \(a\) and \(b\) from \(\mathbb{F}\) is denoted as \(a + b\).
+% The multiplication of two elements \(a\) and \(b\) from \(\mathbb{F}\) is denoted as \(a \cdot b\).
+% These operations must satisfy the following properties:
+% \begin{enumerate}
+%     \item Associativity: \(a + (b + c) = (a + b) + c\) and \(a \cdot (b \cdot c) = (a \cdot b) \cdot c\);
+%     \item Commutativity: \(a + b = b + a\) and \(a \cdot b = b \cdot a\);
+%     \item Additive and multiplicative identity: there exists two elements \(0\) and \(1\) in \(\mathbb{F}\) such that \(a + 0 = a\) and \(a \cdot 1 = a\);
+%     \item Additive inverse: there exists an element \(-a\) such that \(a + (-a) = 0\);
+%     \item Multiplicative inverse: there exists an element \(a^{-1}\) such that \(a \cdot a^{-1} = 1\);
+%     \item Distributivity: 
+% \end{enumerate}
+% \end{definition}
 
+\begin{definition}[Submatrix]
+    Let \(M\) be a matrix, we say that \(M'\) is a \textbf{submatrix} of \(M\) if we can obtain \(M'\) by removing zero or more rows and/or columns from \(M\).
 \end{definition}
-
-\begin{definition}[Fields]
-
-\end{definition}
+\noindent
+Let \(M\) be a matrix. 
+For any sets of indices \(R\) and \(C\), we write \(M_{R,C}\) or \(M[R,C]\) to denote the submatrix of \(M\) formed by keeping only the rows indexed by \(R\) and columns indexed by \(C\). 
+Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix containing all rows indexed by \(R\) and all columns of \(M\) (resp., \(M[*, C]\)).
+% \begin{definition}[Matrix inverse]
+%     Let \(M\) be a matrix. 
+%     The \textbf{inverse} of \(M\), denoted as \(M^{-1}\), is a matrix such that \(MM^{-1} = I\)
+% \end{definition}
+% 
+% \begin{definition}[Singular matrix]
+%     A matrix \(M\) is \textbf{singular} if it does not have an inverse.
+%     A matrix is \textbf{non-singular} if it is not singular.
+% \end{definition}
 
 \begin{theorem}[Sherman-Morrison-Woodbury formula]
     Let \(M\) be a \(n \times n\) matrix, \(U\) and \(V\) be \(n \times k\) matrices.
     Suppose that \(M\) is non-singular. 
     Then
     \begin{enumerate}[label = (\arabic*)]
-        \item \(M + UV^T\) is non-singular iff \(I + V^TM^{-1}U\) is non-singular;
+        \item \(M + UV^T\) is non-singular if and only if \(I + V^TM^{-1}U\) is non-singular;
         \item If \(M + UV^T\) is non-singular, then
         \[
             (M + UV^T)^{-1} = M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}.
@@ -31,42 +56,49 @@
     \]
     Let \(A \coloneqq (I + V^TM^{-1}U)\), then
     \begin{align*}
-        &(M + UV^T)(M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1})\\
+        &\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\! (M + UV^T)(M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1})\\
         = \, &(M + UV^T)(M^{-1} - M^{-1}UA^{-1}V^TM^{-1})\\
-        = \, &(MM^{-1} - MM^{-1}UA^{-1}V^TM^{-1}) + UV^T(M^{-1} - M^{-1}UA^{-1}V^TM^{-1}) \\
-        = \, &(I - UA^{-1}V^TM^{-1}) + UV^T(M^{-1} - M^{-1}UA^{-1}V^TM^{-1}) \\
         = \, &(I - UA^{-1}V^TM^{-1}) + (UV^TM^{-1} - UV^TM^{-1}UA^{-1}V^TM^{-1}) \\
         = \, &(I + UV^TM^{-1}) - (UA^{-1}V^TM^{-1} + UV^TM^{-1}UA^{-1}V^TM^{-1}) \\
-        = \, &(I + UV^TM^{-1}) - U(A^{-1}V^TM^{-1} + V^TM^{-1}UA^{-1}V^TM^{-1}) \\
         = \, &(I + UV^TM^{-1}) - U(I + V^TM^{-1}U)(A^{-1}V^TM^{-1}) \\
         = \, &(I + UV^TM^{-1}) - UAA^{-1}V^TM^{-1} \\
-        = \, &(I + UV^TM^{-1}) - UIV^TM^{-1} =  I + UV^TM^{-1} - UV^TM^{-1} = I. \qedhere \\
+        = \, &I + UV^TM^{-1} - UV^TM^{-1} = I. \qedhere \\
     \end{align*}
 \end{proof}
 
-\begin{corollary}
-    \label{cor:1}
-    Let \(M\) be a non-singular matrix and let \(N\) be its inverse, 
-    \(M'\) be a matrix which is identical to \(M\) except that \(M'_{S, S} \neq M_{S, S}\)
-    and \(\Delta \coloneqq M'_{S, S} - M_{S, S}\).
-    If \(M'\) is non-singular, then
+% Colocar uma equivalencia com o do Nick
+\begin{corollary}[Corollary 2.1 from Harvey's paper]
+    \label{cor:update_cor} 
+    Let \(M\) be a non-singular square matrix, let \(N \coloneqq M^{-1}\) and let \(S\) be a subset of rows from \(M\).
+    Let \(\tilde{M}\) be a matrix that which is identical to \(M\) except that \(\tilde{M}_{S, S} \neq M_{S, S}\)
+    and \(\Delta \coloneqq \tilde{M}_{S, S} - M_{S, S}\).
+    If \(\tilde{M}\) is non-singular, then
     \[
-        M'^{-1} = N - N_{*, S}(I + \Delta N_{S, S})^{-1}\Delta N_{S, *}.
+        \tilde{M}^{-1} = N - N_{*, S}(I + \Delta N_{S, S})^{-1}\Delta N_{S, *}.
     \]
 \end{corollary}
 
-\begin{definition}[Schur complement]
-    Let \(M\) be a square matrix of the form
-    \[
-        M = 
-        \begin{pmatrix}
-            W & X \\
-            Y & Z 
-        \end{pmatrix}
-    \]
-    where \(Z\) is a square matrix; Then, if \(Z\) is non-singular, the matrix
-    \[
-        C = W - X Z^{-1} Y
-    \]
-    is the \textit{Schur complement} of \(Z\) in \(M\).
+\begin{proof}
+    TODO - Prove.
+\end{proof}
+
+\begin{definition}[Skew-symmetric matrix]
+\label{def:skew}
+    A matrix \(M\) is \textbf{skew-symmetric} if \(M = -M^{T}\).
 \end{definition}
+
+\begin{fact}[Inverse of a skew-symmetric matrix]
+    Let \(M\) be a skew-symmetric matrix.
+    If \(M\) is non-singular, then \(M^{-1}\) is also skew-symmetric.
+\end{fact}
+
+\subsection{Time complexities of Matrix algorithms}
+\label{matrix:time_complexity}
+Let \(M\) be a \(n \times n\) matrix. 
+Let \(\omega\) denote the \textbf{matrix multiplication exponent}, defined as the infimum of the exponent over all matrix multiplication algorithms. 
+Then, the following matrix algorithms can be computed in time complexity \(O(n^\omega)\):
+\begin{itemize}
+    \item \textit{Matrix inversion:} Computing the inverse of M, if it exists.
+    \item \textit{Matrix rank:} Determining the rank of M.
+\end{itemize}
+Detailed explanations of these algorithms can be found in \cref{sec:matrix_impl}.

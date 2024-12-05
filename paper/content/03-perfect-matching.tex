@@ -1,0 +1,268 @@
+\chapter{Perfect matching}
+\label{chap:perfect_matching}
+
+This chapter explores finding a perfect matching through an algebraic approach, diverging from traditional graph theory methods. The chapter is structured around three key components:
+
+The initial section introduces fundamental algebraic techniques, focusing on Tutte matrices and their probabilistic representation. 
+Then, a self-reducible algorithm is presented, demonstrating an algebraic strategy for matching problems. 
+The chapter ends with an enhanced version of the self-reducible algorithm that uses rank-two matrix update techniques. 
+
+\section{Tutte Matrix}
+
+\begin{definition}[Indeterminates]
+    An \textbf{indeterminate} is a variable that is not assigned a specific value. It represents a symbolic placeholder that never assumes a value.
+\end{definition}
+
+\begin{definition}[Tutte Matrix]
+\label{def:tutte_matrix}
+    Let \(G\) be a graph and \(n \coloneqq |V_G|\).
+    For each edge \(uv \in E_G\) associate an indeterminate \(t_{uv}\).
+    The Tutte matrix is the \(n \times n\) skew-symmetric matrix such that \(T_{uv} = \pm t_{uv}\) if \(uv \in E_G\) and \(0\), otherwise.
+    The sign is chosen such that \(T\) is skew-symmetric.
+    The Tutte matrix of \(G\) is denoted as \(T_G\).
+\end{definition}
+
+For a Tutte matrix \(T\), its Pfaffian, denoted \(Pf(T)\), is a polynomial whose complete mathematical definition involves sophisticated algebraic concepts beyond our current scope. 
+However, two properties of the Pfaffian are crucial:
+\begin{enumerate}
+    \item The Pfaffian \(Pf(T)\) has a monomial for every perfect matching in the underlying graph of \(T\);
+    \item There exists a fundamental relationship between the Pfaffian and the determinant of a Tutte matrix: \(\det(T) = Pf(T)^2\). 
+\end{enumerate}
+
+For a comprehensive treatment of this polynomial and its properties, we refer the reader to Chapter 7 of \citet{Godsil:1993}.
+
+\begin{fact}[\citet{Tutte}]
+    \label{fact:matching_condition}
+    A graph \(G\) has a perfect matching iff \(T_G\) is non-singular.
+\end{fact}
+
+\begin{proof}
+    Direct from the property \(\det(T) = Pf(T)^2\).
+\end{proof}
+
+While this property of Tutte matrices is powerful, it presents a computational challenge for algorithmic applications. 
+The issue stems from the relationship \(\det(T) = Pf(T)^2\), and that \(Pf(T)\) contains a monomial for each perfect matching in graph \(G\).
+Since a graph may contain exponentially many perfect matchings, symbolic computation becomes infeasible.
+
+\subsection{Probabilistic representation of a Tutte Matrix}
+\label{sec:prob_tutte}
+\noindent
+Fortunately, a probabilistic solution was proposed at \citet{Lovasz:Random}:
+\begin{itemize}
+    \item Replace the non-zero entries of \(T\) with random values from a sufficiently large field.
+\end{itemize}
+This provides a computationally feasible approach.
+
+\begin{lemma}[Schwartz-Zippel]
+\label{lemma:schwartz-zippel}
+Let \(\mathbb{F}\) be a field, and let \(p(x_1, x_2, \dots, x_n)\) be a non-zero polynomial in \(\mathbb{F}[x_1, x_2, \dots, x_n]\) of total degree \(d\). 
+Suppose \(S \subseteq \mathbb{F}\) is a finite subset of the field \( \mathbb{F} \). 
+If the variables \(x_1, x_2, \dots, x_n\) are chosen independently and uniformly at random from \( S \), then
+\[
+\Pr\big[p(x_1, x_2, \dots, x_n) = 0\big] \leq \frac{d}{|S|}.
+\]
+\end{lemma}
+
+\begin{proof}
+    Theorem 7.2 from \citet{MotwaniRaghavan1995}.
+\end{proof}
+
+According to \cref{lemma:schwartz-zippel}, selecting a sufficiently large field significantly reduces the probability of failure.
+Hence, the rank of a Tutte matrix with random values is preserved with \textbf{high} probability.
+
+\subsubsection{Selecting a sufficiently large field}
+Constructing such a field is straightforward. 
+For any prime number \(p\), the set of integers modulo \(p\), denoted as \(\Integers_{p}\), forms a field of size \(p\).
+
+\subsubsection{Implementation Overview}
+
+For a graph \(G\). The following assumption is used for the algorithm pertaining Tutte matrices:
+\begin{itemize}
+    \item For each edge \(uv \in E(G)\), the matrix entry \(t_{uv}\) (since Tutte matrices are skew-symmetric, \(t_{vu}\) is also fixed) is randomly selected from the finite field \(\Integers_p\). 
+    These values are not altered throughout the subsequent algorithmic procedures and can be accessed in $O(1)$ time complexity;
+%    \item Vertices are mapped to zero-indexed integers, enabling straightforward traversal by iterating from \(0\) to \(n-1\). 
+%    This indexing scheme provides a canonical and computationally convenient representation of the graph's structure.
+\end{itemize}
+Then, there are the following algorithms related to Tutte matrices.
+
+\begin{programruledcaption}{\(\SC{TutteMatrix}\)}
+    \label{alg:tuttematrix}
+    \begin{lstlisting}[
+      language={pseudocode},
+      style=pseudocode,
+      style=wider,
+      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      specialidentifiers={},
+    ]
+function AddEdge($T, uv$) // Adds an edge to $T$ in $O(1)$ time complexity
+    $T_{u, v}$ := $t_{uv}$
+    $T_{v, u}$ := $t_{vu}$
+end
+
+function RemoveEdge($T, uv$) // Removes an edge from $T$ in $O(1)$ time complexity
+    $T_{u, v}$ := 0
+    $T_{v, u}$ := 0
+end
+
+function TutteMatrix($G$) // Builds a Tutte matrix in $O(n^2)$ time complexity
+    n := $|V(G)|$
+    Let $T$ be a $n \times n$ matrix in $\Integers_p$
+    for \textbf{each} $uv \in E(G)$ do
+        AddEdge($T$, $uv$)
+    end
+    return $T$
+end
+    \end{lstlisting}
+\end{programruledcaption}
+
+\textbf{Actual implementation}
+The addition/removal of edges were omitted in the actual implementation and it can be found in 
+\href{https://github.com/antoniomsah/algebraic-max-matching/blob/e4cbd397941041e953ea673bef6403575ee253bc/code/matrix/tutte-matrix.hpp}{here}.
+
+
+\section{Naive algorithm}
+
+% A tutte matrix to refer to randomized tutte matrix
+
+Using \cref{fact:matching_condition}, the following algorithm finds a perfect matching in time \(O(n^{\omega+2})\).
+\begin{programruledcaption}{\(\SC{NaiveAlgorithm}\)}
+    \begin{lstlisting}[
+      language={pseudocode},
+      style=pseudocode,
+      style=wider,
+      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      specialidentifiers={},
+    ]
+function NaiveAlgorithm($G$)
+    $T$ := TutteMatrix($G$)
+    $M$ := $\emptyset$
+    for \textbf{ each } $uv \in E_G$ do
+        RemoveEdge($T, uv$)
+        if $T$ is singular then // By \cref{fact:matching_condition}, edge $uv$ is essential.
+            $M$ := $M \cup \{uv\}$
+        else 
+            AddEdge($T, uv$)
+        end
+    end
+    return $M$ 
+end
+    \end{lstlisting}
+\end{programruledcaption}
+\noindent
+\textbf{Time complexity:}
+Let \(f(n)\) be the running time of \(\SC{NaiveAlgorithm}\) when \(|V_G| \eqcolon n\).
+\begin{itemize}
+    \item \textbf{Line 2}: Since a graph has at most \(\binom{n}{2}\), there are at most \(O(n^2)\) iterations;
+    \item \textbf{Line 4}: Checking if a matrix is singular can be done in \(O(n^\omega)\) (\cref{matrix:time_complexity}).
+\end{itemize}
+Thus, the running time can be expressed as:
+\[
+    f(n) = O(n^2) O(n^\omega) = O(n^{\omega+2}).
+\]
+
+\section{Rank-two update algorithm}
+
+The bottleneck of the previous algorithm is the necessity to recompute the whole matrix inverse after each iteration.
+
+\begin{theorem}[Rank-two update]
+\label{thm:rank-two}
+    Let \(G\) be a graph. 
+    Let \(T \coloneqq T_G\). 
+    Let \(N \coloneqq T^{-1}\).
+    Let \(S \subseteq \{u, v\}\) such that \(u, v \in V(G)\) and \(T_{S, S} \neq 0\).
+    Let \(\tilde{T}\) be a matrix which is identical to \(T\) except that \(\tilde{T}_{S, S} = 0\).
+    Let \(\Delta \coloneqq \tilde{T} - T\).
+    If \(\tilde{T}\) is non-singular, then
+    \[
+        \tilde{T}^{-1} = N + N_{*, S} \cdot 
+        \begin{pmatrix}
+            1 / (1 + T_{u, v}N_{u, v}) & 0 \\
+            0 &  1 / (1 + T_{v, u}N_{v, u})
+        \end{pmatrix}
+        \cdot \Delta \cdot N_{S, *}.
+    \]
+\end{theorem}
+
+\begin{proof}
+By \cref{cor:update_cor}, it suffices to prove that 
+\[
+    (I + \Delta N_{S, S})^{-1} = 
+    \begin{pmatrix}
+        1 / (1 + T_{u, v}N_{u, v}) & 0 \\
+        0 &  1 / (1 + T_{v, u}N_{v, u}).
+    \end{pmatrix}
+\]
+Then, one has
+\begin{align*}
+    (I + \Delta N_{S, S}) &= I + 
+    \begin{pmatrix} 0 & -T_{u,v} \\ -T_{v, u} & 0 \end{pmatrix} 
+    \begin{pmatrix} 0 & N_{u, v} \\ N_{v, u} & 0\end{pmatrix} & \\
+    &= I + 
+    \begin{pmatrix} -T_{v, u}N_{u, v} & 0  \\ 0 & -T_{u, v}N_{v, u} \end{pmatrix} & \\
+    &= I + 
+    \begin{pmatrix} T_{u, v}N_{u, v} & 0  \\ 0 & T_{v, u}N_{v, u} \end{pmatrix} & \text{\(T\) and \(N\) are skew-symmetric} \\
+    &= 
+    \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}. &  \\
+\end{align*}
+Finally, 
+\begin{align*}
+    (I + \Delta N_{S, S})^{-1} 
+    &= \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}^{-1} \\
+    &= \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}.
+\end{align*}
+\end{proof}
+
+\begin{corollary}[Edge removal condition]
+    \label{cor:condition_edge_removal}
+    Let \(G\) be a graph, \(T\) be the Tutte matrix of \(G\) and \(N \coloneqq T^{-1}\).
+    An edge \(ij \in E(G)\) is essential if and only if \(N_{i,j} = -1/T_{i,j}\).
+\end{corollary}
+
+\begin{proof}
+    Direct from \cref{thm:rank-two}. 
+\end{proof}
+
+We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essential. 
+If it's not, we remove it and update the matrix using a rank-two update. 
+This removes the necessity to recompute the whole inverse in each iteration.
+
+\begin{programruledcaption}{\(\SC{Rank-2 update algorithm}\)}
+    \begin{lstlisting}[
+      language={pseudocode},
+      style=pseudocode,
+      style=wider,
+      functions={Rank2Update, TutteMatrix, RemoveEdge, RemoveVertex},
+      specialidentifiers={},
+    ]
+        function Rank2Algorithm(G)
+            $T$ := TutteMatrix($G$)
+            $N$ := $T^{-1}$
+            $M$ := $\emptyset$
+            for \textbf{ each } $uv \in E_G$ do
+                if $N_{\{u,v\}} = - 1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
+                    $M$ := $M \gets uv$
+                else 
+                    RemoveEdge($T, uv$)
+                    S := $\{u, v\}$
+                    $N$ := Rank2Update($S, T, N$) // \cref{thm:rank-two}.
+                end
+            end
+            return $M$
+        end
+    \end{lstlisting}
+\end{programruledcaption}
+
+First, let \(t(n)\) be the running time of \(\SC{Rank2Update}\) when \(|V_G| \eqcolon n\).
+Let \(A\) be a \(n \times m\) matrix and let \(B\) be a \(m \times o\).
+In this context, note that \(\tilde{N} \cdot T_{S, S}\) is a \(2 \times 2\) matrix.
+Therefore, \(N_{*, S}\tilde{N}T_{S, S}\) is a \(n \times 2\) matrix.
+Consequently,
+\[
+    t(n) = O(2n^2) = O(n^2).
+\]
+
+Let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
+The running time can be expressed as:
+\begin{align*}
+    g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
+\end{align*}

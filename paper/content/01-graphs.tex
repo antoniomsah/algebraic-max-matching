@@ -1,6 +1,7 @@
 \renewcommand*{\proofname}{Proof}
 
 \chapter{Preliminaries}
+\label{chap:preliminaries}
 
 The purpose of this chapter is to introduce key concepts related to the maximum matching algorithm. 
 The chapter covers important topics such as the definition of graph maximum matching, the Sherman-Morrison-Woodbury formula, and the Schur complement. 
@@ -12,23 +13,22 @@ These concepts are fundamental for understanding the algorithm's correctness and
 \label{sec:graph}
 
 \begin{definition}[Graph]
-	\label{def:graph}
-	A \textbf{graph} \(G\) is a triple \((V, E, \varphi)\) such that
+\label{def:graph}
+	A \textbf{graph} \(G\) is a pair \((V, E)\) such that
 	\begin{enumerate}[label=(\roman*)]
-		\item \(V\) is the \textbf{vertex set};
-		\item \(E\) is the \textbf{edge set};
-		\item \(\varphi: E \to V \times V\) is a relation between each edge and a pair of vertices, called the \textbf{incidence function} of \(G\).
+		\item \(V\) is a finite set, whose elements are called \textbf{vertices};
+		\item \(E\) is set of unordered pairs of vertices, whose elements are called \textbf{edges};
 	\end{enumerate}
-	Usually, it is used 
-	\(V(G)\) or \(V_G\) to denote \(V\) and 
-	\(E(G)\) or \(E_G\) to denote \(E\).
-	Also, if \(e \in E(G)\) and \(\varphi(e) = (u, v)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\);
-	When the context is clear, \((u, v)\) may be abbreviated to \(uv\).
 \end{definition}
+\noindent
+The vertex set of a graph \(G\) is denoted as \(V_G\) or \(V(G)\).
+The edge set of a graph \(G\) is denoted as \(E_G\) or \(E(G)\).
+If \(\{u,v\} \in E(G)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\) and \(e\) \textbf{incides} in both \(u\) and \(v\);
+When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 
 \begin{definition}[Matching]
-	\label{def:matching}
-	For a graph \(G \coloneqq (V, E, \varphi)\), a set \(M \subseteq E\) is a \textbf{matching} of \(G\) if and only if no two edges in \(M\) share an end.
+\label{def:matching}
+	For a graph \(G \coloneqq (V, E)\), a subset \(M \subseteq E\) is a \textbf{matching} of \(G\) if no two edges in \(M\) share an end.
 	A vertex \(v \in V\) is \(M\)-covered if some edge of \(M\) incides in \(v\), 
 	and it is said that \(M\) covers \(v\);
 	Otherwise, \(v\) is \(M\)-exposed.
@@ -36,17 +36,24 @@ These concepts are fundamental for understanding the algorithm's correctness and
 	\begin{itemize}
 		\item 
 			\textbf{maximal}, if there is no edge \(e \in E \setminus M\) such that \(M \cup \{e\}\) is a matching of \(G\);
-
 		\item
 			\textbf{maximum}, if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\);
-	
 		\item
-			\textbf{perfect}, if \(2|V_G| = |M|\), i.e., every vertex of \(G\) is covered.
+			\textbf{perfect}, if \(|V_G| = |M|\), i.e., every vertex of \(G\) is \(M\)-covered.
 	\end{itemize}
-	Now, the following problem can be introduced.
-	\\
+	The \textbf{matching number}, denoted as \(\nu(G)\), is the size of a maximum matching of \(G\).
 \end{definition}
-\begin{problem}{Maximum matching}
-	Given a graph, find a maximum matching of this graph.
-\end{problem}
 
+\begin{definition}[Essential edges]
+\label{def:essential}
+    Let \(G \coloneqq (V, E)\) be a graph that has a perfect matching.
+    An edge \(e \in E_G\) is \textbf{essential} if the graph \((V_G, E_G \setminus \{e\})\) does not have a perfect matching.
+    An edge is \textbf{inessential} if it is not essential.
+\end{definition}
+\noindent
+Now, the following problem can be introduced.
+\newpage
+\begin{problem}{Maximum matching}
+\label{prob:max_matching}
+	Given a graph \(G\), find a maximum matching of \(G\).
+\end{problem}
