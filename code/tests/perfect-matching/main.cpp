@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
   MatchingSolver solver(graph, edges);
   solver.set_strategy(stoi(argv[1]));
-  solver.solve();
+  solver.PerfectMatching();
 
   return 0;
 }

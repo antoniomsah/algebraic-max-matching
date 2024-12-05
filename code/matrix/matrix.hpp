@@ -355,7 +355,36 @@ class Matrix {
       }
     }
     return N;
-  };
+  }
+
+  int rank() {
+    Matrix<T> A = (*this);
+    const int n = A.num_rows(), m = A.num_columns();
+    int rnk = 0;
+    vector<bool> selected(n, false);
+    for (int i = 0; i < m; i++) {
+      int j;
+      for (j = 0; j < n; j++) {
+        if (!selected[j] and A(i, j) != T()) break;
+      }
+
+      if (j == n) {
+        continue;
+      }
+      rnk++;
+      selected[j] = true;
+      for (int p = i+1; p < m; p++) {
+        A(j, p) /= A(j, i);
+      }
+      for (int k = 0; k < n; k++) {
+        if (k == j or A(k, i) == T()) continue;
+        for (int p = i+1; p < m; p++) {
+          A(k, p) -= A(j, p) * A(k, i);
+        }
+      }
+    }
+    return rnk;
+  }
 
   /**
    * @brief Checks if a matrix is singular (i.e., has inverse).
@@ -369,12 +398,12 @@ class Matrix {
       return true;
     }
     return false;
-  };
+  }
 
   /**
    * @brief Checks if a matrix is nonsingular (i.e., does not have an inverse).
    *
    * @return True, if it does not have an inverse; False, otherwise.
    */
-  bool is_nonsingular() { return not is_singular(); };
+  bool is_nonsingular() { return not is_singular(); }
 };
