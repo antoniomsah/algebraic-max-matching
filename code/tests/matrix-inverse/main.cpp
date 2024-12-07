@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 
-#include "../../matrix/matrix.hpp"
-#include "../../matrix/modular-integer.hpp"
+#include "../../classes/matrix.hpp"
+#include "../../classes/modular-integer.hpp"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ signed main() {
     }
   }
 
-  if (M.is_nonsingular()) {
+  if (M.isNonSingular()) {
     cout << "YES\n";
     Matrix<modular_int<MOD>> N = M.inverse();
     for (int i = 0; i < n; i++) {
