@@ -20,8 +20,11 @@ using std::vector;
  **/
 template <class T>
 class Matrix {
-  int n, m;
+protected:
   vector<T> M;
+
+private:
+  int n, m;
   std::shared_ptr<IMatrixMultiplicationStrategy<T>> multiplicationStrategy;
 
   /**
@@ -32,7 +35,7 @@ class Matrix {
    * @return the inverse of matrix A.
    */
   Matrix<T> invert(const Matrix<T>& A) {
-    const int n = A.num_rows(), m = A.num_columns();
+    const int n = A.numRows(), m = A.numColumns();
 
     Matrix<T> NA(n, m);
     if (n == 1) {
@@ -103,7 +106,7 @@ class Matrix {
    *	Complexity: O(nm)
    **/
   Matrix(int n, int m) : n(n), m(m), M(n * m) {
-    set_strategy(std::make_shared<DefaultMultiplicationStrategy<T>>());
+    setStrategy(std::make_shared<DefaultMultiplicationStrategy<T>>());
   }
 
   /**
@@ -124,15 +127,15 @@ class Matrix {
    *
    * @return true, if it is; False, otherwise
    **/
-  bool is_square() { return (n == m); };
+  bool isSquare() { return (n == m); };
 
   T& operator()(const int& i, const int& j) { return M[i * m + j]; }
   const T& operator()(const int& i, const int& j) const { return M[i * m + j]; }
 
-  size_t num_rows() const { return n; }
-  size_t num_columns() const { return m; }
+  size_t numRows() const { return n; }
+  size_t numColumns() const { return m; }
 
-  void set_strategy(
+  void setStrategy(
       std::shared_ptr<IMatrixMultiplicationStrategy<T>> strategy) {
     multiplicationStrategy = strategy;
   }
@@ -270,8 +273,8 @@ class Matrix {
    */
   Matrix<T> operator()(char c, const vector<int>& S) const {
     assert(c == '*');
-    Matrix<T> M(num_rows(), S.size());
-    for (size_t i = 0; i < num_rows(); i++) {
+    Matrix<T> M(numRows(), S.size());
+    for (size_t i = 0; i < numRows(); i++) {
       for (size_t j = 0; j < S.size(); j++) {
         M(i, j) = (*this)(i, S[j]);
       }
@@ -286,9 +289,9 @@ class Matrix {
    */
   Matrix<T> operator()(const vector<int>& S, char c) const {
     assert(c == '*');
-    Matrix<T> M(S.size(), num_columns());
+    Matrix<T> M(S.size(), numColumns());
     for (size_t i = 0; i < S.size(); i++) {
-      for (size_t j = 0; j < num_columns(); j++) {
+      for (size_t j = 0; j < numColumns(); j++) {
         M(i, j) = (*this)(S[i], j);
       }
     }
@@ -302,8 +305,8 @@ class Matrix {
    **/
   Matrix<T> transpose() {
     Matrix<T> result(m, n);
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < m; j++) {
+    for (size_t i = 0; i < numRows(); i++) {
+      for (size_t j = 0; j < numColumns(); j++) {
         result(j, i) = (*this)(i, j);
       }
     }
@@ -329,14 +332,14 @@ class Matrix {
    *
    **/
   Matrix<T> inverse() {
-    assert(num_rows() == num_columns());
+    assert(numRows() == numColumns());
 
     // First power of two NOT smaller than num_rows()
-    const size_t n = std::__bit_ceil(num_rows());
+    const size_t n = std::__bit_ceil(numRows());
     Matrix<T> A(n, n);
     for (size_t i = 0; i < n; i++) {
       for (size_t j = 0; j < n; j++) {
-        if (i < num_rows() and j < num_columns()) {
+        if (i < numRows() and j < numColumns()) {
           A(i, j) = (*this)(i, j);
         } else {
           A(i, j) = (i == j);
@@ -348,9 +351,9 @@ class Matrix {
 
     Matrix<T> NA = invert(B) * A.transpose();
 
-    Matrix<T> N(num_rows(), num_columns());
-    for (size_t i = 0; i < num_rows(); i++) {
-      for (size_t j = 0; j < num_columns(); j++) {
+    Matrix<T> N(numRows(), numColumns());
+    for (size_t i = 0; i < numRows(); i++) {
+      for (size_t j = 0; j < numColumns(); j++) {
         N(i, j) = NA(i, j);
       }
     }
@@ -359,7 +362,7 @@ class Matrix {
 
   int rank() {
     Matrix<T> A = (*this);
-    const int n = A.num_rows(), m = A.num_columns();
+    const int n = A.numRows(), m = A.numColumns();
     int rnk = 0;
     vector<bool> selected(n, false);
     for (int i = 0; i < m; i++) {
@@ -391,7 +394,7 @@ class Matrix {
    *
    * @return True, if it has an inverse; False, otherwise.
    */
-  bool is_singular() {
+  bool isSingular() {
     try {
       (*this).inverse();
     } catch (const SingularMatrixError& e) {
@@ -405,5 +408,5 @@ class Matrix {
    *
    * @return True, if it does not have an inverse; False, otherwise.
    */
-  bool is_nonsingular() { return not is_singular(); }
+  bool isNonSingular() { return not isSingular(); }
 };

@@ -38,7 +38,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
         // Update N[S,S]
         TutteMatrix<MOD> Delta = T(S_[i], S_[i]) - TSi,
-          ISi(S_[i].size(), S_[i].size());
+          ISi(S_[i].size());
 
         // Identity matrix
         for (size_t j = 0; j < S_[i].size(); j++) {
@@ -123,7 +123,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         delete_edges_crossing(RM[i], SM[j], T, N);
 
         TutteMatrix<MOD> Delta = T(RMSM, RMSM) - TRMSM,
-                          I(RMSM.size(), RMSM.size());
+                          I(RMSM.size());
 
         // Identity matrix
         for (size_t k = 0; k < RMSM.size(); k++) {
@@ -155,24 +155,18 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
    * @brief Finds a perfect matching.
    * Complexity: O(n^{\omega}).
    */
-  vector<pair<int, int>> solve(
-      const vector<vector<int>>& graph,
-      const vector<pair<int, int>>& edges) const override {
-    const size_t n = graph.size(), m = edges.size();
+  vector<pair<int, int>> solve(const Graph& G) const override {
+    const size_t n = V(G).size(), m = E(G).size();
 
-    TutteMatrix T = build_tutte_matrix<MOD>(n, edges);
+    TutteMatrix T = GetTutteMatrix(G);
 
-    std::cerr << "Running Harvey's algorithm" << std::endl;
-
-    if (T.is_singular()) {
+    if (T.isSingular()) {
       return {};
     }
 
-    TutteMatrix<MOD> N = T.inverse();
+    TutteMatrix<MOD> N = T.getInverse();
 
-    vector<int> V(n);
-    std::iota(V.begin(), V.end(), 0);
-    delete_edges_within(V, T, N);
+    delete_edges_within(V(G), T, N);
 
     vector<pair<int, int>> matching;
     for (size_t u = 0; u < n; u++) {
