@@ -35,6 +35,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 % \end{definition}
 
 \begin{theorem}[Sherman-Morrison-Woodbury formula]
+\label{thm:smw-formula}
     Let \(M\) be a \(n \times n\) matrix, \(U\) and \(V\) be \(n \times k\) matrices.
     Suppose that \(M\) is non-singular. 
     Then
@@ -79,7 +80,17 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 \end{corollary}
 
 \begin{proof}
-    TODO - Prove.
+    Let \(k \coloneqq |S|\). 
+    Let \(A \coloneqq U \Delta U^T\) such that \(U\) is a \(n \times k\) matrix that selects the \(S\) columns from a \(n \times n\) matrix, i.e.
+    for a \(n \times n\) matrix \(M\), one has \(MU = M_{*, S}\). Let \(V^T \coloneqq \Delta U^T\).
+
+    Then, by \cref{thm:smw-formula}, 
+    \begin{align*}
+        \tilde{M}^{-1} &= (M + U V^T)^{-1} = (M + U \Delta U^T)^{-1} \\
+        &= N - N U (I + \Delta U^T N U)^{-1} \Delta U^T N \\
+        &= N - N_{*, S} (I + \Delta U^T N U)^{-1} \Delta N_{S, *} \\
+        &= N - N_{*, S} (I + \Delta N_{S, S})^{-1} \Delta N_{S, *} \qedhere
+    \end{align*}
 \end{proof}
 
 \begin{definition}[Skew-symmetric matrix]

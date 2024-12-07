@@ -31,7 +31,6 @@ The objective is providing a sufficient understanding of key matrix operations.
 
 \subsection{Matrix inverse}
 
-
 An \(O(n^\omega)\) algorithm that computes the matrix inverse can be achieved exclusively using matrix multiplication with complexity \(O(n^\omega)\). 
 The theorem and pseudo-code below demonstrates the process.
 
@@ -42,13 +41,7 @@ The theorem and pseudo-code below demonstrates the process.
 \end{theorem}
 
 \begin{proof}
-    \[
-        A^{-1} = 
-        \begin{pmatrix}
-            B^{-1} + B^{-1}C^TS^{-1}CB^{-1} & -B^{-1}C^TS^{-1} \\
-            -S^{-1}CB^{-1} & S^{-1}
-        \end{pmatrix}
-    \]
+    Theorem 28.2 from \citet{CLRS}.
 \end{proof}
 
 Now, the following algorithm can be implemented.

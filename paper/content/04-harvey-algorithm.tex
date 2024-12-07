@@ -23,6 +23,10 @@ The algorithm maintains two matrices, \(T\) and \(N\), such that they are initia
 \end{enumerate}
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
 
+\subsection{\(\SC{DivideInTwo}\)}
+\(\SC{DivideInTwo(A)}\) is a function that divides a set \(A\) in two parts, \(R, S\), such that \(R \cup S = A\), \(R \cap S = \emptyset\) and \(|R| - |S| \leq 1\).
+This function has time complexity \(O(n)\) and can be implemented through integer indexing the set.
+
 \subsection{\(\SC{DeleteEdgesCrossing}\)}
 
 $\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) and \(S\) and 
@@ -33,8 +37,6 @@ The following invariant must be preserved:
     of \(\SC{DeleteEdgesCrossing}(R_i, S_j)\).
 \end{itemize}
 To maintain this invariant the following updates are done. 
-
-TODO - Explicit that in both update theorems \(T\) is a Tutte Matrix.
 
 \begin{theorem}[Update 1]
 \label{update:1}
@@ -90,7 +92,7 @@ We have the following algorithm.
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={DeleteEdgesCrossing, RemoveEdge},
+      functions={DeleteEdgesCrossing, RemoveEdge, DivideInTwo},
       specialidentifiers={},
     ]
         function DeleteEdgesCrossing(R, S) // R and S are \textbf{disjoint} sets of vertices.
@@ -108,8 +110,8 @@ We have the following algorithm.
             end
 
             $RS$ := $R \cup S$
-            $R_1, R_2$ := divide R in two 
-            $S_1, S_2$ := divide S in two
+            $R_1, R_2$ := DivideInTwo($R$)
+            $S_1, S_2$ := DivideInTwo($S$)
             for i \textbf{in} {1, 2} do
                 for j \textbf{in} {1, 2} do
                     $T', N'$ := $T, N$ // Save current T and N states
@@ -122,14 +124,23 @@ We have the following algorithm.
     \end{lstlisting}
 \end{programruledcaption}
 
-\textbf{Time complexity:} Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when \(|R| = r\) and \(|S| = s\).
-Let \(n = r + s\). Clearly, \(f(r, s) = O(1)\) for either base case;
-Otherwise, one has:
+    \textbf{Time complexity:} A line-by-line analysis:
+\begin{enumerate}
+    \item \textbf{Base case (Lines 4 to 13)}: Each operation takes \(O(1)\) time;
+    \item \textbf{Dividing in half (Lines 16 and 17)}: Takes \(O(n)\) time;
+    \item \textbf{Saving the states (Line 20)}: Takes \(O(n^2)\) time;
+    \item \textbf{Recursive call (Line 21)}: Recurrence is \(f(r/2, s/2)\);
+    \item \textbf{Delta (Line 22)}: Matrix subtraction is \(O(n^2)\);
+    \item \textbf{Update submatrix (Line 23)}: Takes \(O(n^\omega)\).
+\end{enumerate}
+Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when \(|R| = r\) and \(|S| = s\).
+Let \(n = r + s\). The base cases are \(O(1)\). Otherwise, one has:
 \begin{align*}
-    f(r, s) &= O(r + s) + O(r) + O(s) + 4(2O(n^2) + T(r / 2, s / 2) + O(n^\omega))  \\
-    &= 8O(n^2) + f(r / 2, s / 2) + 4O(n^\omega) \\
-    &= f(r / 2, s / 2) + O(n^\omega) = 2O(n^\omega) = O(n^\omega). \numberthis \label{alg:delcrossing}
+    f(r, s) &= O(1) + O(1) + O(n^2) + 4(O(n^2) + T(r / 2, s / 2) + O(n^\omega))  \\
+    &= 4O(n^2) + f(r / 2, s / 2) + 4O(n^\omega) \\
+    &= f(r / 2, s / 2) + O(n^\omega) = O(n^\omega). \numberthis \label{alg:delcrossing}
 \end{align*}
+The \ref{alg:delcrossing} is a standard analysis of divide-and-conquer recurrence relation \cite{CLRS}.
 
 
 \subsection{\(\SC{DeleteEdgesWithin}\)}
@@ -161,13 +172,13 @@ We have the following algorithm.
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={DeleteEdgesCrossing, DeleteEdgesWithin},
+      functions={DeleteEdgesCrossing, DeleteEdgesWithin, DivideInTwo},
       specialidentifiers={},
     ]
         function DeleteEdgesWithin(S)
             if |S| = 1 return
 
-            $S_1, S_2$ := divide S in the middle
+            $S_1, S_2$ := DivideInTwo($S, 2$)
             for i \textbf{in} {1, 2} do
                 $T', N'$ := $T, N$ // Save current T and N states
                 DeleteEdgesWithin($S_i$)
@@ -179,7 +190,8 @@ We have the following algorithm.
     \end{lstlisting}
 \end{programruledcaption}
 
-\textbf{Time complexity:} Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
+\textbf{Time complexity:} 
+Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
 The base case is direct.
 Then, 
 \begin{align}
