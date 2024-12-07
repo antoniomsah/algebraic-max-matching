@@ -86,18 +86,18 @@ vector<pair<int, int>> MatchingSolver::PerfectMatching() {
       matching = algorithmStrategy->solve(G);
       if (G.hasMatching(matching)) {
         matching_size = max(matching_size, matching.size());
-        if (2 * matching_size == G.size()) break;
+        if (2 * matching_size == V(G).size()) break;
       }
     }
 
-    if (2 * matching_size != G.size()) {
+    if (2 * matching_size != V(G).size()) {
       return {};
     }
     return matching;
 }
 
 vector<pair<int, int>> MatchingSolver::MaximumMatching() {
-  const int n = G.size();
+  const int n = V(G).size();
 
   int unmatched_vertices = n - 2*G.MatchingNumber();
   Graph aG(n + unmatched_vertices); // Augmented Graph.

@@ -27,7 +27,7 @@ class Rank2AlgorithmStrategy : public IAlgorithmStrategy {
 
  public:
   /**
-   * @brief Finds a perfect matching using rank2-updates.
+   * @brief Finds a perfect matching using rank two updates.
    * Complexity: O(n^4).
    */
   vector<pair<int, int>> solve(const Graph& G) const override {

@@ -13,7 +13,7 @@ using namespace std;
  * Solves perfect matching in O(n^\omega). 
  */
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
-  array<vector<int>, 2> divide_in_half(const vector<int>& V) const {
+  array<vector<int>, 2> DivideInTwo(const vector<int>& V) const {
       const int n = V.size();
 
       array<vector<int>, 2> S;
@@ -29,8 +29,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
   void DeleteEdgesWithin(const vector<int> &S, TutteMatrix<MOD> &T, TutteMatrix<MOD> &N) const {
       if (S.size() == 1) return;
 
-      array<vector<int>, 2> S_ = divide_in_half(S);
+      array<vector<int>, 2> S_ = DivideInTwo(S);
       for (int i = 0; i < 2; i++) {
+        // Save the states.
         TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
         TutteMatrix<MOD> oldNSS = N(S, S);
 
@@ -93,7 +94,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return;
     } 
 
-    // R \cup S
+    // RS := R \cup S.
     vector<int> RS(R.size() + S.size());
     for (int i = 0; i < RS.size(); i++) {
       if (i < R.size()) {
@@ -103,8 +104,8 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       }
     }
 
-    array<vector<int>, 2> RM = divide_in_half(R),
-                          SM = divide_in_half(S);
+    array<vector<int>, 2> RM = DivideInTwo(R),
+                          SM = DivideInTwo(S);
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -152,8 +153,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
  public:
   /**
-   * @brief Finds a perfect matching.
+   * Finds a perfect matching.
    * Complexity: O(n^{\omega}).
+   * @return A perfect matching, if one exists. Else, returns an empty set.
    */
   vector<pair<int, int>> solve(const Graph& G) const override {
     const int n = V(G).size(), m = E(G).size();
@@ -165,7 +167,6 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     }
 
     TutteMatrix<MOD> N = T.getInverse();
-
     DeleteEdgesWithin(V(G), T, N);
 
     vector<pair<int, int>> matching;

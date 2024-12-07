@@ -16,19 +16,17 @@ class Graph {
     Matrix<int> adj; // Adjacency matrix, adj(u, v) = index of edge connecting u and v.
     TutteMatrix<MOD> T;
 
-    bool hasVertex(int u) { return u < int(V.size()); }
-
 public:
     Graph(int n) : V(n), adj(n, n), T(TutteMatrix<MOD>(n)) {
-        for (size_t i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             V[i] = i;
-            for (size_t j = 0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 adj(i, j) = -1;
             }
         }
     }
 
-    int size() { return V.size(); }
+    bool hasVertex(int u) { return u < int(V.size()); }
 
     bool isAdj(int u, int v) {
         if (!hasVertex(u) || !hasVertex(v)) return false;
