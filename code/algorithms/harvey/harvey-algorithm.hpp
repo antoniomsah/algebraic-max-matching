@@ -14,34 +14,34 @@ using namespace std;
  */
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
   array<vector<int>, 2> divide_in_half(const vector<int>& V) const {
-      const size_t n = V.size();
+      const int n = V.size();
 
       array<vector<int>, 2> S;
       S[0].reserve(n / 2);
       S[1].reserve(n - n / 2);
-      for (size_t i = 0; i < n; i++) {
+      for (int i = 0; i < n; i++) {
         S[i >= n / 2].push_back(V[i]);
       }
       return S;
   }
 
   template <int MOD>
-  void delete_edges_within(const vector<int> &S, TutteMatrix<MOD> &T, TutteMatrix<MOD> &N) const {
+  void DeleteEdgesWithin(const vector<int> &S, TutteMatrix<MOD> &T, TutteMatrix<MOD> &N) const {
       if (S.size() == 1) return;
 
       array<vector<int>, 2> S_ = divide_in_half(S);
-      for (size_t i = 0; i < 2; i++) {
+      for (int i = 0; i < 2; i++) {
         TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
         TutteMatrix<MOD> oldNSS = N(S, S);
 
-        delete_edges_within(S_[i], T, N);
+        DeleteEdgesWithin(S_[i], T, N);
 
         // Update N[S,S]
         TutteMatrix<MOD> Delta = T(S_[i], S_[i]) - TSi,
           ISi(S_[i].size());
 
         // Identity matrix
-        for (size_t j = 0; j < S_[i].size(); j++) {
+        for (int j = 0; j < S_[i].size(); j++) {
           ISi(j, j) = 1;
         }
 
@@ -56,17 +56,17 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
 
         // Update N
-        for (size_t j = 0; j < S.size(); j++) {
-          for (size_t k = 0; k < S.size(); k++) {
+        for (int j = 0; j < S.size(); j++) {
+          for (int k = 0; k < S.size(); k++) {
             N(S[j], S[k]) = newNSS(j, k);
           }
         }
       }
-      delete_edges_crossing(S_[0], S_[1], T, N);
+      DeleteEdgesCrossing(S_[0], S_[1], T, N);
   }
 
   template <int MOD>
-  void delete_edges_crossing(
+  void DeleteEdgesCrossing(
     const vector<int> &R, 
     const vector<int> &S,
     TutteMatrix<MOD> &T,
@@ -95,7 +95,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
     // R \cup S
     vector<int> RS(R.size() + S.size());
-    for (size_t i = 0; i < RS.size(); i++) {
+    for (int i = 0; i < RS.size(); i++) {
       if (i < R.size()) {
         RS[i] = R[i];
       } else {
@@ -106,10 +106,10 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     array<vector<int>, 2> RM = divide_in_half(R),
                           SM = divide_in_half(S);
 
-    for (size_t i = 0; i < 2; i++) {
-      for (size_t j = 0; j < 2; j++) {
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
         vector<int> RMSM(RM[i].size() + SM[j].size());
-        for (size_t k = 0; k < RMSM.size(); k++) {
+        for (int k = 0; k < RMSM.size(); k++) {
           if (k < RM[i].size()) {
             RMSM[k] = RM[i][k];
           } else {
@@ -120,20 +120,20 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
         TutteMatrix<MOD> oldNRS = N(RS, RS);
 
-        delete_edges_crossing(RM[i], SM[j], T, N);
+        DeleteEdgesCrossing(RM[i], SM[j], T, N);
 
         TutteMatrix<MOD> Delta = T(RMSM, RMSM) - TRMSM,
                           I(RMSM.size());
 
         // Identity matrix
-        for (size_t k = 0; k < RMSM.size(); k++) {
+        for (int k = 0; k < RMSM.size(); k++) {
           I(k, k) = 1;
         }
 
         // Array mapping elements to their indices in RS,
         // e.g. RS = {2, 3, 4} and RMSM = {3, 4} then RMSMi = {1, 2}.
         vector<int> RMSMi(RMSM.size());
-        for (size_t j = 0, k = 0; j < RS.size() and k < RMSM.size(); j++) {
+        for (int j = 0, k = 0; j < RS.size() and k < RMSM.size(); j++) {
           if (RS[j] == RMSM[k]) RMSMi[k++] = j;
         }
 
@@ -141,8 +141,8 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix<MOD> newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
 
         // Update N
-        for (size_t k = 0; k < RS.size(); k++) {
-          for (size_t l = 0; l < RS.size(); l++) {
+        for (int k = 0; k < RS.size(); k++) {
+          for (int l = 0; l < RS.size(); l++) {
             N(RS[k], RS[l]) = newNRS(k, l);
           }
         }
@@ -156,7 +156,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
    * Complexity: O(n^{\omega}).
    */
   vector<pair<int, int>> solve(const Graph& G) const override {
-    const size_t n = V(G).size(), m = E(G).size();
+    const int n = V(G).size(), m = E(G).size();
 
     TutteMatrix T = GetTutteMatrix(G);
 
@@ -166,11 +166,11 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
 
     TutteMatrix<MOD> N = T.getInverse();
 
-    delete_edges_within(V(G), T, N);
+    DeleteEdgesWithin(V(G), T, N);
 
     vector<pair<int, int>> matching;
-    for (size_t u = 0; u < n; u++) {
-      for (size_t v = u+1; v < n; v++) {
+    for (int u = 0; u < n; u++) {
+      for (int v = u+1; v < n; v++) {
         if (T(u, v).x != 0) matching.emplace_back(u, v);
       }
     }

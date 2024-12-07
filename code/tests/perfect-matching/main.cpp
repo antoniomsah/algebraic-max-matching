@@ -6,6 +6,8 @@
 
 using namespace std;
 
+const string OUTPUT_DIR = "./output";
+
 int main(int argc, char* argv[]) {
   MatchingSolver::initialize();
 
@@ -22,7 +24,13 @@ int main(int argc, char* argv[]) {
 
   MatchingSolver solver(G);
   solver.setStrategy(stoi(argv[1]));
-  solver.PerfectMatching();
+
+  auto M = solver.PerfectMatching();
+  if (M.empty() || !G.hasMatching(M)) {
+    cout << "NO\n";
+    return 0;
+  }
+  cout << "YES\n";
 
   return 0;
 }

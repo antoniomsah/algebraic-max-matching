@@ -40,7 +40,7 @@ class MatchingSolver {
   //  * 0 := NaiveAlgorithm // O(n^{\omega + 2})
   //  * 1 := RankTwoAlgorithm // O(n^4)
   //  * 2 := HarveyAlgorithm // O(n^\omega)
-  void setStrategy(const size_t& id) {
+  void setStrategy(const int& id) {
     if (id >= NUM_STRATEGIES) {
       std::cout << "Invalid strategy index, number of strategies is: "
                 << NUM_STRATEGIES << "\n";
@@ -63,94 +63,69 @@ class MatchingSolver {
   /**
    * Finds a perfect matching in the underlying graph of MatchingSolver.
    * It prints any perfect matching from the graph.
+   * @returns A perfect matching, if one exists. Else, returns an empty set.
    */
-  void PerfectMatching();
+  vector<pair<int, int>> PerfectMatching();
 
   /**
    * Finds a maximum matching in the underlying graph of MatchingSolver.
    * It prints any maximum matching from the graph.
+   * @returns A maximum matching.
    */
-  void MaximumMatching();
-
-  int get_maximum_matching_size() {
-    TutteMatrix<MOD> T = GetTutteMatrix(G);
-    return T.rank() / 2;
-  }
-
-  /**
-   * Validates checks if a matching is a valid in the underlying graph of MatchingSolver.
-   */
-  bool validate(const vector<pair<int, int>>& matching) {
-    set<int> matched_vertices;
-    for (auto [u, v] : matching) {
-      if (!G.isAdj(u, v)) { // This edge DOES not exist in the original graph.
-        return false;
-      } 
-      if (matched_vertices.find(u) != matched_vertices.end()) return false;
-      if (matched_vertices.find(v) != matched_vertices.end()) return false;
-      matched_vertices.insert(u);
-      matched_vertices.insert(v);
-    }
-    return true;
-  }
+  vector<pair<int, int>> MaximumMatching();
 };
 
 array<std::shared_ptr<IAlgorithmStrategy>, NUM_STRATEGIES>
     MatchingSolver::strategies;
 
-void MatchingSolver::PerfectMatching() {
+vector<pair<int, int>> MatchingSolver::PerfectMatching() {
     vector<pair<int, int>> matching;
 
     size_t matching_size = 0;
     for (int it = 0; it < MAX_IT; it++) {
       matching = algorithmStrategy->solve(G);
-      if (validate(matching)) {
+      if (G.hasMatching(matching)) {
         matching_size = max(matching_size, matching.size());
         if (2 * matching_size == G.size()) break;
       }
     }
 
     if (2 * matching_size != G.size()) {
-      cout<<"NO\n";
-      return;
+      return {};
     }
-
-    cout << "YES\n";
-    //for (const auto& [u, v] : matching) {
-      //cout << u << ' ' << v << '\n';
-    //}
+    return matching;
 }
 
-void MatchingSolver::MaximumMatching() {
+vector<pair<int, int>> MatchingSolver::MaximumMatching() {
   const int n = G.size();
 
-  int sz = get_maximum_matching_size();
-  int unmatched_vertices = n - 2 * sz;
-  // vector<vector<int>> G(n + unmatched_vertices, vector<int>(n + unmatched_vertices));
-  // vector<pair<int, int>> E = E(G);
-  // for (int i = 0; i < unmatched_vertices; i++) {
-    // int u = n + i; // Index of the new vertex.
-    // for (int v = 0; v < n; v++) {
-      // E.emplace_back(u, v);
-    // }
-  // }
+  int unmatched_vertices = n - 2*G.MatchingNumber();
+  Graph aG(n + unmatched_vertices); // Augmented Graph.
 
-  // for (auto [u, v] : E) {
-    // G[u][v] = G[v][u] = 1;
-  // }
+  for (const auto& [u, v] : E(G)) {
+    aG.addEdge(u, v);
+  }
 
-  // // Augmented graph G has been created.
-  // vector<pair<int, int>> matching;
-  // for (int it = 0; it < MAX_IT; it++) {
-    // matching = algorithmStrategy->solve(G, E);
-    // if (validate(matching) and matching.size() == sz) {
-      // break;
-    // }
-  // }
+  for (int u = n; u < n + unmatched_vertices; u++) {
+    for (int v = 0; v < n; v++) {
+      aG.addEdge(u, v);
+    }
+  }
 
-  // cout << sz << '\n';
-  // for (auto [u, v] : matching) {
-    // if (u >= n or v >= n) continue; // Not an original vertex.
-    // cout << u << ' ' << v << '\n';
-  // }
+  // Augmented graph aG has been created.
+  vector<pair<int, int>> aM; // Matching in the Augmented Graph.
+  for (int it = 0; it < MAX_IT; it++) {
+    aM = algorithmStrategy->solve(aG);
+    if (G.hasMatching(aM)) {
+      break;
+    }
+  }
+
+  vector<pair<int, int>> M;
+  for (const auto &[u, v] : aM) {
+    if (G.isAdj(u, v)) { // This edge exists in the original graph.
+      M.emplace_back(u, v);
+    }
+  }
+  return M;
 }

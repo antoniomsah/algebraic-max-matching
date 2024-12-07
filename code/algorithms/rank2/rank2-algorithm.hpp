@@ -31,7 +31,7 @@ class Rank2AlgorithmStrategy : public IAlgorithmStrategy {
    * Complexity: O(n^4).
    */
   vector<pair<int, int>> solve(const Graph& G) const override {
-    const size_t n = V(G).size(), m = E(G).size();
+    const int n = V(G).size(), m = E(G).size();
 
     auto T = GetTutteMatrix(G);
     if (T.isSingular()) {
