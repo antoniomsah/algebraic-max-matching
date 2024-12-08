@@ -1,6 +1,7 @@
 MAXIMUM_MATCHING_DIR := tests/maximum-matching
 PERFECT_MATCHING_DIR := tests/perfect-matching
 MATRIX_INVERSE_DIR := tests/matrix-inverse
+ALG ?= 2
 
 .PHONY: all clear
 
@@ -18,7 +19,7 @@ test_perfect_matching:
 	@echo "Testing Perfect Matching algorithms..."
 	@cd $(PERFECT_MATCHING_DIR) && \
 		$(MAKE) && \
-		$(MAKE) run "arg=2" && \
+		$(MAKE) run "arg=$(ALG)" && \
 		$(MAKE) compare && \
 		$(MAKE) clean
 
@@ -26,7 +27,7 @@ test_maximum_matching:
 	@echo "Testing Maximum Matching algorithms..."
 	@cd $(MAXIMUM_MATCHING_DIR) && \
 		$(MAKE) && \
-		$(MAKE) run "arg=2" && \
+		$(MAKE) run "arg=$(ALG)" && \
 		$(MAKE) compare && \
 		$(MAKE) clean
 

@@ -31,6 +31,7 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
       if (N(u, v) != -T(u, v).inv()) { // This edge can be removed.
         vector<int> S = {u, v};
         N = rankTwoUpdate(S, T, N);
+        T.removeEdge(u, v);
       } 
     }
     return E(T);
