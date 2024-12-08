@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Trigger on pushes to main
     paths:
-      - 'code/**'  # Only trigger when files in 'code/' are changed
+      - 'code/classes/**'  # Only trigger when files in 'code/' are changed
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -24,6 +24,5 @@ jobs:
       - name: Compile
         run: |
           cd code
-          echo "Running all tests"
-          make
+          make test_matrix_inverse
           echo "Done"

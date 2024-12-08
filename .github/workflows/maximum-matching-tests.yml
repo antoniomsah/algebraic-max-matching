@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to main
+    paths:
+      - 'code/**'  # Only trigger when files in 'code/' are changed
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make
+          
+      - name: Compile
+        run: |
+          cd code
+          make test_perfect_matching
+          echo "Done"
