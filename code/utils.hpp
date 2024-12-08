@@ -69,28 +69,19 @@ Matrix<T> unite(
 }
 
 template <typename T>
-array<Matrix<T>, 3> split(const Matrix<T> &A) {
-    assert(A.isSquare());
-    size_t n = A.numRows();
-    Matrix<T> B(n/2, n/2), C(n/2, n/2), D(n/2, n/2);
+array<Matrix<T>, 4> split(const Matrix<T> &M) {
+    assert(M.isSquare());
+    size_t n = M.numRows();
+    Matrix<T> A(n/2, n/2), B(n/2, n/2), C(n/2, n/2), D(n/2, n/2);
     for (int i = 0; i < n/2; i++) {
         for (int j = 0; j < n/2; j++) {
-            B(i, j) = A(i, j);
+            A(i, j) = M(i, j);
+            B(i, j) = M(i, n/2 + j);
+            C(i, j) = M(n/2 + i, j);
+            D(i, j) = M(n/2 + i, n/2 + j);
         }
     }
-
-    for (int i = n / 2; i < n; i++) {
-        for (int j = 0; j < n / 2; j++) {
-            C(i - n / 2, j) = A(i, j);
-        }
-    }
-
-    for (int i = n / 2; i < n; i++) {
-        for (int j = n / 2; j < n; j++) {
-            D(i - n / 2, j - n / 2) = A(i, j);
-        }
-    }
-    return {B, C, D};
+    return {A, B, C, D};
 }
 
 template <const int P>

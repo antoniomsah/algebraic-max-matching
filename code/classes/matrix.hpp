@@ -272,8 +272,9 @@ Matrix<T> Matrix<T>::invert(const Matrix<T>& A) {
     return NA;
   } 
 
-  auto [B, C, D] = split(A);
-  Matrix<T> NB = invert(B), CT = C.transpose(), S = D - C * NB * CT,
+  auto [B, CT, C, D] = split(A);
+  Matrix<T> NB = invert(B), 
+            S = D - C * NB * CT, // Schur complement.
             NS = invert(S);
 
   return unite(
