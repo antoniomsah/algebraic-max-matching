@@ -52,5 +52,18 @@ public:
     (*this)(v, u) = 0;
   }
 
+  // E(T) returns the edges remaining in T, i.e. entries
+  // that are not zero.
+  friend std::vector<std::pair<int, int>> E(const TutteMatrix& T) {
+    int n = T.numRows();
+    std::vector<std::pair<int, int>> edges;
+    for (int u = 0; u < n; u++) {
+      for (int v = u+1; v < n; v++) {
+        if (T(u, v).x) edges.emplace_back(u, v);
+      }
+    }
+    return edges;
+  }
+
   TutteMatrix getInverse() { return TutteMatrix((*this).inverse()); }
 };

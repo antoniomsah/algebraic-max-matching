@@ -26,10 +26,9 @@ class NaiveAlgorithmStrategy : public IAlgorithmStrategy {
     for (const auto& [u, v] : E(G)) {
       T.removeEdge(u, v);
       if (T.isSingular()) { // This edge is essential.
-        M.emplace_back(u, v); 
         T.addEdge(u, v);
       }
     }
-    return M;
+    return E(T);
   }
 };

@@ -5,6 +5,7 @@
 
 #include "algorithm-strategy-interface.hpp"
 #include "../config.hpp"
+#include "../utils.hpp"
 
 using namespace std;
 
@@ -13,18 +14,6 @@ using namespace std;
  * Time complexity: O(O(multiply)), where O(multiply) is the time complexity of the matrix multiplication algorithm used.
  */
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
-  array<vector<int>, 2> DivideInTwo(const vector<int>& V) const {
-      const int n = V.size();
-
-      array<vector<int>, 2> S;
-      S[0].reserve(n / 2);
-      S[1].reserve(n - n / 2);
-      for (int i = 0; i < n; i++) {
-        S[i >= n / 2].push_back(V[i]);
-      }
-      return S;
-  }
-
   template <int MOD>
   void DeleteEdgesWithin(const vector<int> &S, TutteMatrix<MOD> &T, TutteMatrix<MOD> &N) const {
       if (S.size() == 1) return;
@@ -80,44 +69,22 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     // Need to check a SINGLE edge for the update to be valid
     // Not sufficient to be |R| = 1
     if (max(R.size(), S.size()) == 1) {
-      for (const int& r : R) {
-        for (const int& s : S) {
-          if (T(r, s).x != 0 and N(r, s) != T(r, s).inv() * (-1)) {
-            N(r, s) = N(r, s) * (T(r, s) * N(r, s) * (-1) + 1) / (T(r, s) * N(r, s) + 1);
-            N(s, r) = N(r, s) * (-1);
-
-            // remove edge
-            T(r, s) = T(s, r) = 0;
-          }
-        }
+      int r = R[0], s = S[0];
+      if (T(r, s).x != 0 and N(r, s) != T(r, s).inv() * (-1)) {
+        N(r, s) = N(r, s) * (T(r, s) * N(r, s) * (-1) + 1) / (T(r, s) * N(r, s) + 1);
+        N(s, r) = N(r, s) * (-1);
+        T.removeEdge(r, s);
       }
       return;
     } 
 
-    // RS := R \cup S.
-    vector<int> RS(R.size() + S.size());
-    for (int i = 0; i < RS.size(); i++) {
-      if (i < R.size()) {
-        RS[i] = R[i];
-      } else {
-        RS[i] = S[i - R.size()];
-      }
-    }
-
     array<vector<int>, 2> RM = DivideInTwo(R),
                           SM = DivideInTwo(S);
 
+    vector<int> RS = Unite(R, S);
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
-        vector<int> RMSM(RM[i].size() + SM[j].size());
-        for (int k = 0; k < RMSM.size(); k++) {
-          if (k < RM[i].size()) {
-            RMSM[k] = RM[i][k];
-          } else {
-            RMSM[k] = SM[j][k - RM[i].size()];
-          }
-        }
-
+        vector<int> RMSM = Unite(RM[i], SM[j]);
         TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
         TutteMatrix<MOD> oldNRS = N(RS, RS);
 
@@ -158,23 +125,13 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
    * @return A perfect matching, if one exists. Else, returns an empty set.
    */
   vector<pair<int, int>> solve(const Graph& G) const override {
-    const int n = V(G).size(), m = E(G).size();
-
     TutteMatrix T = GetTutteMatrix(G);
-
     if (T.isSingular()) {
       return {};
     }
 
     TutteMatrix<MOD> N = T.getInverse();
     DeleteEdgesWithin(V(G), T, N);
-
-    vector<pair<int, int>> matching;
-    for (int u = 0; u < n; u++) {
-      for (int v = u+1; v < n; v++) {
-        if (T(u, v).x != 0) matching.emplace_back(u, v);
-      }
-    }
-    return matching;
+    return E(T);
   }
 };
