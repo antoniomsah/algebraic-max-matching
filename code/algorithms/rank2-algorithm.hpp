@@ -44,7 +44,7 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
 
     auto N = T.getInverse();
     for (const auto& [u, v] : E(G)) {
-      if (N(u, v) != T(u, v).inv() * (-1)) {
+      if (N(u, v) != -T(u, v).inv()) {
         vector<int> S = {u, v};
         N = rankTwoUpdate(S, T, N);
       } 

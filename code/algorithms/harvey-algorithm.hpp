@@ -70,9 +70,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     // Not sufficient to be |R| = 1
     if (max(R.size(), S.size()) == 1) {
       int r = R[0], s = S[0];
-      if (T(r, s).x != 0 and N(r, s) != T(r, s).inv() * (-1)) {
-        N(r, s) = N(r, s) * (T(r, s) * N(r, s) * (-1) + 1) / (T(r, s) * N(r, s) + 1);
-        N(s, r) = N(r, s) * (-1);
+      if (T(r, s).x != 0 and N(r, s) != -T(r, s).inv()) {
+        N(r, s) = N(r, s) * (1 - T(r, s) * N(r, s)) / (T(r, s) * N(r, s) + 1);
+        N(s, r) = -N(r, s);
         T.removeEdge(r, s);
       }
       return;

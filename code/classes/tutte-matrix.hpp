@@ -41,7 +41,7 @@ public:
   void addEdge(int u, int v) {
     if (t(u, v) == modular_int<MOD>()) {
       t(u, v) = rng();
-      t(v, u) = t(u, v) * (-1);
+      t(v, u) = -t(u, v);
     }
     (*this)(u, v) = t(u, v);
     (*this)(v, u) = t(v, u);

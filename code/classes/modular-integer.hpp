@@ -38,6 +38,8 @@ struct modular_int {
     return res;
   }
 
+  modular_int operator-() const { return (*this) * (-1); }
+
   modular_int operator*(const modular_int& rhs) const {
     modular_int res = *this;
     res *= rhs;
@@ -68,6 +70,10 @@ struct modular_int {
   bool operator>(modular_int y) const { return x > y.x; }
   bool operator==(modular_int y) const { return x == y.x; }
   bool operator!=(modular_int y) const { return x != y.x; }
+
+  friend modular_int operator-(int lhs, modular_int rhs) {
+    return -rhs + lhs;
+  }
 
   friend std::ostream& operator<<(std::ostream& os, modular_int x) {
     return (os << x.x);
