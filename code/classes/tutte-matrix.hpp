@@ -18,7 +18,11 @@ std::mt19937 rng(
  */
 template <int P>
 class TutteMatrix : public Matrix<modular_int<P>> {
-  Matrix<modular_int<P>> t; // Indeterminate assigned to edge.
+  /**
+   * Indeterminates assigned to each edge.
+   * If no indeterminate was assigned yet, it is zero.
+   */
+  Matrix<modular_int<P>> t; 
 
 public:
   TutteMatrix() : Matrix<modular_int<P>>() {}

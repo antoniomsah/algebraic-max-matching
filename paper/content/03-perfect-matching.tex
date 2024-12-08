@@ -115,9 +115,43 @@ end
     \end{lstlisting}
 \end{programruledcaption}
 
-\textbf{Actual implementation}
-The addition/removal of edges were omitted in the actual implementation and it can be found in 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/e4cbd397941041e953ea673bef6403575ee253bc/code/matrix/tutte-matrix.hpp}{here}.
+Implementation was made in \href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{classes/tutte-matrix.hpp}.
+It is done as follows:
+\begin{programruledcaption}{\(Implementation: \SC{TutteMatrix}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      specialidentifiers={},
+    ]
+// P is an integer such that $\Integers_P$ is a field.
+template <int P>
+class TutteMatrix : public Matrix {
+    /** 
+     * Indeterminates assigned to each edge.
+     * If no indeterminate was assigned yet, it is zero.
+     **/ 
+    Matrix<modular_int<P>> t; 
+    
+public:
+// Constructors here...
+
+    void addEdge(int u, int v) {
+        if (t(u, v) == modular_int<MOD>()) { // If t(u, v) is zero.
+            t(u, v) = rng();
+            t(v, u) = t(u, v) * (-1);
+        }
+        (*this)(u, v) = t(u, v);
+        (*this)(v, u) = t(v, u);
+    }
+
+    void removeEdge(int u, int v) {
+        (*this)(u, v) = 0;
+        (*this)(v, u) = 0;
+    }
+}
+    \end{lstlisting}
+\end{programruledcaption}
 
 
 \section{Naive algorithm}
@@ -159,6 +193,31 @@ Thus, the running time can be expressed as:
 \[
     f(n) = O(n^2) O(n^\omega) = O(n^{\omega+2}).
 \]
+
+\begin{programruledcaption}{\(Implementation: \SC{NaiveAlgorithm}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      specialidentifiers={},
+    ]
+vector<pair<int, int>> NaiveAlgorithm(const Graph& G) {
+    auto T = GetTutteMatrix(G);
+    if (T.isSingular()) {
+        return {};
+    }
+    vector<pair<int, int>> M;
+    for (const auto& [u, v] : E(G)) {
+      T.removeEdge(u, v);
+      if (T.isSingular()) { // This edge is essential.
+        M.emplace_back(u, v); 
+        T.addEdge(u, v);
+      }
+    }
+    return M;
+}
+    \end{lstlisting}
+\end{programruledcaption}
 
 \section{Rank-two update algorithm}
 
@@ -266,3 +325,46 @@ The running time can be expressed as:
 \begin{align*}
     g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
 \end{align*}
+
+\begin{programruledcaption}{\(Implementation: \SC{RankTwoAlgorithm}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      specialidentifiers={},
+    ]
+vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
+    const int n = V(G).size(), m = E(G).size();
+
+    auto T = GetTutteMatrix(G);
+    if (T.isSingular()) {
+        return {};
+    } 
+
+    auto N = T.getInverse();
+    vector<pair<int, int>> matching;
+    for (const auto& [u, v] : E(G)) {
+        if (N(u, v) != T(u, v).inv() * (-1)) {
+            vector<int> S = {u, v};
+            N = rankTwoUpdate(S, T, N);
+        } else {
+            matching.emplace_back(u, v);
+        }
+    }
+    return matching;
+}
+
+template <const int P>
+TutteMatrix<P> rankTwoUpdate(
+    const vector<int>& S, 
+    const TutteMatrix<P>& T,
+    const TutteMatrix<P>& N
+) {
+    const int u = S[0], v = S[1];
+    TutteMatrix<P> TN(2);
+    TN(0, 0) = (T(u, v) * N(u, v) + 1).inv();
+    TN(1, 1) = (T(u, v) * N(u, v) + 1).inv();
+    return N + N('*', S) * TN * T(S, S) * N(S, '*');
+}
+    \end{lstlisting}
+\end{programruledcaption}
