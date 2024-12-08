@@ -38,14 +38,14 @@ This transformation ensures that every previously unmatched vertex now has an ad
             for i := 0; i < |V(G)| - rank(G); i := i + 1 
                 $v$ := new vertex
                 $V(G')$ := $V(G') \cup \{v\}$
-                for $u \in V$ do 
+                for $u \in V(G)$ do 
                     $E(G')$ := $E(G') \cup \{uv\}$
                 end
             end
             $M'$ := PerfectMatching($G'$)
             $M$ := $\emptyset$
             for $uv \in M'$ do 
-                if $u \in E$ and $v \in V$ then // If this edge exists in the original graph.
+                if $u \in E(G)$ and $v \in V(G)$ then // If this edge exists in the original graph.
                     $M$ := $M \cup \{uv\}$
                 end
             end

@@ -32,6 +32,67 @@ vector<int> Unite(const vector<int>& A, const vector<int> &B) {
     return AB;
 }
 
+// Unite unite four matrices.
+template <typename T>
+Matrix<T> unite(
+  Matrix<T> top_left, Matrix<T> top_right, 
+  Matrix<T> bot_left, Matrix<T> bot_right
+) {
+  int n = top_left.numRows() + bot_left.numRows(),
+      m = top_left.numColumns() + top_right.numColumns();
+
+  Matrix<T> A(n, m);
+  for (int i = 0; i < n / 2; i++) {
+    for (int j = 0; j < m / 2; j++) {
+      A(i, j) = top_left(i, j);
+    }
+  }
+
+  for (int i = 0; i < n / 2; i++) {
+    for (int j = m / 2; j < m; j++) {
+      A(i, j) = top_right(i, j - m / 2);
+    }
+  }
+
+  for (int i = n / 2; i < n; i++) {
+    for (int j = 0; j < m / 2; j++) {
+      A(i, j) = bot_left(i - n / 2, j);
+    }
+  }
+
+  for (int i = n / 2; i < n; i++) {
+    for (int j = m / 2; j < m; j++) {
+      A(i, j) = bot_right(i - n / 2, j - m / 2);
+    }
+  }
+  return A;
+}
+
+template <typename T>
+array<Matrix<T>, 3> split(const Matrix<T> &A) {
+    assert(A.isSquare());
+    size_t n = A.numRows();
+    Matrix<T> B(n/2, n/2), C(n/2, n/2), D(n/2, n/2);
+    for (int i = 0; i < n/2; i++) {
+        for (int j = 0; j < n/2; j++) {
+            B(i, j) = A(i, j);
+        }
+    }
+
+    for (int i = n / 2; i < n; i++) {
+        for (int j = 0; j < n / 2; j++) {
+            C(i - n / 2, j) = A(i, j);
+        }
+    }
+
+    for (int i = n / 2; i < n; i++) {
+        for (int j = n / 2; j < n; j++) {
+            D(i - n / 2, j - n / 2) = A(i, j);
+        }
+    }
+    return {B, C, D};
+}
+
 template <const int P>
 TutteMatrix<P> Identity(size_t n) {
     TutteMatrix<P> I(n);
