@@ -2,6 +2,7 @@
 
 #include "./matrix-strategy-interface.hpp"
 
+// DefaultMultiplicationStrategy implements matrix multiplication in O(n^3).
 template <typename T>
 class DefaultMultiplicationStrategy : public IMatrixMultiplicationStrategy<T> {
  public:

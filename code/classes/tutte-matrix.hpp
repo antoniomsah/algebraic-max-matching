@@ -11,12 +11,18 @@
 std::mt19937 rng(
     SEED ? SEED : (int)std::chrono::steady_clock::now().time_since_epoch().count());
 
+/**
+ * Tutte matrix class.
+ * Builds a Tutte matrix over field \Integers_P.
+ * @tparam P an integer such that \Integers_P is a field.
+ */
 template <int P>
 class TutteMatrix : public Matrix<modular_int<P>> {
-  Matrix<modular_int<P>> t;
+  Matrix<modular_int<P>> t; // Indeterminate assigned to edge.
 
 public:
   TutteMatrix() : Matrix<modular_int<P>>() {}
+
   TutteMatrix(int n) : Matrix<modular_int<P>>(n, n) {
     t = Matrix<modular_int<P>>(n, n);
   }

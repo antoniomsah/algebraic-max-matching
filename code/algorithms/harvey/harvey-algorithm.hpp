@@ -9,8 +9,8 @@
 using namespace std;
 
 /**
- * @brief Strategy that uses the algorithm proposed by Harvey. 
- * Solves perfect matching in O(n^\omega). 
+ * Implements HarveyAlgorithm. 
+ * Time complexity: O(O(multiply)), where O(multiply) is the time complexity of the matrix multiplication algorithm used.
  */
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
   array<vector<int>, 2> DivideInTwo(const vector<int>& V) const {

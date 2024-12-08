@@ -9,7 +9,12 @@
 
 using std::pair;
 using std::vector;
-class Rank2AlgorithmStrategy : public IAlgorithmStrategy {
+
+/**
+ * Implements the RankTwoAlgorithm.
+ * Time complexity: O(n^4).
+ */
+class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
 
   template <const int P>
   TutteMatrix<P> rankTwoUpdate(const vector<int>& S, 

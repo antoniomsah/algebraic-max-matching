@@ -8,10 +8,14 @@
 
 using namespace std;
 
+/**
+ * Implements the NaiveAlgorithm. 
+ * Time complexity: O(n^2 O(multiply)), where O(multiply) is the time complexity of the matrix multiplication algorithm used.
+ */
 class NaiveAlgorithmStrategy : public IAlgorithmStrategy {
  public:
   /**
-   * @brief Finds a perfect matching.
+   * Finds a perfect matching.
    * Complexity: O(n^{\omega+2}).
    */
   vector<pair<int, int>> solve(const Graph& G) const override {

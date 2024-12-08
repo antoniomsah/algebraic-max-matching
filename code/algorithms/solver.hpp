@@ -31,15 +31,15 @@ class MatchingSolver {
 
   static void initialize() {
     strategies[0] = std::make_shared<NaiveAlgorithmStrategy>();
-    strategies[1] = std::make_shared<Rank2AlgorithmStrategy>();
+    strategies[1] = std::make_shared<RankTwoAlgorithmStrategy>();
     strategies[2] = std::make_shared<HarveyAlgorithmStrategy>();
   }
 
   // setStrategy changes the algorithm strategy.
   // The default values are 
-  //  * 0 := NaiveAlgorithm // O(n^{\omega + 2})
-  //  * 1 := RankTwoAlgorithm // O(n^4)
-  //  * 2 := HarveyAlgorithm // O(n^\omega)
+  //  - 0: NaiveAlgorithm // O(n^{\omega + 2})
+  //  - 1: RankTwoAlgorithm // O(n^4)
+  //  - 2: HarveyAlgorithm // O(n^\omega)
   void setStrategy(const int& id) {
     if (id >= NUM_STRATEGIES) {
       std::cout << "Invalid strategy index, number of strategies is: "
@@ -50,10 +50,8 @@ class MatchingSolver {
   }
 
   /**
-   * @brief MatchingSolver's constructor.
    * Default strategy is the naive one.
-   * @param graph vector<vector<int>> that represents a graph
-   * @param edges vector<pair<int,int>> of edges
+   * @param graph a Graph class;
    * @param strategy_id id of the selected strategy (default is 0).
    */
   MatchingSolver(Graph graph, int strategy_id = 0) : G(graph) {
@@ -61,14 +59,13 @@ class MatchingSolver {
   }
 
   /**
-   * Finds a perfect matching in the underlying graph of MatchingSolver.
-   * It prints any perfect matching from the graph.
+   * PerfectMatching finds a perfect matching in the underlying graph of MatchingSolver.
    * @returns A perfect matching, if one exists. Else, returns an empty set.
    */
   vector<pair<int, int>> PerfectMatching();
 
   /**
-   * Finds a maximum matching in the underlying graph of MatchingSolver.
+   * MaximumMatching finds a maximum matching in the underlying graph of MatchingSolver.
    * It prints any maximum matching from the graph.
    * @returns A maximum matching.
    */
