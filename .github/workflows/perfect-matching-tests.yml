@@ -9,7 +9,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  run-tests:
+  test-perfect-matching:
     runs-on: ubuntu-latest
 
     steps:

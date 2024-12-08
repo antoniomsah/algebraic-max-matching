@@ -9,7 +9,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  run-tests:
+  test-matrix-inversion:
     runs-on: ubuntu-latest
 
     steps:
