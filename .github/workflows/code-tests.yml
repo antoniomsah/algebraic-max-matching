@@ -9,7 +9,7 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  matrix-inversion-tests:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,21 +23,7 @@ jobs:
           
       - name: Compile
         run: |
-          cd code/tests/matrix-inverse
-          echo "Compiling..."
+          cd code
+          echo "Running all tests"
           make
-          echo "Compiled."
-
-      - name: Run
-        run: |
-          echo "Running..."
-          cd code/tests/matrix-inverse
-          make run
-          echo "Completed."
-
-      - name: Compare
-        run: |
-          echo "Comparing..."
-          cd code/tests/matrix-inverse
-          make compare
-          echo "Success."
+          echo "Done"

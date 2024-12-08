@@ -1,18 +1,39 @@
-# Variables
-CXX := g++
-CXXFLAGS := -Wall -g -Wextra -std=c++20
-TARGET := main
-SRC := main.cpp
+MAXIMUM_MATCHING_DIR := tests/maximum-matching
+PERFECT_MATCHING_DIR := tests/perfect-matching
+MATRIX_INVERSE_DIR := tests/matrix-inverse
 
-# Rules
-all: $(TARGET)
+.PHONY: all clear
 
-.PHONY: $(TARGET)
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
+all: test_matrix_inverse test_perfect_matching test_maximum_matching
+
+test_matrix_inverse:
+	@echo "Testing Matrix Inverse algorithms..."
+	@cd $(MATRIX_INVERSE_DIR) && \
+		$(MAKE) && \
+		$(MAKE) run && \
+		$(MAKE) compare && \
+		$(MAKE) clean
+
+test_perfect_matching:
+	@echo "Testing Perfect Matching algorithms..."
+	@cd $(PERFECT_MATCHING_DIR) && \
+		$(MAKE) && \
+		$(MAKE) run "arg=2" && \
+		$(MAKE) compare && \
+		$(MAKE) clean
+
+test_maximum_matching:
+	@echo "Testing Maximum Matching algorithms..."
+	@cd $(MAXIMUM_MATCHING_DIR) && \
+		$(MAKE) && \
+		$(MAKE) run "arg=2" && \
+		$(MAKE) compare && \
+		$(MAKE) clean
 
 clean:
-	rm -f $(TARGET)
-
-# Phony targets
-.PHONY: all clean
+	@cd $(MATRIX_INVERSE_DIR) && \
+		$(MAKE) clean
+	@cd $(PERFECT_MATCHING_DIR) && \
+		$(MAKE) clean
+	@cd $(MAXIMUM_MATCHING_DIR) && \
+		$(MAKE) clean

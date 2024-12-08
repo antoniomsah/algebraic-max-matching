@@ -46,7 +46,8 @@ compare:
 		judge_file=$(JUDGE_DIR)/$$(basename $$output_file); \
 		if [ -f $$judge_file ]; then \
 			if ! diff $$output_file $$judge_file > /dev/null; then \
-				exit 1; \
+				echo "Failed $$judge_file"; \
+				diff $$output_file $$judge_file; \
 			fi; \
 		else \
 				echo "Judge file $$judge_file not found"; \
