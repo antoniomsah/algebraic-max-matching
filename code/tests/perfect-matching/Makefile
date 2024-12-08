@@ -28,7 +28,7 @@ all: $(OUT)
 $(OUT): $(SRC)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-$(SRC): $(ALG_PATH)/harvey/harvey-algorithm.hpp $(ALG_PATH)/naive/naive-algorithm.hpp $(ALG_PATH)/rank2/rank2-algorithm.hpp
+$(SRC): $(ALG_PATH)/harvey-algorithm.hpp $(ALG_PATH)/naive-algorithm.hpp $(ALG_PATH)/rank2-algorithm.hpp
 
 # Run the program with each file in the input directory
 run: $(OUT)

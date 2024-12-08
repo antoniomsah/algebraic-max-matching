@@ -3,8 +3,8 @@
 #include <vector>
 #include <array>
 
-#include "../../config.hpp"
-#include "../algorithm-strategy-interface.hpp"
+#include "algorithm-strategy-interface.hpp"
+#include "../config.hpp"
 
 using namespace std;
 
