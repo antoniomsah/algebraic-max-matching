@@ -21,8 +21,6 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
    * Complexity: O(n^4).
    */
   vector<pair<int, int>> solve(const Graph& G) const override {
-    const int n = V(G).size(), m = E(G).size();
-
     auto T = GetTutteMatrix(G);
     if (T.isSingular()) {
       return {};
@@ -30,7 +28,7 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
 
     auto N = T.inverse();
     for (const auto& [u, v] : E(G)) {
-      if (N(u, v) != -T(u, v).inv()) {
+      if (N(u, v) != -T(u, v).inv()) { // This edge can be removed.
         vector<int> S = {u, v};
         N = rankTwoUpdate(S, T, N);
       } 

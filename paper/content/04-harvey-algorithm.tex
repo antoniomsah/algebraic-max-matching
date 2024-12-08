@@ -105,9 +105,7 @@ We have the following algorithm.
                     $N_{r, s}$ := $N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})$ // \cref{update:1}.
                     $N_{s, r}$ := $-N_{r, s}$
                     RemoveEdge($T, rs$)
-                end
                 return
-            end
 
             $RS$ := $R \cup S$
             $R_1, R_2$ := DivideInTwo($R$)
@@ -118,9 +116,75 @@ We have the following algorithm.
                     DeleteEdgesCrossing($R_i, S_j$)
                     $\Delta$ := $T_{R_i \cup S_j, R_i \cup S_j} - {T'}_{R_i \cup S_j, R_i \cup S_j}$
                     $N_{RS, RS}$ := $N_{RS, RS}' - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // \cref{update:2}.
-                end
-            end
         end
+    \end{lstlisting}
+\end{programruledcaption}
+
+\begin{programruledcaption}{\(Implementation: \SC{DeleteEdgesCrossing}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={DivideInTwo, removeEdge, DeleteEdgesCrossing, Unite},
+      specialidentifiers={},
+    ]
+template <int MOD>
+void DeleteEdgesCrossing(
+  const vector<int> &R, 
+  const vector<int> &S,
+  TutteMatrix<MOD> &T,
+  TutteMatrix<MOD> &N
+) const {
+  // There are no edges in this case
+  if (min(R.size(), S.size()) == 0) {
+    return;
+  }
+
+  if (max(R.size(), S.size()) == 1) {
+    int r = R[0], s = S[0];
+    if (T(r, s).x != 0 and N(r, s) != -T(r, s).inv()) {
+      N(r, s) = N(r, s) * (1 - T(r, s) * N(r, s)) / (T(r, s) * N(r, s) + 1);
+      N(s, r) = -N(r, s);
+      T.removeEdge(r, s);
+    }
+    return;
+  } 
+
+  auto RM = DivideInTwo(R);
+  auto SM = DivideInTwo(S);
+
+  vector<int> RS = Unite(R, S);
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      // Save states before the recursion.
+      vector<int> RMSM = Unite(RM[i], SM[j]);
+      TutteMatrix TRMSM = T(RMSM, RMSM);
+      TutteMatrix oldNRS = N(RS, RS);
+
+      DeleteEdgesCrossing(RM[i], SM[j], T, N);
+
+      auto Delta = T(RMSM, RMSM) - TRMSM;
+      auto I = Identity<MOD>(RMSM.size());
+
+
+      // Array mapping elements to their indices in RS,
+      // e.g. RS = {2, 3, 4} and RMSM = {3, 4} then RMSMi = {1, 2}.
+      vector<int> RMSMi(RMSM.size());
+      for (int j = 0, k = 0; j < RS.size() and k < RMSM.size(); j++) {
+        if (RS[j] == RMSM[k]) RMSMi[k++] = j;
+      }
+
+      // Update N[R \cup S, R \cup S]
+      TutteMatrix newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
+
+      // Update N
+      for (int k = 0; k < RS.size(); k++) {
+        for (int l = 0; l < RS.size(); l++) {
+          N(RS[k], RS[l]) = newNRS(k, l);
+        }
+      }
+    }
+  }
+}
     \end{lstlisting}
 \end{programruledcaption}
 
@@ -184,9 +248,54 @@ We have the following algorithm.
                 DeleteEdgesWithin($S_i$)
                 $\Delta$ := $T_{S_i, S_i} - {T'}_{S_i, S_i}$
                 $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S_i, S_i})^{-1} \Delta {N'}_{S_i, S}$ // \cref{update:3}. 
-            end
             DeleteEdgesCrossing($S_1, S_2$)
-        end
+    \end{lstlisting}
+\end{programruledcaption}
+
+\begin{programruledcaption}{\(Implementation: \SC{DeleteEdgesWithin}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={Identity, DeleteEdgesWithin, DivideInTwo, DeleteEdgesCrossing},
+      specialidentifiers={},
+    ]
+void DeleteEdgesWithin(
+    const vector<int> &S, 
+    TutteMatrix<MOD> &T, 
+    TutteMatrix<MOD> &N
+) const {
+    if (S.size() == 1) return;
+
+    auto S_ = DivideInTwo(S);
+    for (int i = 0; i < 2; i++) {
+        // Save the states.
+        TutteMatrix<MOD> oldTSi = T(S_[i], S_[i]);
+        TutteMatrix<MOD> oldNSS = N(S, S);
+
+        DeleteEdgesWithin(S_[i], T, N);
+
+        // Array mapping elements to their indices in S,
+        // e.g. S = {1, 2, 3, 4} and S_[i] = {2, 4}, then Si = {1, 3}.
+        vector<int> Si(S_[i].size());
+        for (int j = 0, k = 0; j < S.size() and k < S_[i].size(); j++) {
+        if (S[j] == S_[i][k]) Si[k++] = j;
+        }
+
+        auto Delta = T(S_[i], S_[i]) - oldTSi;
+        auto ISi = Identity<MOD>(S_[i].size());
+
+        // Update N[S,S].
+        TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
+
+        // Update N.
+        for (int j = 0; j < S.size(); j++) {
+            for (int k = 0; k < S.size(); k++) {
+                N(S[j], S[k]) = newNSS(j, k);
+            }
+        }
+    }
+    DeleteEdgesCrossing(S_[0], S_[1], T, N);
+}
     \end{lstlisting}
 \end{programruledcaption}
 
@@ -222,14 +331,27 @@ Consequently, there is the following implementation:
             if T \textbf{ is singular} then return $\emptyset$ // The graph has no perfect matching
             N := $T^{-1}$
             DeleteEdgesWithin($V$)
-            M := $\emptyset$
-            for uv \textbf{in} E(G) do
-                if $T_{uv} \neq 0$ then M := $M \cup \{uv\}$ // This edge was \textbf{not} removed
-            end
-            if $2|M| = |V|$ // Matching is perfect
-                return M
-            end
+            return $E(T)$
         end
+    \end{lstlisting}
+\end{programruledcaption}
+
+\begin{programruledcaption}{\(Implementation: \SC{DeleteEdgesWithin}\)}
+    \begin{lstlisting}[
+      language={C++},
+      style=wider,
+      functions={DeleteEdgesWithin, GetTutteMatrix, isSingular, inverse},
+      specialidentifiers={},
+    ]
+vector<pair<int, int>> HarveyAlgorithm(const Graph& G) const override {
+    TutteMatrix T = GetTutteMatrix(G);
+    if (T.isSingular()) {
+      return {};
+    }
+    TutteMatrix N = T.inverse();
+    DeleteEdgesWithin(V(G), T, N);
+    return E(T);
+}
     \end{lstlisting}
 \end{programruledcaption}
 

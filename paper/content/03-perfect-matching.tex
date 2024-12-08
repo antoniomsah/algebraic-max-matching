@@ -169,17 +169,11 @@ Using \cref{fact:matching_condition}, the following algorithm finds a perfect ma
     ]
 function NaiveAlgorithm($G$)
     $T$ := TutteMatrix($G$)
-    $M$ := $\emptyset$
-    for \textbf{ each } $uv \in E_G$ do
+    for \textbf{ each } $uv \in E(G)$ do
         RemoveEdge($T, uv$)
         if $T$ is singular then // By \cref{fact:matching_condition}, edge $uv$ is essential.
-            $M$ := $M \cup \{uv\}$
-        else 
             AddEdge($T, uv$)
-        end
-    end
-    return $M$ 
-end
+    return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
 \noindent
@@ -206,15 +200,13 @@ vector<pair<int, int>> NaiveAlgorithm(const Graph& G) {
     if (T.isSingular()) {
         return {};
     }
-    vector<pair<int, int>> M;
     for (const auto& [u, v] : E(G)) {
       T.removeEdge(u, v);
       if (T.isSingular()) { // This edge is essential.
-        M.emplace_back(u, v); 
         T.addEdge(u, v);
       }
     }
-    return M;
+    return E(T);
 }
     \end{lstlisting}
 \end{programruledcaption}
@@ -285,29 +277,22 @@ We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essenti
 If it's not, we remove it and update the matrix using a rank-two update. 
 This removes the necessity to recompute the whole inverse in each iteration.
 
-\begin{programruledcaption}{\(\SC{Rank-2 update algorithm}\)}
+\begin{programruledcaption}{\(\SC{Rank-two update algorithm}\)}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
       style=wider,
-      functions={Rank2Update, TutteMatrix, RemoveEdge, RemoveVertex},
+      functions={RankTwoUpdate, TutteMatrix, RemoveEdge, RemoveVertex},
       specialidentifiers={},
     ]
         function Rank2Algorithm(G)
             $T$ := TutteMatrix($G$)
             $N$ := $T^{-1}$
-            $M$ := $\emptyset$
-            for \textbf{ each } $uv \in E_G$ do
-                if $N_{\{u,v\}} = - 1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
-                    $M$ := $M \gets uv$
-                else 
-                    RemoveEdge($T, uv$)
+            for \textbf{ each } $uv \in E(G)$ do
+                if $N_{\{u,v\}} \neq - 1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
                     S := $\{u, v\}$
-                    $N$ := Rank2Update($S, T, N$) // \cref{thm:rank-two}.
-                end
-            end
-            return $M$
-        end
+                    $N$ := RankTwoUpdate($S, T, N$) // \cref{thm:rank-two}.
+            return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
 
@@ -334,8 +319,6 @@ The running time can be expressed as:
       specialidentifiers={},
     ]
 vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
-    const int n = V(G).size(), m = E(G).size();
-
     auto T = GetTutteMatrix(G);
     if (T.isSingular()) {
         return {};
@@ -344,27 +327,12 @@ vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
     auto N = T.getInverse();
     vector<pair<int, int>> matching;
     for (const auto& [u, v] : E(G)) {
-        if (N(u, v) != T(u, v).inv() * (-1)) {
+        if (N(u, v) != T(u, v).inv() * (-1)) { // This edge can be removed.
             vector<int> S = {u, v};
             N = rankTwoUpdate(S, T, N);
-        } else {
-            matching.emplace_back(u, v);
         }
     }
-    return matching;
-}
-
-template <const int P>
-TutteMatrix<P> rankTwoUpdate(
-    const vector<int>& S, 
-    const TutteMatrix<P>& T,
-    const TutteMatrix<P>& N
-) {
-    const int u = S[0], v = S[1];
-    TutteMatrix<P> TN(2);
-    TN(0, 0) = (T(u, v) * N(u, v) + 1).inv();
-    TN(1, 1) = (T(u, v) * N(u, v) + 1).inv();
-    return N + N('*', S) * TN * T(S, S) * N(S, '*');
+    return E(T);
 }
     \end{lstlisting}
 \end{programruledcaption}

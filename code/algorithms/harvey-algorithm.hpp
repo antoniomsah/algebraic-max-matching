@@ -16,43 +16,37 @@ using namespace std;
 class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
   template <int MOD>
   void DeleteEdgesWithin(const vector<int> &S, TutteMatrix<MOD> &T, TutteMatrix<MOD> &N) const {
-      if (S.size() == 1) return;
+    if (S.size() == 1) return;
 
-      array<vector<int>, 2> S_ = DivideInTwo(S);
-      for (int i = 0; i < 2; i++) {
-        // Save the states.
-        TutteMatrix<MOD> TSi = T(S_[i], S_[i]);
-        TutteMatrix<MOD> oldNSS = N(S, S);
+    auto S_ = DivideInTwo(S);
+    for (int i = 0; i < 2; i++) {
+      // Save the states.
+      TutteMatrix<MOD> oldTSi = T(S_[i], S_[i]);
+      TutteMatrix<MOD> oldNSS = N(S, S);
 
-        DeleteEdgesWithin(S_[i], T, N);
+      DeleteEdgesWithin(S_[i], T, N);
 
-        // Update N[S,S]
-        TutteMatrix<MOD> Delta = T(S_[i], S_[i]) - TSi,
-          ISi(S_[i].size());
+      // Array mapping elements to their indices in S,
+      // e.g. S = {1, 2, 3, 4} and S_[i] = {2, 4}, then Si = {1, 3}.
+      vector<int> Si(S_[i].size());
+      for (int j = 0, k = 0; j < S.size() and k < S_[i].size(); j++) {
+        if (S[j] == S_[i][k]) Si[k++] = j;
+      }
 
-        // Identity matrix
-        for (int j = 0; j < S_[i].size(); j++) {
-          ISi(j, j) = 1;
-        }
-
-        // Array mapping elements to their indices in S,
-        // e.g. S = {1, 2, 3, 4} and S_[i] = {2, 4}, then Si = {1, 3}.
-        vector<int> Si(S_[i].size());
-        for (int j = 0, k = 0; j < S.size() and k < S_[i].size(); j++) {
-          if (S[j] == S_[i][k]) Si[k++] = j;
-        }
+      auto Delta = T(S_[i], S_[i]) - oldTSi;
+      auto ISi = Identity<MOD>(S_[i].size());
     
-        // Updated N[S,S]
-        TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
+      // Update N[S,S].
+      TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
 
-        // Update N
-        for (int j = 0; j < S.size(); j++) {
-          for (int k = 0; k < S.size(); k++) {
-            N(S[j], S[k]) = newNSS(j, k);
-          }
+      // Update N.
+      for (int j = 0; j < S.size(); j++) {
+        for (int k = 0; k < S.size(); k++) {
+          N(S[j], S[k]) = newNSS(j, k);
         }
       }
-      DeleteEdgesCrossing(S_[0], S_[1], T, N);
+    }
+    DeleteEdgesCrossing(S_[0], S_[1], T, N);
   }
 
   template <int MOD>
@@ -78,25 +72,20 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return;
     } 
 
-    array<vector<int>, 2> RM = DivideInTwo(R),
-                          SM = DivideInTwo(S);
+    auto RM = DivideInTwo(R);
+    auto SM = DivideInTwo(S);
 
     vector<int> RS = Unite(R, S);
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         vector<int> RMSM = Unite(RM[i], SM[j]);
-        TutteMatrix<MOD> TRMSM = T(RMSM, RMSM);
-        TutteMatrix<MOD> oldNRS = N(RS, RS);
+        TutteMatrix TRMSM = T(RMSM, RMSM);
+        TutteMatrix oldNRS = N(RS, RS);
 
         DeleteEdgesCrossing(RM[i], SM[j], T, N);
 
-        TutteMatrix<MOD> Delta = T(RMSM, RMSM) - TRMSM,
-                          I(RMSM.size());
-
-        // Identity matrix
-        for (int k = 0; k < RMSM.size(); k++) {
-          I(k, k) = 1;
-        }
+        auto Delta = T(RMSM, RMSM) - TRMSM;
+        auto I = Identity<MOD>(RMSM.size());
 
         // Array mapping elements to their indices in RS,
         // e.g. RS = {2, 3, 4} and RMSM = {3, 4} then RMSMi = {1, 2}.
@@ -106,7 +95,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         }
 
         // Update N[R \cup S, R \cup S]
-        TutteMatrix<MOD> newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
+        TutteMatrix newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
 
         // Update N
         for (int k = 0; k < RS.size(); k++) {
@@ -129,8 +118,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     if (T.isSingular()) {
       return {};
     }
-
-    TutteMatrix<MOD> N = T.inverse();
+    TutteMatrix N = T.inverse();
     DeleteEdgesWithin(V(G), T, N);
     return E(T);
   }

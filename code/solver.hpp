@@ -96,14 +96,14 @@ vector<pair<int, int>> MatchingSolver::PerfectMatching() {
 vector<pair<int, int>> MatchingSolver::MaximumMatching() {
   const int n = V(G).size();
 
-  int unmatched_vertices = n - 2*G.MatchingNumber();
-  Graph aG(n + unmatched_vertices); // Augmented Graph.
+  int unmatched = n - 2 * G.MatchingNumber();
+  Graph aG(n + unmatched); // Augmented Graph.
 
   for (const auto& [u, v] : E(G)) {
     aG.addEdge(u, v);
   }
 
-  for (int u = n; u < n + unmatched_vertices; u++) {
+  for (int u = n; u < n + unmatched; u++) {
     for (int v = 0; v < n; v++) {
       aG.addEdge(u, v);
     }
