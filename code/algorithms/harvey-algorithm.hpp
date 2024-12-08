@@ -130,7 +130,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return {};
     }
 
-    TutteMatrix<MOD> N = T.getInverse();
+    TutteMatrix<MOD> N = T.inverse();
     DeleteEdgesWithin(V(G), T, N);
     return E(T);
   }

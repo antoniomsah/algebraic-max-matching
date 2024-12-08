@@ -3,6 +3,8 @@
 #include "vector"
 #include "array"
 
+#include "classes/tutte-matrix.hpp"
+
 using std::array;
 using std::vector;
 
@@ -28,4 +30,20 @@ vector<int> Unite(const vector<int>& A, const vector<int> &B) {
         }
     }
     return AB;
+}
+
+// Performs a RankTwoUpdate on TutteMatrices.
+// S must have size two.
+template <const int P>
+TutteMatrix<P> rankTwoUpdate(const vector<int>& S, 
+                            const TutteMatrix<P>& T,
+                            const TutteMatrix<P>& N) {
+assert(S.size() == 2);
+
+const int u = S[0], v = S[1];
+TutteMatrix<P> TN(2);
+TN(0, 0) = (T(u, v) * N(u, v) + 1).inv();
+TN(1, 1) = (T(u, v) * N(u, v) + 1).inv();
+
+return N + N('*', S) * TN * T(S, S) * N(S, '*');
 }

@@ -65,5 +65,5 @@ public:
     return edges;
   }
 
-  TutteMatrix getInverse() { return TutteMatrix((*this).inverse()); }
+  TutteMatrix inverse() { return TutteMatrix(Matrix<modular_int<P>>::inverse()); }
 };
