@@ -4,8 +4,7 @@
 #include <map>
 #include <vector>
 
-#include "../../config.hpp"
-#include "../../classes/graph.hpp"
+#include "algorithm-strategy-interface.hpp"
 
 using std::pair;
 using std::vector;

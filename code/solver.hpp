@@ -6,12 +6,12 @@
 #include <set>
 #include <vector>
 
-#include "algorithm-strategy-interface.hpp"
-#include "rank2/rank2-algorithm.hpp"
-#include "naive/naive-algorithm.hpp"
-#include "harvey/harvey-algorithm.hpp"
-#include "../classes/graph.hpp"
-#include "../config.hpp"
+#include "algorithms/algorithm-strategy-interface.hpp"
+#include "algorithms/rank2-algorithm.hpp"
+#include "algorithms/naive-algorithm.hpp"
+#include "algorithms/harvey-algorithm.hpp"
+#include "classes/graph.hpp"
+#include "config.hpp"
 
 using std::cout;
 using std::pair;

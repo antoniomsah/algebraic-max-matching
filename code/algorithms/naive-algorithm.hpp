@@ -2,9 +2,7 @@
 
 #include <vector>
 
-#include "../../config.hpp"
-#include "../algorithm-strategy-interface.hpp"
-#include "../../classes/graph.hpp"
+#include "algorithm-strategy-interface.hpp"
 
 using namespace std;
 
