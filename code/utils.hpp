@@ -103,8 +103,8 @@ TutteMatrix<P> rankTwoUpdate(const vector<int>& S,
 
     const int u = S[0], v = S[1];
     TutteMatrix<P> TN(2);
-    TN(0, 0) = (T(u, v) * N(u, v) + 1).inv();
-    TN(1, 1) = (T(u, v) * N(u, v) + 1).inv();
+    TN(0, 0) = 1 / (T(u, v) * N(u, v) + 1);
+    TN(1, 1) = 1 / (T(u, v) * N(u, v) + 1);
 
     return N + N('*', S) * TN * T(S, S) * N(S, '*');
 }

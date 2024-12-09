@@ -28,7 +28,7 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
 
     auto N = T.inverse();
     for (const auto& [u, v] : E(G)) {
-      if (N(u, v) != -T(u, v).inv()) { // This edge can be removed.
+      if (N(u, v) != -1 / T(u, v)) { // This edge can be removed.
         vector<int> S = {u, v};
         N = rankTwoUpdate(S, T, N);
         T.removeEdge(u, v);

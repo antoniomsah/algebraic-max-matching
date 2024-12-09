@@ -136,7 +136,7 @@ public:
     void addEdge(int u, int v) {
         if (t(u, v) == modular_int<P>()) { // If t(u, v) is zero.
             t(u, v) = rng();
-            t(v, u) = t(u, v) * (-1);
+            t(v, u) = -t(u, v);
         }
         (*this)(u, v) = t(u, v);
         (*this)(v, u) = t(v, u);
@@ -324,7 +324,7 @@ vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
 
     auto N = T.getInverse();
     for (const auto& [u, v] : E(G)) {
-        if (N(u, v) != T(u, v).inv() * (-1)) { // This edge can be removed.
+        if (N(u, v) != - 1 / T(u, v)) { // This edge can be removed.
             vector<int> S = {u, v};
             N = rankTwoUpdate(S, T, N);
         }
