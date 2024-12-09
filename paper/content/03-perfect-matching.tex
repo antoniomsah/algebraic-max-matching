@@ -97,36 +97,33 @@ Then, there are the following algorithms related to Tutte matrices.
 function AddEdge($T, uv$) // Adds an edge to $T$ in $O(1)$ time complexity
     $T_{u, v}$ := $t_{uv}$
     $T_{v, u}$ := $t_{vu}$
-end
 
 function RemoveEdge($T, uv$) // Removes an edge from $T$ in $O(1)$ time complexity
     $T_{u, v}$ := 0
     $T_{v, u}$ := 0
-end
 
 function TutteMatrix($G$) // Builds a Tutte matrix in $O(n^2)$ time complexity
     n := $|V(G)|$
     Let $T$ be a $n \times n$ matrix in $\Integers_p$
     for \textbf{each} $uv \in E(G)$ do
         AddEdge($T$, $uv$)
-    end
     return $T$
-end
     \end{lstlisting}
 \end{programruledcaption}
 
-Implementation was made in \href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{classes/tutte-matrix.hpp}.
+Implementation was made in \href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{//code/classes/tutte-matrix.hpp}.
 It is done as follows:
 \begin{programruledcaption}{\(Implementation: \SC{TutteMatrix}\)}
     \begin{lstlisting}[
       language={C++},
       style=wider,
-      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
-      specialidentifiers={},
+      functions={},
+      specialidentifiers={Matrix},
     ]
+// C++ implementation of TutteMatrix.
 // P is an integer such that $\Integers_P$ is a field.
 template <int P>
-class TutteMatrix : public Matrix {
+class TutteMatrix : public Matrix<modular_int<P>> {
     /** 
      * Indeterminates assigned to each edge.
      * If no indeterminate was assigned yet, it is zero.
@@ -137,7 +134,7 @@ public:
 // Constructors here...
 
     void addEdge(int u, int v) {
-        if (t(u, v) == modular_int<MOD>()) { // If t(u, v) is zero.
+        if (t(u, v) == modular_int<P>()) { // If t(u, v) is zero.
             t(u, v) = rng();
             t(v, u) = t(u, v) * (-1);
         }
@@ -188,13 +185,13 @@ Thus, the running time can be expressed as:
     f(n) = O(n^2) O(n^\omega) = O(n^{\omega+2}).
 \]
 
-\begin{programruledcaption}{\(Implementation: \SC{NaiveAlgorithm}\)}
+\begin{programruledcaption}{Implementation: \(\SC{NaiveAlgorithm}\)}
     \begin{lstlisting}[
       language={C++},
       style=wider,
-      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
-      specialidentifiers={},
+      functions={GetTutteMatrix, isSingular, removeEdge, addEdge},
     ]
+// C++ implementation of NaiveAlgorithm.
 vector<pair<int, int>> NaiveAlgorithm(const Graph& G) {
     auto T = GetTutteMatrix(G);
     if (T.isSingular()) {
@@ -311,13 +308,14 @@ The running time can be expressed as:
     g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
 \end{align*}
 
-\begin{programruledcaption}{\(Implementation: \SC{RankTwoAlgorithm}\)}
+\begin{programruledcaption}{Implementation: \(\SC{RankTwoAlgorithm}\)}
     \begin{lstlisting}[
       language={C++},
       style=wider,
-      functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
+      functions={GetTutteMatrix, isSingular, getInverse, RankTwoUpdate},
       specialidentifiers={},
     ]
+// C++ implementation of RankTwoAlgorithm.
 vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
     auto T = GetTutteMatrix(G);
     if (T.isSingular()) {
@@ -325,7 +323,6 @@ vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
     } 
 
     auto N = T.getInverse();
-    vector<pair<int, int>> matching;
     for (const auto& [u, v] : E(G)) {
         if (N(u, v) != T(u, v).inv() * (-1)) { // This edge can be removed.
             vector<int> S = {u, v};

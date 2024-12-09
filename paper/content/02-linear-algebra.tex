@@ -34,24 +34,18 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 %     A matrix is \textbf{non-singular} if it is not singular.
 % \end{definition}
 
-\begin{theorem}[Sherman-Morrison-Woodbury formula]
+\begin{theorem}[Woodbury matrix identity]
 \label{thm:smw-formula}
     Let \(M\) be a \(n \times n\) matrix, \(U\) and \(V\) be \(n \times k\) matrices.
-    Suppose that \(M\) is non-singular. 
-    Then
-    \begin{enumerate}[label = (\arabic*)]
-        \item \(M + UV^T\) is non-singular if and only if \(I + V^TM^{-1}U\) is non-singular;
-        \item If \(M + UV^T\) is non-singular, then
-        \[
-            (M + UV^T)^{-1} = M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}.
-        \]
-    \end{enumerate}
+    Suppose that \(M\) is non-singular and \(M + UV^{T}\) is non-singular. 
+    Then,
+    \[
+        (M + UV^T)^{-1} = M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}.
+    \]
 \end{theorem}
 
 \begin{proof}
-    For (1).
-
-    For (2), it suffices to verify that 
+    It suffices to verify that 
     \[
         (M + UV^T)(M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}) = I.
     \]
@@ -81,15 +75,14 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 
 \begin{proof}
     Let \(k \coloneqq |S|\). 
-    Let \(A \coloneqq U \Delta U^T\) such that \(U\) is a \(n \times k\) matrix that selects the \(S\) columns from a \(n \times n\) matrix, i.e.
-    for a \(n \times n\) matrix \(M\), one has \(MU = M_{*, S}\). Let \(V^T \coloneqq \Delta U^T\).
-
+    Let \(U\)\footnote{Every column should be a canonical basis vector from \(S\)} be a \(n \times k\) matrix that selects the \(S\) columns from a \(n \times n\) matrix, i.e.
+    for a \(n \times n\) matrix \(M\), one has \(MU = M_{*, S}\). Let \(V^T \coloneqq \Delta U^T\). 
     Then, by \cref{thm:smw-formula}, 
     \begin{align*}
-        \tilde{M}^{-1} &= (M + U V^T)^{-1} = (M + U \Delta U^T)^{-1} \\
+        \tilde{M}^{-1} &= (M + U V^T)^{-1} \\
         &= N - N U (I + \Delta U^T N U)^{-1} \Delta U^T N \\
         &= N - N_{*, S} (I + \Delta U^T N U)^{-1} \Delta N_{S, *} \\
-        &= N - N_{*, S} (I + \Delta N_{S, S})^{-1} \Delta N_{S, *} \qedhere
+        &= N - N_{*, S} (I + \Delta N_{S, S})^{-1} \Delta N_{S, *}. \qedhere
     \end{align*}
 \end{proof}
 
