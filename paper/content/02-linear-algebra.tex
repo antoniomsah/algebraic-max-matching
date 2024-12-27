@@ -34,18 +34,38 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 %     A matrix is \textbf{non-singular} if it is not singular.
 % \end{definition}
 
-\begin{theorem}[Woodbury matrix identity]
+\begin{theorem}[Sherman-Morrison-Woodbury formula]
 \label{thm:smw-formula}
-    Let \(M\) be a \(n \times n\) matrix, \(U\) and \(V\) be \(n \times k\) matrices.
-    Suppose that \(M\) is non-singular and \(M + UV^{T}\) is non-singular. 
-    Then,
-    \[
-        (M + UV^T)^{-1} = M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}.
-    \]
+  Suppose that \(M\) is non-singular. 
+  Then
+  \begin{enumerate}[label = (\arabic*)]
+      \item \(M + UV^T\) is non-singular if and only if \(I + V^TM^{-1}U\) is non-singular;
+      \item If \(M + UV^T\) is non-singular, then
+      \[
+          (M + UV^T)^{-1} = M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}.
+      \]
+  \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-    It suffices to verify that 
+    For (1), let 
+    \[
+      A \coloneqq \begin{bmatrix} I & V^T \\ -U & M \end{bmatrix}.
+    \]
+    Note that the Schur complement [\ref{def:schur}] of \(A\) is \(I + V^TM^{-1}U\) and that 
+    \[
+      \begin{bmatrix} I & V^T \\ -U & M \end{bmatrix} = 
+      \begin{bmatrix} I & 0 \\ -U & I \end{bmatrix} \begin{bmatrix} I & V^T \\ 0 & M + UV^T \end{bmatrix}.
+    \]
+    Then, one has
+    \begin{align*}
+      \det(M)\det(I + V^TM^{-1}U) 
+      &= \det(A) \\
+      &= \det\bigg(\begin{bmatrix} I & 0 \\ -U & I \end{bmatrix} \begin{bmatrix} I & V^T \\ 0 & M + UV^T \end{bmatrix}\bigg) \\
+      &= \det(I) \det(M+UV^T) = \det(M+UV^T).
+    \end{align*}
+    Thus, (1) is proven.
+    For (2), it suffices to verify that 
     \[
         (M + UV^T)(M^{-1} - M^{-1}U(I + V^TM^{-1}U)^{-1}V^TM^{-1}) = I.
     \]
