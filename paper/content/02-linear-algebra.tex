@@ -34,6 +34,27 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 %     A matrix is \textbf{non-singular} if it is not singular.
 % \end{definition}
 
+\begin{definition}[Schur complement]
+    \label{def:schur}
+    Let \(M\) be a square matrix of the form
+    \[
+        M =
+        \begin{pmatrix}
+            W & X \\
+            Y & Z
+        \end{pmatrix}
+    \]
+    where \(Z\) is a square matrix; Then, if \(Z\) is non-singular, the matrix
+    \[
+        C = W - X Z^{-1} Y
+    \]
+    is the \textit{Schur complement} of \(Z\) in \(M\).
+    The Schur complement has a useful property
+    \begin{enumerate}
+      \item \(\det(M) = \det(Z)\det(C)\).
+    \end{enumerate}
+\end{definition}
+
 \begin{theorem}[Sherman-Morrison-Woodbury formula]
 \label{thm:smw-formula}
   Suppose that \(M\) is non-singular. 

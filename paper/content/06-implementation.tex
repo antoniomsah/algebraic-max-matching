@@ -8,29 +8,6 @@ In this section, fundamental concepts related to matrix implementation are prese
 matrix multiplication being as hard to compute as matrix inversion and others.
 The objective is providing a sufficient understanding of key matrix operations.
 
-\subsection{Definitions}
-
-\begin{definition}[Schur complement]
-    \label{def:schur}
-    Let \(M\) be a square matrix of the form
-    \[
-        M = 
-        \begin{pmatrix}
-            W & X \\
-            Y & Z 
-        \end{pmatrix}
-    \]
-    where \(Z\) is a square matrix; Then, if \(Z\) is non-singular, the matrix
-    \[
-        C = W - X Z^{-1} Y
-    \]
-    is the \textit{Schur complement} of \(Z\) in \(M\).
-    The Schur complement has a useful property
-    \begin{enumerate}
-      \item \(\det(M) = \det(Z)\det(C)\).
-    \end{enumerate}
-\end{definition}
-
 \subsection{Matrix operations}
 
 \subsection{Matrix inverse}

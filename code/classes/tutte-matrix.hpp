@@ -39,7 +39,7 @@ public:
   }
 
   void addEdge(int u, int v) {
-    if (t(u, v) == modular_int<P>()) {
+    if (t(u, v) == 0) {
       t(u, v) = rng();
       t(v, u) = -t(u, v);
     }

@@ -40,11 +40,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       TutteMatrix<MOD> newNSS = oldNSS - oldNSS('*', Si) * (ISi + Delta * oldNSS(Si, Si)).inverse() * Delta * oldNSS(Si, '*');
 
       // Update N.
-      for (int j = 0; j < S.size(); j++) {
-        for (int k = 0; k < S.size(); k++) {
+      for (int j = 0; j < S.size(); j++)
+        for (int k = 0; k < S.size(); k++)
           N(S[j], S[k]) = newNSS(j, k);
-        }
-      }
     }
     DeleteEdgesCrossing(S_[0], S_[1], T, N);
   }
@@ -56,15 +54,13 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     TutteMatrix<MOD> &T,
     TutteMatrix<MOD> &N) const {
     // There are no edges in this case
-    if (min(R.size(), S.size()) == 0) {
-      return;
-    }
+    if (min(R.size(), S.size()) == 0) return;
 
     // Need to check a SINGLE edge for the update to be valid
     // Not sufficient to be |R| = 1
     if (max(R.size(), S.size()) == 1) {
       int r = R[0], s = S[0];
-      if (!T(r, s).isZero() and N(r, s) != -1 / T(r, s)) {
+      if (T(r, s) != 0 and N(r, s) != -1 / T(r, s)) {
         N(r, s) = N(r, s) * (1 - T(r, s) * N(r, s)) / (T(r, s) * N(r, s) + 1);
         N(s, r) = -N(r, s);
         T.removeEdge(r, s);
@@ -72,19 +68,18 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
       return;
     } 
 
+    vector<int> RS = Unite(R, S);
     auto RM = DivideInTwo(R);
     auto SM = DivideInTwo(S);
-
-    vector<int> RS = Unite(R, S);
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         vector<int> RMSM = Unite(RM[i], SM[j]);
-        TutteMatrix TRMSM = T(RMSM, RMSM);
+        TutteMatrix oldT = T(RMSM, RMSM);
         TutteMatrix oldNRS = N(RS, RS);
 
         DeleteEdgesCrossing(RM[i], SM[j], T, N);
 
-        auto Delta = T(RMSM, RMSM) - TRMSM;
+        auto Delta = T(RMSM, RMSM) - oldT;
         auto I = Identity<MOD>(RMSM.size());
 
         // Array mapping elements to their indices in RS,
@@ -98,11 +93,9 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
         TutteMatrix newNRS = oldNRS - oldNRS('*', RMSMi) * (I + Delta * oldNRS(RMSMi, RMSMi)).inverse() * Delta * oldNRS(RMSMi, '*');
 
         // Update N
-        for (int k = 0; k < RS.size(); k++) {
-          for (int l = 0; l < RS.size(); l++) {
+        for (int k = 0; k < RS.size(); k++)
+          for (int l = 0; l < RS.size(); l++)
             N(RS[k], RS[l]) = newNRS(k, l);
-          }
-        }
       }
     }
   }

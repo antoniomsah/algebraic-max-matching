@@ -70,7 +70,6 @@ struct modular_int {
   bool operator>(modular_int y) const { return x > y.x; }
   bool operator==(modular_int y) const { return x == y.x; }
   bool operator!=(modular_int y) const { return x != y.x; }
-  bool isZero() const { return x == 0; }
 
   friend modular_int operator/(const int& lhs, const modular_int& rhs) {
     return modular_int(lhs) / rhs;

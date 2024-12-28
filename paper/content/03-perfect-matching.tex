@@ -1,7 +1,7 @@
 \chapter{Perfect matching}
 \label{chap:perfect_matching}
 
-This chapter explores finding a perfect matching through an algebraic approach, diverging from traditional graph theory methods. The chapter is structured around three key components:
+% This chapter explores finding a perfect matching through an algebraic approach, diverging from traditional graph theory methods. The chapter is structured around three key components:
 
 The initial section introduces fundamental algebraic techniques, focusing on Tutte matrices and their probabilistic representation. 
 Then, a self-reducible algorithm is presented, demonstrating an algebraic strategy for matching problems. 
@@ -134,7 +134,7 @@ public:
 // Constructors here...
 
     void addEdge(int u, int v) {
-        if (t(u, v) == modular_int<P>()) { // If t(u, v) is zero.
+        if (t(u, v) == 0) { // If t(u, v) is zero.
             t(u, v) = rng();
             t(v, u) = -t(u, v);
         }
@@ -150,7 +150,7 @@ public:
     \end{lstlisting}
 \end{programruledcaption}
 
-
+\newpage
 \section{Naive algorithm}
 
 % A tutte matrix to refer to randomized tutte matrix
@@ -237,8 +237,8 @@ By \cref{cor:update_cor}, it suffices to prove that
     (I + \Delta N_{S, S})^{-1} = 
     \begin{pmatrix}
         1 / (1 + T_{u, v}N_{u, v}) & 0 \\
-        0 &  1 / (1 + T_{v, u}N_{v, u}).
-    \end{pmatrix}
+        0 &  1 / (1 + T_{v, u}N_{v, u})
+    \end{pmatrix}.
 \]
 Then, one has
 \begin{align*}
@@ -274,6 +274,7 @@ We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essenti
 If it's not, we remove it and update the matrix using a rank-two update. 
 This removes the necessity to recompute the whole inverse in each iteration.
 
+\newpage
 \begin{programruledcaption}{\(\SC{Rank-two update algorithm}\)}
     \begin{lstlisting}[
       language={pseudocode},
@@ -282,11 +283,11 @@ This removes the necessity to recompute the whole inverse in each iteration.
       functions={RankTwoUpdate, TutteMatrix, RemoveEdge, RemoveVertex},
       specialidentifiers={},
     ]
-        function Rank2Algorithm(G)
+        function RankTwoAlgorithm(G)
             $T$ := TutteMatrix($G$)
             $N$ := $T^{-1}$
             for \textbf{ each } $uv \in E(G)$ do
-                if $N_{\{u,v\}} \neq - 1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
+                if $N_{\{u,v\}} \neq -1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
                     S := $\{u, v\}$
                     $N$ := RankTwoUpdate($S, T, N$) // \cref{thm:rank-two}.
             return $E(T)$
@@ -324,7 +325,7 @@ vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
 
     auto N = T.getInverse();
     for (const auto& [u, v] : E(G)) {
-        if (N(u, v) != - 1 / T(u, v)) { // This edge can be removed.
+        if (N(u, v) != -1 / T(u, v)) { // This edge can be removed.
             vector<int> S = {u, v};
             N = rankTwoUpdate(S, T, N);
         }
