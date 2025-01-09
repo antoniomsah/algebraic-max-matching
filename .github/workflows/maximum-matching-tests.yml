@@ -1,4 +1,4 @@
-name: CI
+name: Maximum Matching algorithm tests
 
 on:
   push:
