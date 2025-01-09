@@ -5,14 +5,19 @@
 
 using namespace std;
 
-// Implements the Blossom algorithm.
+/** 
+ * Implements the Blossom algorithm.
+ * Solves maximum matching in O(nm).
+ *
+ * The implementation was based on: https://codeforces.com/blog/entry/92339.
+ **/
 class BlossomAlgorithm {
   int n, sz;
-  vector<int> mate,
-              id,
-              p,
-              vis;
-  vector<vector<int>> blossom;
+  vector<int> mate, // mate[u] is the vertex matched to u.
+              id,   // id[u] is the blossom containing u.
+              p,    // p[u] is the parent of u.
+              vis;  // vis[u] is 0 if not visited, 1 if even depth and 2 if odd depth.
+  vector<vector<int>> blossom; // blossom[b] is the list of vertices contained in blossom 'b'.
   Matrix<int> g;
 
   /**
@@ -31,23 +36,27 @@ class BlossomAlgorithm {
     return q;
   }
 
+  // addEdge adds the edge {u, v} to 'g'.
   void addEdge(int u, int v) {
     assert(u < sz && v < sz);
     g(u, v) = v;
     g(v, u) = u;
   }
 
+  // removeEdge removes edge {u, v} from 'g'.
   void removeEdge(int u, int v) {
     assert(u < sz && v < sz);
     g(u, v) = -1;
     g(v, u) = -1;
   }
 
+  // isAdj checks if two vertices are adjacent.
   bool isAdj(int u, int v) {
     assert(u < sz && v < sz);
     return g(u, v) != -1;
   }
 
+  // match matches vertices 'u' and 'v'.
   void match(int u, int v) {
     assert(u < sz && v < sz);
     removeEdge(u, v);
@@ -55,6 +64,7 @@ class BlossomAlgorithm {
     mate[v] = u;
   }
 
+  // contract contracts a blossom.
   void contract(int c, int u, int v, vector<int> &vx, vector<int> &vy) {
     blossom[c].clear();
     int r = vx.back();
@@ -79,6 +89,7 @@ class BlossomAlgorithm {
     }
   }
 
+  // trace returns the path from 'u' to the root.
   vector<int> trace(int u) {
     vector<int> vx;
     while (true) {
@@ -90,6 +101,7 @@ class BlossomAlgorithm {
     return vx;
   }
 
+  // lift liftes a path from the contracted graph to the original graph.
   vector<int> lift(vector<int> &vx) {
     vector<int> A;
     while (vx.size() >= 2) {
@@ -186,6 +198,8 @@ public:
 };
 
 /**
+ * BlossomAlgorithmStrategy uses an algorithm based on Edmonds-Blossom algorithm
+ * to solve Maximum Matching in O(n^3).
  */
 class BlossomAlgorithmStrategy : public IAlgorithmStrategy {
  public:
