@@ -10,6 +10,7 @@
 #include "algorithms/rank2-algorithm.hpp"
 #include "algorithms/naive-algorithm.hpp"
 #include "algorithms/harvey-algorithm.hpp"
+#include "algorithms/blossom-algorithm.hpp"
 #include "classes/graph.hpp"
 #include "config.hpp"
 
@@ -33,6 +34,7 @@ class MatchingSolver {
     strategies[0] = std::make_shared<NaiveAlgorithmStrategy>();
     strategies[1] = std::make_shared<RankTwoAlgorithmStrategy>();
     strategies[2] = std::make_shared<HarveyAlgorithmStrategy>();
+    strategies[3] = std::make_shared<BlossomAlgorithmStrategy>();
   }
 
   // setStrategy changes the algorithm strategy.

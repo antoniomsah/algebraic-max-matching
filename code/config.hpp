@@ -6,6 +6,6 @@ extern const int MOD = 998244353;
 extern const bool TEST = true;
 extern const int SEED = 0; //1281;
 
-extern const int NUM_STRATEGIES = 3;
+extern const int NUM_STRATEGIES = 4;
 
 #endif

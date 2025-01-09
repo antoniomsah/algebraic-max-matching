@@ -44,7 +44,7 @@ private:
    *	@brief Builds an n x m matrix, is the zero-matrix by default.
    *	Complexity: O(nm)
    **/
-  Matrix(int n, int m) : n(n), m(m), M(n * m) {
+  Matrix(int n, int m, T x = T()) : n(n), m(m), M(n * m, x) {
     setStrategy(std::make_shared<DefaultMultiplicationStrategy<T>>());
   }
 
