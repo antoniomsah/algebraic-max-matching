@@ -48,6 +48,7 @@ compare:
 			if ! diff $$output_file $$judge_file > /dev/null; then \
 				echo "Failed $$judge_file"; \
 				diff $$output_file $$judge_file; \
+				exit 1; \
 			fi; \
 		else \
 				echo "Judge file $$judge_file not found"; \
