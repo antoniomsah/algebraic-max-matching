@@ -1,4 +1,4 @@
-name: CI
+name: Perfect Matching algorithm tests
 
 on:
   push:
@@ -21,8 +21,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y make
           
-      - name: Compile
+      - name: Harvey Algorithm tests
         run: |
           cd code
-          make test_perfect_matching
+          make test_perfect_matching "ALG=2"
+          echo "Done"
+          
+      - name: Blossom Algorithm tests
+        run: |
+          cd code
+          make test_perfect_matching "ALG=3"
           echo "Done"
