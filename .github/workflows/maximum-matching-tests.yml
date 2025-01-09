@@ -21,8 +21,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y make
           
-      - name: Compile
+      - name: Testing Harvey Algorithm
         run: |
           cd code
-          make test_maximum_matching
+          make test_maximum_matching "ALG=2"
+          echo "Done"
+
+      - name: Testing Blossoms Algorithm
+        run: |
+          cd code
+          make test_maximum_matching "ALG=3"
           echo "Done"
