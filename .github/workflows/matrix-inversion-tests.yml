@@ -1,4 +1,4 @@
-name: CI
+name: Matrix Inversion tests
 
 on:
   push:
