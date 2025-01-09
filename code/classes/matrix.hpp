@@ -292,7 +292,7 @@ int Matrix<T>::rank() {
   for (int i = 0; i < m; i++) {
     int j;
     for (j = 0; j < n; j++) {
-      if (!selected[j] and A(i, j) != T()) break;
+      if (!selected[j] && A(j, i) != T()) break;
     }
 
     if (j == n) {
@@ -304,7 +304,7 @@ int Matrix<T>::rank() {
       A(j, p) /= A(j, i);
     }
     for (int k = 0; k < n; k++) {
-      if (k == j or A(k, i) == T()) continue;
+      if (k == j || A(k, i) == T()) continue;
       for (int p = i+1; p < m; p++) {
         A(k, p) -= A(j, p) * A(k, i);
       }

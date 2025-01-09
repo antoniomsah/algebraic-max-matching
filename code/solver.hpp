@@ -115,7 +115,7 @@ vector<pair<int, int>> MatchingSolver::MaximumMatching() {
   vector<pair<int, int>> aM; // Matching in the Augmented Graph.
   for (int it = 0; it < MAX_IT; it++) {
     aM = algorithmStrategy->solve(aG);
-    if (G.hasMatching(aM)) {
+    if (aG.hasMatching(aM)) {
       break;
     }
   }
