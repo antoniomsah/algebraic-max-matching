@@ -206,4 +206,8 @@ class BlossomAlgorithmStrategy : public IAlgorithmStrategy {
   vector<pair<int, int>> solve(const Graph& G) const override {
     return BlossomAlgorithm(G).solve();
   }
+
+  string name() const override {
+    return "Blossom";
+  }
 };

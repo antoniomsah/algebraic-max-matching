@@ -3,11 +3,9 @@
 #include <vector>
 #include "../classes/graph.hpp"
 
-using std::pair;
-using std::vector;
-
 class IAlgorithmStrategy {
  public:
   virtual ~IAlgorithmStrategy() = default;
-  virtual vector<pair<int, int>> solve(const Graph& graph) const = 0;
+  virtual std::vector<std::pair<int, int>> solve(const Graph& graph) const = 0;
+  virtual std::string name() const = 0;
 };

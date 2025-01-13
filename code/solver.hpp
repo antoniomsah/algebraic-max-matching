@@ -51,6 +51,10 @@ class MatchingSolver {
     algorithmStrategy = strategies[id];
   }
 
+  string algorithmName() {
+    return algorithmStrategy->name();
+  }
+
   /**
    * Default strategy is the naive one.
    * @param graph a Graph class;

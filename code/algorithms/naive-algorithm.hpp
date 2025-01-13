@@ -31,4 +31,8 @@ class NaiveAlgorithmStrategy : public IAlgorithmStrategy {
     }
     return E(T);
   }
+
+  string name() const override {
+    return "Simple";
+  }
 };

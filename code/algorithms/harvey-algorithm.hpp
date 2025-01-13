@@ -115,4 +115,8 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     DeleteEdgesWithin(V(G), T, N);
     return E(T);
   }
+
+  string name() const override {
+    return "Harvey";
+  }
 };

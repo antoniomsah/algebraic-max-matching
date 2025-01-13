@@ -36,4 +36,8 @@ class RankTwoAlgorithmStrategy : public IAlgorithmStrategy {
     }
     return E(T);
   }
+
+  std::string name() const override {
+    return "RankTwo";
+  }
 };
