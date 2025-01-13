@@ -16,7 +16,7 @@ struct Result {
 class Benchmarker {
 private:
   const int NUM_IT;
-  map<string, Result> results;
+  map<string, vector<Result>> results;
   ofstream outFile;
 
   Graph readInput(string filename) {
@@ -38,12 +38,12 @@ private:
   }
 public:
   Benchmarker(string name, int num_it) : NUM_IT(num_it) {
+    MatchingSolver::initialize();
     outFile.open(name + ".csv");
-    outFile << "Input, Algorithm, Average Time (ms)\n";
+    outFile << "Input,Algorithm,Average Time (ms)\n";
   }
 
   void run(string filename, bool maximumMatching, int alg_id) {
-    MatchingSolver::initialize();
     MatchingSolver solver(readInput(filename));
     solver.setStrategy(alg_id);
 
@@ -64,13 +64,15 @@ public:
       double time = duration.count() / 1000.0; // Time in ms.
       total_time += time;
     }
-    results[filename] = {solver.algorithmName(), total_time / NUM_IT};
+    results[filename].emplace_back(solver.algorithmName(), total_time / NUM_IT);
   }
 
   void write() {
     outFile << fixed << setprecision(4);
-    for (const auto& [filename, result]: results) {
-      outFile << filename << ", " << result.algorithmName << ", " << result.averageTime << "\n";
+    for (const auto& [filename, results]: results) {
+      for (const auto& result: results) {
+        outFile << filename << "," << result.algorithmName << "," << result.averageTime << "\n";
+      }
     }
     outFile.close();
   }
@@ -78,8 +80,10 @@ public:
   void print() {
     cout << fixed << setprecision(4);
     cout << "Summary\n";
-    for (const auto& [filename, result]: results) {
-      cout << "Input: " << filename << "(" << result.algorithmName << "): " << result.averageTime << "ms average\n";
+    for (const auto& [filename, results]: results) {
+      for (const auto& result: results) {
+        cout << "Input: " << filename << "(" << result.algorithmName << "): " << result.averageTime << "ms average\n";
+      }
     }
   }
 };
