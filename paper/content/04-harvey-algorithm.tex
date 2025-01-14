@@ -292,17 +292,17 @@ void DeleteEdgesWithin(
 Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
 The base case is direct.
 Then, 
-\begin{align}
+\begin{align*}
     g(n) &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + f(n / 2, n / 2) &  \\
     &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + f(n / 2, n / 2) & \\ 
     &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + O(n^\omega) & \text{by \ref{alg:delcrossing}} \\ 
-    &= 2g(n / 2) + 3O(n^\omega) = O(n^\omega) & \label{alg:delwithin}
-\end{align}
+    &= 2g(n / 2) + 3O(n^\omega) = O(n^\omega) & \numberthis \label{alg:delwithin}
+\end{align*}
 
 \subsection{\(\SC{PerfectMatching}\)}
 
 \(\SC{PerfectMatching}\): Receives a graph \(G\) and finds a perfect matching, or returns \(\emptyset\) if one does not exist.
-It creates a tutte matrix of \(G\) using constructor\footnote{I want to properly define a tutte matrix constructor and such in the previous chapter}.
+It creates a Tutte Matrix of \(G\) with random entries.
 Note that calling \(\SC{DeleteEdgesWithin}(V(G))\) is equivalent to deleting every non-essential edge from \(G\).
 Thus, after this call, the graph only has essential edges, i.e., edges from the perfect matching. 
 Consequently, there is the following implementation:
@@ -359,5 +359,11 @@ Note that the \textbf{corretude} of the algorithm is direct from updates perform
 
 \section{Analysis}
 
-In this section, Harvey's algorithm will be compared with other versions of perfect matching algorithms: the ones implemented in the previous section\footnote{If possible, desired to have Edmonds-Blossoms}.
+This section compares Harvey's algorithm with three perfect matching algorithms:
+\begin{enumerate}
+   \item The simple algorithm presented in \cref{alg:simple};
+   \item The rank-two algorithm described in \cref{alg:rank-two};
+ \item A graph theory-based implementation used in competitive programming competitions (see \href{https://codeforces.com/blog/entry/92339}{blog}).
+\end{enumerate}
 The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
+

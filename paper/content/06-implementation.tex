@@ -1,64 +1,64 @@
-\chapter{Implementation}
-\label{chap:implementation}
-
-\section{Matrix implementation}
-\label{sec:matrix_impl}
-
-In this section, fundamental concepts related to matrix implementation are presented such as time complexity of various matrix operations,
-matrix multiplication being as hard to compute as matrix inversion and others.
-The objective is providing a sufficient understanding of key matrix operations.
-
-\subsection{Matrix operations}
-
-\subsection{Matrix inverse}
-
-An \(O(n^\omega)\) algorithm that computes the matrix inverse can be achieved exclusively using matrix multiplication with complexity \(O(n^\omega)\). 
-The theorem and pseudo-code below demonstrates the process.
-
-\begin{theorem}[Matrix inversions is no harder than matrix multiplication]
-    \label{thm:mult_inv}
-    If there is an algorithm that computes matrix multiplication in \(O(n^{\omega})\), then
-    there is an algorithm that computes matrix inverse in \(O(n^{\omega})\).
-\end{theorem}
-
-\begin{proof}
-    Theorem 28.2 from \citet{CLRS}.
-\end{proof}
-
-Now, the following algorithm can be implemented.
-\begin{programruledcaption}{Matrix: \(\SC{Inverse}\)}
-    \noindent
-    \SC{Input:} A \(n \times n\) matrix \(A\) where \(n\) is a power of two; \\
-    \SC{Output: } \(A^{-1}\). 
-
-    \noindent \hrule
-    \begin{lstlisting}[
-      language={pseudocode},
-      style=pseudocode,
-      style=wider,
-      functions={MatrixInverse},
-      specialidentifiers={},
-    ]
-    function MatrixInverse(A) 
-        if n = 1  
-            if $A_{0, 0} = 0$ then ... // Matrix is singular.
-            $N_{0,0}$ := $1 / A_{0,0}$
-            return N
-        $\begin{pmatrix} B & C^T \\ C & D\end{pmatrix}$ := A // Each submatrix size should be $n/2 \times n/2$.
-        S := $D - CB^{-1}C^T$ // Schur complement (\ref{def:schur}).
-        // Save results for $B^{-1}$ and $S^{-1}$.
-        return $ \begin{pmatrix} B^{-1} + B^{-1}C^TS^{-1}CB^{-1} & -B^{-1}C^TS^{-1} \\ -S^{-1}CB^{-1} & S^{-1} \end{pmatrix}$ // \cref{thm:mult_inv}.
-    end
-    \end{lstlisting}
-\end{programruledcaption}
-
-\subsection*{Complexity}
-Note that the algorithm above can be optimized to only calculate the recursive inversions a single time by saving them.
-Suppose it is optimized.
-Each call, has two recursive calls one for \(B^{-1}\) and another for \(S^{-1}\).
-Suppose \(n = \max(n, m)\).
-\begin{align}
-    T(n) = O(n^2) + T(n/2, m/2) + O(n^2) + 2O(n^\omega) + 2T(n/2) + O(n^\omega)
-\end{align}
-
-\subsection{Matrix rank}
+% \chapter{Implementation}
+% \label{chap:implementation}
+% 
+% \section{Matrix implementation}
+% \label{sec:matrix_impl}
+% 
+% In this section, fundamental concepts related to matrix implementation are presented such as time complexity of various matrix operations,
+% matrix multiplication being as hard to compute as matrix inversion and others.
+% The objective is providing a sufficient understanding of key matrix operations.
+% 
+% \subsection{Matrix operations}
+% 
+% \subsection{Matrix inverse}
+% 
+% An \(O(n^\omega)\) algorithm that computes the matrix inverse can be achieved exclusively using matrix multiplication with complexity \(O(n^\omega)\). 
+% The theorem and pseudo-code below demonstrates the process.
+% 
+% \begin{theorem}[Matrix inversions is no harder than matrix multiplication]
+%     \label{thm:mult_inv}
+%     If there is an algorithm that computes matrix multiplication in \(O(n^{\omega})\), then
+%     there is an algorithm that computes matrix inverse in \(O(n^{\omega})\).
+% \end{theorem}
+% 
+% \begin{proof}
+%     Theorem 28.2 from \citet{CLRS}.
+% \end{proof}
+% 
+% Now, the following algorithm can be implemented.
+% \begin{programruledcaption}{Matrix: \(\SC{Inverse}\)}
+%     \noindent
+%     \SC{Input:} A \(n \times n\) matrix \(A\) where \(n\) is a power of two; \\
+%     \SC{Output: } \(A^{-1}\). 
+% 
+%     \noindent \hrule
+%     \begin{lstlisting}[
+%       language={pseudocode},
+%       style=pseudocode,
+%       style=wider,
+%       functions={MatrixInverse},
+%       specialidentifiers={},
+%     ]
+%     function MatrixInverse(A) 
+%         if n = 1  
+%             if $A_{0, 0} = 0$ then ... // Matrix is singular.
+%             $N_{0,0}$ := $1 / A_{0,0}$
+%             return N
+%         $\begin{pmatrix} B & C^T \\ C & D\end{pmatrix}$ := A // Each submatrix size should be $n/2 \times n/2$.
+%         S := $D - CB^{-1}C^T$ // Schur complement (\ref{def:schur}).
+%         // Save results for $B^{-1}$ and $S^{-1}$.
+%         return $ \begin{pmatrix} B^{-1} + B^{-1}C^TS^{-1}CB^{-1} & -B^{-1}C^TS^{-1} \\ -S^{-1}CB^{-1} & S^{-1} \end{pmatrix}$ // \cref{thm:mult_inv}.
+%     end
+%     \end{lstlisting}
+% \end{programruledcaption}
+% 
+% \subsection*{Complexity}
+% Note that the algorithm above can be optimized to only calculate the recursive inversions a single time by saving them.
+% Suppose it is optimized.
+% Each call, has two recursive calls one for \(B^{-1}\) and another for \(S^{-1}\).
+% Suppose \(n = \max(n, m)\).
+% \begin{align}
+%     T(n) = O(n^2) + T(n/2, m/2) + O(n^2) + 2O(n^\omega) + 2T(n/2) + O(n^\omega)
+% \end{align}
+% 
+% \subsection{Matrix rank}

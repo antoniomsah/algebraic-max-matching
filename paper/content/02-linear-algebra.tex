@@ -137,13 +137,35 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
     If \(M\) is non-singular, then \(M^{-1}\) is also skew-symmetric.
 \end{fact}
 
-\subsection{Time complexities of Matrix algorithms}
-\label{matrix:time_complexity}
-Let \(M\) be a \(n \times n\) matrix. 
-Let \(\omega\) denote the \textbf{matrix multiplication exponent}, defined as the infimum of the exponent over all matrix multiplication algorithms. 
-Then, the following matrix algorithms can be computed in time complexity \(O(n^\omega)\):
-\begin{itemize}
-    \item \textit{Matrix inversion:} Computing the inverse of M, if it exists.
-    \item \textit{Matrix rank:} Determining the rank of M.
-\end{itemize}
-Detailed explanations of these algorithms can be found in \cref{sec:matrix_impl}.
+\section{Matrix Algorithms}
+
+This section presents the matrix algorithms used throughout this paper.
+
+\begin{definition}[Matrix multiplication exponent]
+  The \textbf{matrix exponent multiplication exponent}, denoted by \(\omega\), is the infimum of the exponent over all matrix multiplication algorithms.
+  That is there is a known algorithm that solves matrix multiplication in \(O(n^{\omega + o(1)})\) field operations.
+\end{definition}
+
+\noindent
+The following milestones related to matrix multiplication algorithms were found:
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Year & Author(s) & Bound on omega \\
+    \hline
+    1969 & \citet{Strassen1969} & 2.8074 \\ 
+    1990 & \citet{COPPERSMITH1990} & 2.3755 \\
+    2024 & \citet{2024asymmetryyieldsfastermatrix} & 2.371339 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Matrix inversion algorithm}
+
+Computing the inverse of a \(n \times n\) matrix can be done in \(O(n^\omega)\). 
+We refer the reader to Theorem 28.2 from \citet{CLRS}.
+
+\subsection{Matrix rank algorithm}
+
+Determining the rank of a \(n \times n\) matrix can be done in \(O(n^\omega)\).
+TODO: Find a paper implementating this algiorithm.

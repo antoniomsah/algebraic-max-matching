@@ -1,151 +1,129 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% INSERINDO COMENTÁRIOS EM ARQUIVOS .bib %%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% 1. Como em outros arquivos LaTeX, comentários são iniciados por "%" e,
-%    portanto, é preciso usar "\%" para imprimir o caractere "%". Esquecer
-%    disso pode gerar erros difíceis de encontrar!
-%
-% 2. Não é possível inserir comentários dentro de uma entrada, apenas fora.
-%
-% 3. Não é possível incluir o caractere arroba em um comentário.
-%
-% 4. Se quiser desabilitar temporariamente um campo ("comentar" o campo),
-%    troque seu nome para algum nome inválido, como "author-disable".
-%    Se quiser fazer alguma observação permanente dentro de uma entrada,
-%    você também pode usar algum nome de campo inválido, como "lembrete",
-%    ou usar o campo "annotation", que normalmente é ignorado.
-%
-% 5. Se quiser desabilitar temporariamente uma entrada inteira ("comentar" a
-%    entrada), não basta colocar "%" nas linhas correspondentes por causa do
-%    caractere arroba; também é preciso remover a arroba.
-%
-% 6. Na verdade, as regras não são bem essas, mas segui-las é uma boa ideia:
-%    https://tex.stackexchange.com/a/262282
-%
-% Por exemplo, esta entrada está comentada, ou seja, não tem efeito: se
-% houvesse uma referência a ela no texto, a referência ficaria inválida.
-% Observe que, para isso, o caractere arroba foi apagado!
-%
-%Book{JW82,
-% author    = {Richard A. Johnson and Dean W. Wichern},
-% title     = {Applied Multivariate Statistical Analysis},
-% publisher = {Prentice-Hall},
-% year      = {1983}
-%}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% O CAMPO "MONTH" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% biblatex prefere o uso do campo "date" para definir ano, mês etc. No
-% entanto, se você quiser garantir compatibilidade tanto com biblatex
-% quanto com bibtex, use os campos "year" e "month". Ambos reconhecem
-% diversos formatos para o campo "month", mas apenas um funciona
-% corretamente com os dois: o nome do mês em inglês, abreviado com três
-% letras minúsculas e sem chaves, ou seja:
-%
-% ...
-% author = {Somebody},
-% year = {2011},
-% month = oct,
-% title = {Some title},
-% ...
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Esta entrada não está em uso em tese.tex, apenas em
-% apresentacao.tex, mas isso não é um problema: você pode
-% ter um banco de dados com todos os papers que são de seu
-% interesse e, em um dado texto, citar apenas alguns deles.
-@Book{Godsil:1993,
-	title 		= {Algebraic Combinatorics},
-	author 		= {C. D. Godsil},
-	shortauthor = {Godsil},
-	publisher	= {Chapman \& Hall},
-	year 		= {1993}
+@book{Godsil:1993,
+  title = {Algebraic Combinatorics},
+  author = {C. D. Godsil},
+  shortauthor = {Godsil},
+  publisher = {Chapman \& Hall},
+  year = {1993},
 }
 
-@Inproceedings{Lovasz:Random,
-	author 		= {L. Lovász},
-	shortauthor = {Lovász},
-	year 		= {1979},
-	month 		= {01},
-	pages 		= {565-574},
-	title 		= {On determinants, matchings and random algorithms},
-	volume 		= {79},
-	journal 	= {Fundamentals of Computation Theory}
+@inproceedings{Lovasz:Random,
+  author = {L. Lovász},
+  shortauthor = {Lovász},
+  year = {1979},
+  month = {01},
+  pages = {565-574},
+  title = {On determinants, matchings and random algorithms},
+  volume = {79},
+  journal = {Fundamentals of Computation Theory},
 }
 
 @article{Rabin1989,
-title = {Maximum matchings in general graphs through randomization},
-journal = {Journal of Algorithms},
-volume = {10},
-number = {4},
-pages = {557-567},
-year = {1989},
-issn = {0196-6774},
-doi = {10.1016/0196-6774(89)90005-9},
-author = {Rabin, M. O. and Vazirani, V. V.},
-abstract = {A new randomized algorithm for the maximum matching problem is presented. Unlike conventional matching algorithms which are combinatorial, our algorithm is algebraic and works on the Tutte matrix of the given graph. Although slower than the best known matching algorithm, our algorithm has the advantage of being conceptually simple and easy to program.}
+  title = {Maximum matchings in general graphs through randomization},
+  journal = {Journal of Algorithms},
+  volume = {10},
+  number = {4},
+  pages = {557-567},
+  year = {1989},
+  issn = {0196-6774},
+  doi = {10.1016/0196-6774(89)90005-9},
+  author = {Rabin, M. O. and Vazirani, V. V.},
+  abstract = {A new randomized algorithm for the maximum matching problem is
+              presented. Unlike conventional matching algorithms which are
+              combinatorial, our algorithm is algebraic and works on the Tutte
+              matrix of the given graph. Although slower than the best known
+              matching algorithm, our algorithm has the advantage of being
+              conceptually simple and easy to program.},
 }
 
-@article{Edmonds, 
-	title={Paths, Trees, and Flowers}, 
-	volume={17}, 
-	DOI={10.4153/CJM-1965-045-4}, 
-	journal={Canadian Journal of Mathematics}, 
-	author={Edmonds, J.}, 
-	year={1965}, 
-	pages={449–467}
+@article{Edmonds,
+  title = {Paths, Trees, and Flowers},
+  volume = {17},
+  DOI = {10.4153/CJM-1965-045-4},
+  journal = {Canadian Journal of Mathematics},
+  author = {Edmonds, J.},
+  year = {1965},
+  pages = {449–467},
 }
 
-@Article{Tutte,
-	author = {Tutte, W. T.},
-	title = {The Factorization of Linear Graphs},
-	journal = {Journal of the London Mathematical Society},
-	volume = {s1-22},
-	number = {2},
-	pages = {107-111},
-	year = {1947}
+@article{Tutte,
+  author = {Tutte, W. T.},
+  title = {The Factorization of Linear Graphs},
+  journal = {Journal of the London Mathematical Society},
+  volume = {s1-22},
+  number = {2},
+  pages = {107-111},
+  year = {1947},
 }
 
-@Book{plummer1986matching,
-  title={Matching Theory},
-  author={Lov{\'a}sz, L. and Plummer, M.D.},
-  isbn={9780080872322},
-  series={Annals of Discrete Mathematics},
-  year={1986},
-  publisher={North Holland}
+@book{plummer1986matching,
+  title = {Matching Theory},
+  author = {Lov{\'a}sz, L. and Plummer, M.D.},
+  isbn = {9780080872322},
+  series = {Annals of Discrete Mathematics},
+  year = {1986},
+  publisher = {North Holland},
 }
 
-@Article{Harvey:Paper,
-	author = {Harvey, N. J. A.},
-	title = {Algebraic Algorithms for Matching and Matroid Problems},
-	journal = {SIAM Journal on Computing},
-	volume = {39},
-	number = {2},
-	pages = {679-702},
-	year = {2009},
-	doi = {10.1137/070684008},
+@article{Harvey:Paper,
+  author = {Harvey, N. J. A.},
+  title = {Algebraic Algorithms for Matching and Matroid Problems},
+  journal = {SIAM Journal on Computing},
+  volume = {39},
+  number = {2},
+  pages = {679-702},
+  year = {2009},
+  doi = {10.1137/070684008},
 }
 
-@Book{CLRS,
-  author    = "{T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein}",
+@book{CLRS,
+  author = "{T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein}",
   shortauthor = {CLRS},
-  title     = {Introduction to Algorithms, Third Edition},
-  year      = {2009},
-  isbn      = {0262033844},
+  title = {Introduction to Algorithms, Third Edition},
+  year = {2009},
+  isbn = {0262033844},
   publisher = {The MIT Press},
-  edition   = {3rd},
+  edition = {3rd},
 }
 
-@book{MotwaniRaghavan1995, 
-	place={Cambridge}, 
-	title={Randomized Algorithms}, 
-	publisher={Cambridge University Press}, 
-	author={Motwani, R. and Raghavan, P.}, 
-	year={1995}
+@book{MotwaniRaghavan1995,
+  place = {Cambridge},
+  title = {Randomized Algorithms},
+  publisher = {Cambridge University Press},
+  author = {Motwani, R. and Raghavan, P.},
+  year = {1995},
+}
+
+@article{Strassen1969,
+  title = {Gaussian elimination is not optimal},
+  author = {Strassen, Volker},
+  journal = {Numer. Math. (Heidelb.)},
+  publisher = {Springer Science and Business Media LLC},
+  volume = {13},
+  number = {4},
+  pages = {354--356},
+  month = {aug},
+  year = {1969},
+}
+
+@article{COPPERSMITH1990,
+  title = {Matrix multiplication via arithmetic progressions},
+  journal = {Journal of Symbolic Computation},
+  volume = {9},
+  number = {3},
+  pages = {251-280},
+  year = {1990},
+  note = {Computational algebraic complexity editorial},
+  issn = {0747-7171},
+  doi = {https://doi.org/10.1016/S0747-7171(08)80013-2},
+  author = {Don Coppersmith and Shmuel Winograd},
+}
+
+@misc{2024asymmetryyieldsfastermatrix,
+  title = {More Asymmetry Yields Faster Matrix Multiplication},
+  author = {Josh Alman and Ran Duan and Virginia Vassilevska Williams and
+            Yinzhan Xu and Zixuan Xu and Renfei Zhou},
+  year = {2024},
+  eprint = {2404.16349},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.DS},
 }

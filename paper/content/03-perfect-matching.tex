@@ -79,7 +79,7 @@ For any prime number \(p\), the set of integers modulo \(p\), denoted as \(\Inte
 For a graph \(G\). The following assumption is used for the algorithm pertaining Tutte matrices:
 \begin{itemize}
     \item For each edge \(uv \in E(G)\), the matrix entry \(t_{uv}\) (since Tutte matrices are skew-symmetric, \(t_{vu}\) is also fixed) is randomly selected from the finite field \(\Integers_p\). 
-    These values are not altered throughout the subsequent algorithmic procedures and can be accessed in $O(1)$ time complexity;
+    These values are not altered throughout the subsequent algorithmic procedures and can be accessed in $O(1)$ time complexity.
 %    \item Vertices are mapped to zero-indexed integers, enabling straightforward traversal by iterating from \(0\) to \(n-1\). 
 %    This indexing scheme provides a canonical and computationally convenient representation of the graph's structure.
 \end{itemize}
@@ -157,6 +157,7 @@ public:
 
 Using \cref{fact:matching_condition}, the following algorithm finds a perfect matching in time \(O(n^{\omega+2})\).
 \begin{programruledcaption}{\(\SC{NaiveAlgorithm}\)}
+    \label{alg:simple}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
@@ -276,6 +277,7 @@ This removes the necessity to recompute the whole inverse in each iteration.
 
 \newpage
 \begin{programruledcaption}{\(\SC{Rank-two update algorithm}\)}
+  \label{alg:rank-two}
     \begin{lstlisting}[
       language={pseudocode},
       style=pseudocode,
