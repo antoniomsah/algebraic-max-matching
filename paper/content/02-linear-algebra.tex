@@ -40,20 +40,32 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
     \[
         M =
         \begin{pmatrix}
-            W & X \\
-            Y & Z
+            A & B \\
+            C & D
         \end{pmatrix}
     \]
-    where \(Z\) is a square matrix; Then, if \(Z\) is non-singular, the matrix
+    where \(D\) is a square matrix; Then, if \(D\) is non-singular, the matrix
     \[
-        C = W - X Z^{-1} Y
+        C = A - B D^{-1} C
     \]
-    is the \textit{Schur complement} of \(Z\) in \(M\).
-    The Schur complement has a useful property
-    \begin{enumerate}
-      \item \(\det(M) = \det(Z)\det(C)\).
-    \end{enumerate}
+    is the \textit{Schur complement} of \(D\) in \(M\).
 \end{definition}
+
+\begin{theorem}[Schur's formula]
+\label{thm:schur_formula}
+  Let \(M\) be a square matrix of the form 
+  \[
+      M =
+      \begin{pmatrix}
+          A & B \\
+          C & D
+      \end{pmatrix}
+  \]
+  Then,
+  \[
+    \det(M) = \det(D)\det(A - BD^{-1}C).
+  \]
+\end{theorem}
 
 \begin{theorem}[Sherman-Morrison-Woodbury formula]
 \label{thm:smw-formula}
@@ -78,7 +90,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
       \begin{bmatrix} I & V^T \\ -U & M \end{bmatrix} = 
       \begin{bmatrix} I & 0 \\ -U & I \end{bmatrix} \begin{bmatrix} I & V^T \\ 0 & M + UV^T \end{bmatrix}.
     \]
-    Then, one has
+    Then, by \cref{thm:schur_formula}, one has
     \begin{align*}
       \det(M)\det(I + V^TM^{-1}U) 
       &= \det(A) \\
