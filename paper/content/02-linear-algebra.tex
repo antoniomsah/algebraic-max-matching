@@ -44,28 +44,12 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
             C & D
         \end{pmatrix}
     \]
-    where \(D\) is a square matrix; Then, if \(D\) is non-singular, the matrix
-    \[
-        C = A - B D^{-1} C
-    \]
-    is the \textit{Schur complement} of \(D\) in \(M\).
+    where \(D\) is a square matrix; Then, if \(D\) is non-singular, the matrix \(A - B D^{-1} C\) is the \textbf{Schur complement} of \(D\) in \(M\).
+    The Schur complement has the following properties:
+    \begin{enumerate}
+      \item \(\det(M) = \det(D)\det(A - BD^{-1}C)\).
+    \end{enumerate}
 \end{definition}
-
-\begin{theorem}[Schur's formula]
-\label{thm:schur_formula}
-  Let \(M\) be a square matrix of the form 
-  \[
-      M =
-      \begin{pmatrix}
-          A & B \\
-          C & D
-      \end{pmatrix}
-  \]
-  Then,
-  \[
-    \det(M) = \det(D)\det(A - BD^{-1}C).
-  \]
-\end{theorem}
 
 \begin{theorem}[Sherman-Morrison-Woodbury formula]
 \label{thm:smw-formula}
@@ -90,7 +74,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
       \begin{bmatrix} I & V^T \\ -U & M \end{bmatrix} = 
       \begin{bmatrix} I & 0 \\ -U & I \end{bmatrix} \begin{bmatrix} I & V^T \\ 0 & M + UV^T \end{bmatrix}.
     \]
-    Then, by \cref{thm:schur_formula}, one has
+    Then, one has
     \begin{align*}
       \det(M)\det(I + V^TM^{-1}U) 
       &= \det(A) \\
@@ -151,7 +135,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 
 \section{Matrix Algorithms}
 
-This section presents the matrix algorithms used throughout this paper.
+% This section presents the matrix algorithms used throughout this paper.
 
 \begin{definition}[Matrix multiplication exponent]
   The \textbf{matrix exponent multiplication exponent}, denoted by \(\omega\), is the infimum of the exponent over all matrix multiplication algorithms.
@@ -172,11 +156,10 @@ The following milestones related to matrix multiplication algorithms were found:
   \end{tabular}
 \end{center}
 
-\subsection{Matrix inversion algorithm}
+\noindent
+The following algorithms can be done in \(O(n^\omega)\):
 
-Computing the inverse of a \(n \times n\) matrix can be done in \(O(n^\omega)\), see \citet[Theorem 28.2]{CLRS}.
-
-\subsection{Matrix rank algorithm}
-
-Determining the rank of a \(n \times n\) matrix can be done in \(O(n^\omega)\).
-TODO: Find a paper implementating this algiorithm.
+\begin{enumerate}
+  \item \textbf{Matrix inversion}, see \citet[Theorem 28.2]{CLRS};
+  \item \textbf{Matrix rank}, see (TODO: add citation).
+\end{enumerate}
