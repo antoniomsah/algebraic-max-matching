@@ -297,15 +297,17 @@ This removes the necessity to recompute the whole inverse in each iteration.
 \end{programruledcaption}
 
 First, let \(t(n)\) be the running time of \(\SC{Rank2Update}\) when \(|V_G| \eqcolon n\).
-Let \(A\) be a \(n \times m\) matrix and let \(B\) be a \(m \times o\).
-In this context, note that \(\tilde{N} \cdot T_{S, S}\) is a \(2 \times 2\) matrix.
-Therefore, \(N_{*, S}\tilde{N}T_{S, S}\) is a \(n \times 2\) matrix.
+Note that 
+\[
+  \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}
+\]
+is a \(2 \times 2\) matrix. 
 Consequently,
 \[
     t(n) = O(2n^2) = O(n^2).
 \]
 
-Let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
+Then, let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
 The running time can be expressed as:
 \begin{align*}
     g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
