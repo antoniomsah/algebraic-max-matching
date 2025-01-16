@@ -38,19 +38,23 @@ class MatchingSolver {
   }
 
   // setStrategy changes the algorithm strategy.
-  // The default values are 
-  //  - 0: NaiveAlgorithm // O(n^{\omega + 2})
-  //  - 1: RankTwoAlgorithm // O(n^4)
-  //  - 2: HarveyAlgorithm // O(n^\omega)
   void setStrategy(const int& id) {
     if (id >= NUM_STRATEGIES) {
-      std::cout << "Invalid strategy index, number of strategies is: "
+      std::cerr << "Invalid strategy index, number of strategies is: "
                 << NUM_STRATEGIES << "\n";
       return;
     } 
     algorithmStrategy = strategies[id];
   }
 
+  // printStrategies prints the strategies available.
+  void printStrategies() {
+    for (int i = 0; i < NUM_STRATEGIES; i++) {
+      std::cout << i << ": " << strategies[i]->name() << "\n";
+    }
+  }
+
+  // algrorithmName prints the currently set algorithm strategy.
   string algorithmName() {
     return algorithmStrategy->name();
   }
