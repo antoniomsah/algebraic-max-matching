@@ -234,7 +234,7 @@ Similarly to \cref{alg:delcrossing}, we have
 
 \(\SC{PerfectMatching}\): Receives a graph \(G\) and finds a perfect matching, or returns \(\emptyset\) if one does not exist.
 It creates a Tutte Matrix of \(G\) with random entries.
-Note that calling \(\SC{DeleteEdgesWithin}(V(G))\) is equivalent to deleting every non-essential edge from \(G\).
+Note that calling \(\SC{DeleteEdgesWithin}(V(G))\) is equivalent to deleting every inessential edge from \(G\).
 Thus, after this call, the graph only has essential edges, i.e., edges from the perfect matching. 
 Consequently, there is the following implementation:
 
