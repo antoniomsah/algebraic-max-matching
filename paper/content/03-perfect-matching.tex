@@ -83,72 +83,8 @@ For a graph \(G\). The following assumption is used for the algorithm pertaining
 %    \item Vertices are mapped to zero-indexed integers, enabling straightforward traversal by iterating from \(0\) to \(n-1\). 
 %    This indexing scheme provides a canonical and computationally convenient representation of the graph's structure.
 \end{itemize}
-% Then, there are the following algorithms related to Tutte matrices.
-% 
-% \begin{programruledcaption}{\(\SC{TutteMatrix}\)}
-%     \label{alg:tuttematrix}
-%     \begin{lstlisting}[
-%       language={pseudocode},
-%       style=pseudocode,
-%       style=wider,
-%       functions={TutteMatrix, RemoveEdge, RemoveVertex, AddEdge},
-%       specialidentifiers={},
-%     ]
-% function AddEdge($T, uv$) // Adds an edge to $T$ in $O(1)$ time complexity
-%     $T_{u, v}$ := $t_{uv}$
-%     $T_{v, u}$ := $t_{vu}$
-% 
-% function RemoveEdge($T, uv$) // Removes an edge from $T$ in $O(1)$ time complexity
-%     $T_{u, v}$ := 0
-%     $T_{v, u}$ := 0
-% 
-% function TutteMatrix($G$) // Builds a Tutte matrix in $O(n^2)$ time complexity
-%     n := $|V(G)|$
-%     Let $T$ be a $n \times n$ matrix in $\Integers_p$
-%     for \textbf{each} $uv \in E(G)$ do
-%         AddEdge($T$, $uv$)
-%     return $T$
-%     \end{lstlisting}
-% \end{programruledcaption}
-% 
-% Implementation was made in \href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{//code/classes/tutte-matrix.hpp}.
-% It is done as follows:
-% \begin{programruledcaption}{Implementation: \(\SC{TutteMatrix}\)}
-%     \begin{lstlisting}[
-%       language={C++},
-%       style=wider,
-%       functions={},
-%       specialidentifiers={Matrix},
-%     ]
-% // C++ implementation of TutteMatrix.
-% // P is an integer such that $\Integers_P$ is a field.
-% template <int P>
-% class TutteMatrix : public Matrix<modular_int<P>> {
-%     /** 
-%      * Indeterminates assigned to each edge.
-%      * If no indeterminate was assigned yet, it is zero.
-%      **/ 
-%     Matrix<modular_int<P>> t; 
-%     
-% public:
-% // Constructors here...
-% 
-%     void addEdge(int u, int v) {
-%         if (t(u, v) == 0) { // If t(u, v) is zero.
-%             t(u, v) = rng();
-%             t(v, u) = -t(u, v);
-%         }
-%         (*this)(u, v) = t(u, v);
-%         (*this)(v, u) = t(v, u);
-%     }
-% 
-%     void removeEdge(int u, int v) {
-%         (*this)(u, v) = 0;
-%         (*this)(v, u) = 0;
-%     }
-% }
-%     \end{lstlisting}
-% \end{programruledcaption}
+A C++ implementation is available at 
+\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{//code/classes/tutte-matrix.hpp}
 
 \newpage
 \section{Naive algorithm}
@@ -174,8 +110,14 @@ function NaiveAlgorithm($G$)
     return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
+
+\subsubsection{Implementation}
 \noindent
-\textbf{Time complexity:}
+A C++ implementation is available at
+\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/naive-algorithm.hpp}{//code/algorithms/naive-algorithm.hpp}.
+
+\subsubsection{Time complexity}
+\noindent
 Let \(f(n)\) be the running time of \(\SC{NaiveAlgorithm}\) when \(|V_G| \eqcolon n\).
 \begin{itemize}
     \item \textbf{Line 2}: Since a graph has at most \(\binom{n}{2}\), there are at most \(O(n^2)\) iterations;
@@ -185,29 +127,6 @@ Thus, the running time can be expressed as:
 \[
     f(n) = O(n^2) O(n^\omega) = O(n^{\omega+2}).
 \]
-
-\begin{programruledcaption}{Implementation: \(\SC{NaiveAlgorithm}\)}
-    \begin{lstlisting}[
-      language={C++},
-      style=wider,
-      functions={GetTutteMatrix, isSingular, removeEdge, addEdge},
-    ]
-// C++ implementation of NaiveAlgorithm.
-vector<pair<int, int>> NaiveAlgorithm(const Graph& G) {
-    auto T = GetTutteMatrix(G);
-    if (T.isSingular()) {
-        return {};
-    }
-    for (const auto& [u, v] : E(G)) {
-      T.removeEdge(u, v);
-      if (T.isSingular()) { // This edge is essential.
-        T.addEdge(u, v);
-      }
-    }
-    return E(T);
-}
-    \end{lstlisting}
-\end{programruledcaption}
 
 \section{Rank-two update algorithm}
 
@@ -251,13 +170,13 @@ Then, one has
     &= I + 
     \begin{pmatrix} T_{u, v}N_{u, v} & 0  \\ 0 & T_{v, u}N_{v, u} \end{pmatrix} & \text{\(T\) and \(N\) are skew-symmetric} \\
     &= 
-    \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}. &  \\
+    \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}. &
 \end{align*}
 Finally, 
 \begin{align*}
     (I + \Delta N_{S, S})^{-1} 
     &= \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}^{-1} \\
-    &= \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}.
+    &= \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}. \qedhere
 \end{align*}
 \end{proof}
 
@@ -275,7 +194,6 @@ We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essenti
 If it's not, we remove it and update the matrix using a rank-two update. 
 This removes the necessity to recompute the whole inverse in each iteration.
 
-\newpage
 \begin{programruledcaption}{\(\SC{Rank-two update algorithm}\)}
   \label{alg:rank-two}
     \begin{lstlisting}[
@@ -289,13 +207,20 @@ This removes the necessity to recompute the whole inverse in each iteration.
             $T$ := TutteMatrix($G$)
             $N$ := $T^{-1}$
             for \textbf{ each } $uv \in E(G)$ do
-                if $N_{\{u,v\}} \neq -1 / T_{uv}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
+                if $N_{u,v} \neq -1 / T_{u, v}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
                     S := $\{u, v\}$
                     $N$ := RankTwoUpdate($S, T, N$) // \cref{thm:rank-two}.
             return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
 
+\subsubsection{Implementation}
+\noindent
+A C++ implementation is available at 
+\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/rank2-algorithm.hpp}{//code/algorithms/rank2-algorithm.hpp}.
+
+\subsubsection{Time complexity}
+\noindent
 First, let \(t(n)\) be the running time of \(\SC{Rank2Update}\) when \(|V_G| \eqcolon n\).
 Note that 
 \[
@@ -312,29 +237,3 @@ The running time can be expressed as:
 \begin{align*}
     g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
 \end{align*}
-
-\begin{programruledcaption}{Implementation: \(\SC{RankTwoAlgorithm}\)}
-    \begin{lstlisting}[
-      language={C++},
-      style=wider,
-      functions={GetTutteMatrix, isSingular, getInverse, RankTwoUpdate},
-      specialidentifiers={},
-    ]
-// C++ implementation of RankTwoAlgorithm.
-vector<pair<int, int>> RankTwoAlgorithm(const Graph& G) {
-    auto T = GetTutteMatrix(G);
-    if (T.isSingular()) {
-        return {};
-    } 
-
-    auto N = T.getInverse();
-    for (const auto& [u, v] : E(G)) {
-        if (N(u, v) != -1 / T(u, v)) { // This edge can be removed.
-            vector<int> S = {u, v};
-            N = rankTwoUpdate(S, T, N);
-        }
-    }
-    return E(T);
-}
-    \end{lstlisting}
-\end{programruledcaption}
