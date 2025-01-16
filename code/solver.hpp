@@ -116,13 +116,9 @@ vector<pair<int, int>> MatchingSolver::MaximumMatching() {
   }
 
   // Augmented graph aG has been created.
-  vector<pair<int, int>> aM; // Matching in the Augmented Graph.
-  for (int it = 0; it < MAX_IT; it++) {
-    aM = algorithmStrategy->solve(aG);
-    if (aG.hasMatching(aM)) {
-      break;
-    }
-  }
+  swap(aG, G);
+  vector<pair<int, int>> aM = PerfectMatching(); // Matching in the Augmented Graph.
+  swap(aG, G);
 
   vector<pair<int, int>> M;
   for (const auto &[u, v] : aM) {
