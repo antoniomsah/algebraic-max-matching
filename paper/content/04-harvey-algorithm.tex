@@ -75,7 +75,7 @@ To maintain this invariant the following updates are done.
 
 \begin{theorem}[Update 2]
 \label{update:2}
-    Let \(R, S\) be two disjoint set of vertices. Let \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) that connects vertices from \(R_i\) to vertices in \(S_j\).
+    Let \(R, S\) be two disjoint set of vertices. Let \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) with an end in \(R_i\) and another in \(S_j\).
     Then, let \(N := T^{-1}\) and \(\Delta := T' - T\), one has:
     \[
         {T'}^{-1}_{R \cup S, R \cup S} = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
@@ -166,7 +166,7 @@ The following invariant must be preserved:
 To maintain this invariant the following update is done.
 \begin{theorem}[Update 3]
 \label{update:3}
-    Let \(S \subseteq V_G\), \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) that connects vertices from \(V\) to vertices in \(V\).
+    Let \(S \subseteq V_G\), \(T'\) be \(T\) after removing some (possibly zero) edges from \(G\) with both ends in \(S\).
     Then, let \(N \coloneqq T^{-1}\) and \(\Delta \coloneqq T' - T\), one has
     \[
         {T'}^{-1}_{S, S} = N_{S, S} - N_{S, S_i}(I + \Delta N_{S_i, S_i})^{-1} \Delta N_{S_i, S}.
