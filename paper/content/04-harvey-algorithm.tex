@@ -127,23 +127,33 @@ The C++ implementation is available at
 
 \subsubsection{Time complexity}
 \noindent
-A line-by-line analysis:
+Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when \(|R| = r\) and \(|S| = s\).
+Let \(n = r + s\). The base cases are \(O(1)\).
+Otherwise, a line-by-line analysis:
 \begin{enumerate}
-    \item \textbf{Base case (Lines 4 to 13)}: Each operation takes \(O(1)\) time;
     \item \textbf{Dividing in half (Lines 16 and 17)}: Takes \(O(n)\) time;
     \item \textbf{Saving the states (Line 20)}: Takes \(O(n^2)\) time;
     \item \textbf{Recursive call (Line 21)}: Recurrence is \(f(r/2, s/2)\);
     \item \textbf{Delta (Line 22)}: Matrix subtraction is \(O(n^2)\);
     \item \textbf{Update submatrix (Line 23)}: Takes \(O(n^\omega)\).
 \end{enumerate}
-Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when \(|R| = r\) and \(|S| = s\).
-Let \(n = r + s\). The base cases are \(O(1)\). Otherwise, one has:
+Combining these steps, we have
 \begin{align*}
     f(r, s) &= O(1) + O(1) + O(n^2) + 4(O(n^2) + T(r / 2, s / 2) + O(n^\omega))  \\
-    &= 4O(n^2) + f(r / 2, s / 2) + 4O(n^\omega) \\
-    &= f(r / 2, s / 2) + O(n^\omega) = O(n^\omega). \numberthis \label{alg:delcrossing}
+    &= 4O(n^2) + 4f(r / 2, s / 2) + 4O(n^\omega) \\
+    &= 4f(r / 2, s / 2) + 4O(n^\omega).
 \end{align*}
-The \ref{alg:delcrossing} is a standard analysis of divide-and-conquer recurrence relation, see \citet{CLRS}.
+Now, applying the master theorem for recursions, i.e. 
+\[
+  T(n) = aT(n/b) + f(n).
+\]
+In this case, \(T(n) = t(r, s)\), \(a = 4\), \(b = 2\) and \(f(n) = O(n^\omega)\), then if \(\omega > \log_{b}a = 2\) the complexity is dominated by \(O(n^\omega)\).
+From \cref{matrix:time_complexity}, the best currently known matrix multiplication algorithm has \(\omega > 2\).
+Thus, the complexity is dominated by \(O(n^\omega)\) and
+\begin{equation}
+  \label{alg:delcrossing}
+  f(r, s) = 4f(r/2, s/2) + 4O(n^\omega) = 8O(n^\omega) = O(n^\omega). 
+\end{equation}
 
 \subsection{\(\SC{DeleteEdgesWithin}\)}
 
@@ -199,13 +209,26 @@ The C++ implementation is available at
 \noindent
 Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
 The base case is direct.
-Then, 
+Then, through a line-by-line analysis we have
+\begin{enumerate}
+  \item \textbf{DivideInTwo (Line 4)}: Takes \(O(n)\) times;
+  \item \textbf{Saving the states (Line 6)}: Takes \(O(n^2)\) time;
+  \item \textbf{Recursive call (Line 7)}: Takes \(g(n/2)\) time;
+  \item \textbf{Delta (Line 8)}: Takes \(O(n^2)\);
+  \item \textbf{Update 3 (Line 9)}: Takes \(O(n^\omega)\) time;
+  \item \textbf{DeleteEdgesCrossing (Line 10)}: Takes \(f(n/2, n/2)\).
+\end{enumerate}
+Now, combining these steps:
 \begin{align*}
-    g(n) &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + f(n / 2, n / 2) &  \\
-    &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + f(n / 2, n / 2) & \\ 
-    &= 4O(n^2) + 2g(n / 2) + 2O(n^\omega) + O(n^\omega) & \text{by \ref{alg:delcrossing}} \\ 
-    &= 2g(n / 2) + 3O(n^\omega) = O(n^\omega) & \numberthis \label{alg:delwithin}
+    g(n) &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + f(n/2, n/2) &  \\
+    &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + O(n^\omega) & \text{by \ref{alg:delcrossing}} \\
+    &= 2g(n / 2) + 3O(n^\omega).
 \end{align*}
+Similarly to \cref{alg:delcrossing}, we have
+\begin{equation}
+\label{alg:delwithin}
+  g(n) = 2g(n / 2) + 3O(n^\omega) = O(n^\omega).
+\end{equation}
 
 \subsection{\(\SC{PerfectMatching}\)}
 
@@ -239,14 +262,20 @@ The C++ implementation is available at
 
 \subsubsection{Time complexity}
 \noindent
-Let \(T(n)\) be the running time of \(\SC{PerfectMatching(G)}\) when \(|V| = n\) and \(E(n)\) be the expected number of iterations
-until a perfect matching is found. Then,
-\begin{align*}
-    T(n) &= O(n^2) + O(n^\omega) + (O(n^\omega) + g(n) + O(n^2) + O(1)) & \\
-    &= (O(n^\omega) + g(n)) &  \\
-    &= O(n^\omega + O(n^\omega)) & \text{by \ref{alg:delwithin}} \\ 
-    &= O(n^\omega) & \numberthis \label{alg:harvey_complexity}
-\end{align*}
+Let \(T(n)\) be the running time of \(\SC{PerfectMatching(G)}\) when \(|V| = n\). 
+A line-by-line comparison:
+\begin{enumerate}
+  \item \textbf{Building a TutteMatrix (Line 2)}: Takes \(O(n^2)\) time;
+  \item \textbf{Checking if a matrix is singular (Line 3)}: Takes \(O(n^\omega)\) time;
+  \item \textbf{Calculating a matrix inverse (Line 4)}: Takes \(O(n^\omega)\) time;
+  \item \textbf{DeleteEdgesWithin (Line 5)}: From \cref{alg:delwithin}, takes \(g(|V|) = O(n^\omega)\) time;
+  \item \textbf{Returning the matching (Line 6)}: Takes \(O(n^2)\) time.
+\end{enumerate}
+Combining these steps, we have:
+\begin{equation}
+\label{alg:harvey_complexity}
+    T(n) = O(n^2) + O(n^\omega) + O(n^\omega) + O(n^\omega) + O(n^2) = O(n^\omega).
+\end{equation}
 
 \subsubsection{Probability of failure}
 \noindent
