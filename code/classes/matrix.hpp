@@ -1,15 +1,12 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <exception>
-#include <iomanip>
-#include <tuple>
 #include <vector>
 
 #include "memory"
 #include "multiplication/default-matrix-strategy.hpp"
+#include "multiplication/strassen-matrix-strategy.hpp"
 #include "multiplication/matrix-strategy-interface.hpp"
 #include "singular-exception.hpp"
 
