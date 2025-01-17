@@ -83,15 +83,22 @@ For a graph \(G\). The following assumption is used for the algorithm pertaining
 %    \item Vertices are mapped to zero-indexed integers, enabling straightforward traversal by iterating from \(0\) to \(n-1\). 
 %    This indexing scheme provides a canonical and computationally convenient representation of the graph's structure.
 \end{itemize}
-A C++ implementation is available at 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/classes/tutte-matrix.hpp}{//code/classes/tutte-matrix.hpp}
 
 \newpage
 \section{Naive algorithm}
 
 % A tutte matrix to refer to randomized tutte matrix
 
-Using \cref{fact:matching_condition}, the following algorithm finds a perfect matching in time \(O(n^{\omega+2})\).
+Now, a naive algorithm can be implemented.
+For a graph \(G \coloneqq (V, E)\).
+The idea is, for each edge \(e \in E\), check through \cref{fact:matching_condition} if the graph \((V, E \setminus \{e\})\) has a perfect matching.
+\begin{enumerate}
+  \item If it does not have a perfect matching, then this \(e\) is essential;
+  \item Else, let \(G = (V, E \setminus e)\);
+\end{enumerate}
+Then, after iterating through each edge in \(E\), only the essential edges remain in \(G\), i.e. a perfect matching.
+Hence, achieving the following algorithm.
+
 \begin{programruledcaption}{\(\SC{NaiveAlgorithm}\)}
     \label{alg:simple}
     \begin{lstlisting}[
@@ -103,6 +110,8 @@ Using \cref{fact:matching_condition}, the following algorithm finds a perfect ma
     ]
 function NaiveAlgorithm($G$)
     $T$ := TutteMatrix($G$)
+    if $T$ is singular then // $G$ does not have a perfect matching.
+      return $\emptyset$
     for \textbf{ each } $uv \in E(G)$ do
         RemoveEdge($T, uv$)
         if $T$ is singular then // By \cref{fact:matching_condition}, edge $uv$ is essential.
@@ -110,11 +119,6 @@ function NaiveAlgorithm($G$)
     return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
-
-\subsubsection{Implementation}
-\noindent
-A C++ implementation is available at
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/naive-algorithm.hpp}{//code/algorithms/naive-algorithm.hpp}.
 
 \subsubsection{Time complexity}
 \noindent
@@ -131,6 +135,7 @@ Thus, the running time can be expressed as:
 \section{Rank-two update algorithm}
 
 The bottleneck of the previous algorithm is the necessity to recompute the whole matrix inverse after each iteration.
+An improvement from the previous algorithm was achieved by using \cref{cor:condition_edge_removal} to quickly check essential edges and \cref{thm:rank-two} to update the inverse in \(O(n^2)\) instead of \(O(n^\omega)\).
 
 \begin{theorem}[Rank-two update]
 \label{thm:rank-two}
@@ -190,9 +195,12 @@ Finally,
     Direct from \cref{thm:rank-two}. 
 \end{proof}
 
-We use \cref{cor:condition_edge_removal} to quickly decide if an edge is essential. 
-If it's not, we remove it and update the matrix using a rank-two update. 
-This removes the necessity to recompute the whole inverse in each iteration.
+The idea is similar to the naive algorithm.
+For a graph \(G = (V, E)\).
+For each \(e \in E\), check if \(e\) is essential.
+However, instead of temporarily removing \(e\) from \(G\), we use \cref{cor:condition_edge_removal} to quickly decide if \(e\) is essential.
+If \(e\) is inessential, then we use a rank-two update instead of completely recomputing the inverse.
+Thus, we have the following algorithm.
 
 \begin{programruledcaption}{\(\SC{Rank-two update algorithm}\)}
   \label{alg:rank-two}
@@ -213,11 +221,6 @@ This removes the necessity to recompute the whole inverse in each iteration.
             return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
-
-\subsubsection{Implementation}
-\noindent
-A C++ implementation is available at 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/rank2-algorithm.hpp}{//code/algorithms/rank2-algorithm.hpp}.
 
 \subsubsection{Time complexity}
 \noindent

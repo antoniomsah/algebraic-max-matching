@@ -18,7 +18,7 @@ As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 For a graph \(G\) and \(n = |V(G)|\). 
 The algorithm maintains two matrices, \(T\) and \(N\), that are initialized as
 \begin{enumerate}
-    \item \(T \coloneqq \) a Tutte matrix where the entries were randomly chosen\footnote{\cref{sec:prob_tutte}};
+  \item \(T \coloneqq \) a Tutte matrix where the entries were randomly chosen, see \cref{sec:prob_tutte};
     \item \(N \coloneqq T^{-1}\).
 \end{enumerate}
 It relies on two recursive functions: \(\SC{DeleteEdgesCrossing}\) and \(\SC{DeleteEdgesWithin}\). 
@@ -30,7 +30,7 @@ This function has time complexity \(O(n)\) and can be implemented through intege
 \subsection{\(\SC{DeleteEdgesCrossing}\)}
 
 $\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) and \(S\) and 
-deletes inessential edges that connect a vertex in \(R\) to a vertex in \(S\).
+deletes inessential edges with an end in \(R\) and the other in \(S\).
 The following invariant must be preserved:
 \begin{itemize}
     \item \(\SC{DeleteEdgesCrossing}(R, S)\): initially has \(N_{R \cup S, R \cup S} = {T^{-1}}_{R \cup S, R \cup S}\) and this property is restored after each call 
@@ -53,24 +53,24 @@ To maintain this invariant the following updates are done.
 \end{theorem}
 
 \begin{proof}
-  TODO
-%    The inverse of a Tutte Matrix is skew-symmetric, thus \(N_{s, r} = -N_{r, s}\).
-%    Let \(V \coloneqq R \cup S\)
-%    By \cref{cor:update_cor}, one has:
-%    \begin{align*}
-%        {T'}^{-1}_{X, X} &= N_{X, X} - N_{X, X} (I + \Delta N_{X, X})^{-1} \Delta N_{X, X} \\
-%        &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} 0 & -T_{r, s} \\ -T_{s, r} & 0 \end{bmatrix} \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix}\bigg)^{-1} \Delta N_{X, X} \\ &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} -T_{r, s} N_{s, r} & 0 \\ 0 & -T_{s, r} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%        &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} T_{r, s} N_{r, s} & 0 \\ 0 & T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%        &= N_{X, X} - N_{X, X} \bigg(\begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%        &= N_{X, X} - N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{X, X} \\
-%        &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} \\
-%        &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
-%        &= N_{X, X} + \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix} \begin{bmatrix} \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{s, r}} & 0 \\ 0 & \frac{T_{r, s}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
-%        &= N_{X, X} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
-%        &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
-%        &= \begin{bmatrix} 0 & \frac{N_{r, s}(1 + T_{r, s}N_{r, s} + T_{s, r}N_{s, r})}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
-%        &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}
-%    \end{align*}
+TODO
+% The inverse of a Tutte Matrix is skew-symmetric, thus \(N_{s, r} = -N_{r, s}\).
+% Let \(V \coloneqq R \cup S\)
+% By \cref{cor:update_cor}, one has:
+% \begin{align*}
+%     {T'}^{-1}_{X, X} &= N_{X, X} - N_{X, X} (I + \Delta N_{X, X})^{-1} \Delta N_{X, X} \\
+%     &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} 0 & -T_{r, s} \\ -T_{s, r} & 0 \end{bmatrix} \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix}\bigg)^{-1} \Delta N_{X, X} \\ &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} -T_{r, s} N_{s, r} & 0 \\ 0 & -T_{s, r} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
+%     &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} T_{r, s} N_{r, s} & 0 \\ 0 & T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
+%     &= N_{X, X} - N_{X, X} \bigg(\begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
+%     &= N_{X, X} - N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{X, X} \\
+%     &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} \\
+%     &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
+%     &= N_{X, X} + \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix} \begin{bmatrix} \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{s, r}} & 0 \\ 0 & \frac{T_{r, s}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
+%     &= N_{X, X} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
+%     &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
+%     &= \begin{bmatrix} 0 & \frac{N_{r, s}(1 + T_{r, s}N_{r, s} + T_{s, r}N_{s, r})}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
+%     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}
+% \end{align*}
 \end{proof}
 
 \begin{theorem}[Update 2]
@@ -119,11 +119,6 @@ We have the following algorithm.
                     $N_{RS, RS}$ := $N_{RS, RS}' - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // \cref{update:2}.
     \end{lstlisting}
 \end{programruledcaption}
-
-\subsubsection{Implementation}
-\noindent
-The C++ implementation is available at 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/harvey-algorithm.hpp#L51}{//code/algorithms/harvey-algorithm.hpp:L51}.
 
 \subsubsection{Time complexity}
 \noindent
@@ -200,11 +195,6 @@ We have the following algorithm.
     \end{lstlisting}
 \end{programruledcaption}
 
-\subsubsection{Implementation}
-\noindent
-The C++ implementation is available at 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/algorithms/harvey-algorithm.hpp#L18}{//code/algorithms/harvey-algorithm.hpp:L18}.
-
 \subsubsection{Time complexity}
 \noindent
 Let \(g(n)\) be the running time of \(\SC{DeleteEdgesWithin}(S)\) when \(|S| = n\).
@@ -254,11 +244,6 @@ Consequently, there is the following implementation:
             return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
-
-\subsubsection{Implementation}
-\noindent
-The C++ implementation is available at 
-\href{https://github.com/antoniomsah/algebraic-max-matching/blob/main/code/solver.hpp#L89}{//code/solver.hpp:L89}.
 
 \subsubsection{Time complexity}
 \noindent
