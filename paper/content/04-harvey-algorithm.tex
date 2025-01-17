@@ -44,33 +44,27 @@ To maintain this invariant the following updates are done.
     Let \(N \coloneqq T^{-1}\), \(r \in R\) and \(s \in S\).
     If \(\{r, s\}\) is inessential, let \(\tilde{T}\) be the Tutte matrix of \(G\) without edge \(\{r, s\}\), then one has
     \[
-        \tilde{T}^{-1}_{R, S} = N_{R, S} (1 - T_{R, S} N_{R, S}) / (1 + T_{R, S} N_{R, S})
+        \tilde{T}^{-1}_{r, s} = N_{r, s} / (1 + T_{r, s} N_{r, s})
     \]
     and
     \[
-        \tilde{T}^{-1}_{S, R} = N_{S, R} (1 - T_{S, R} N_{S, R}) / (1 + T_{S, R} N_{S, R}) = -\tilde{T}^{-1}_{R, S}.
+        \tilde{T}^{-1}_{s, r} = N_{s, r} / (1 + T_{r, s} N_{r, s}) = -\tilde{T}^{-1}_{r, s}.
     \]
 \end{theorem}
 
 \begin{proof}
-TODO
-% The inverse of a Tutte Matrix is skew-symmetric, thus \(N_{s, r} = -N_{r, s}\).
-% Let \(V \coloneqq R \cup S\)
-% By \cref{cor:update_cor}, one has:
-% \begin{align*}
-%     {T'}^{-1}_{X, X} &= N_{X, X} - N_{X, X} (I + \Delta N_{X, X})^{-1} \Delta N_{X, X} \\
-%     &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} 0 & -T_{r, s} \\ -T_{s, r} & 0 \end{bmatrix} \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix}\bigg)^{-1} \Delta N_{X, X} \\ &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} -T_{r, s} N_{s, r} & 0 \\ 0 & -T_{s, r} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%     &= N_{X, X} - N_{X, X} \bigg(I + \begin{bmatrix} T_{r, s} N_{r, s} & 0 \\ 0 & T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%     &= N_{X, X} - N_{X, X} \bigg(\begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix} \bigg)^{-1} \Delta N_{X, X} \\
-%     &= N_{X, X} - N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{X, X} \\
-%     &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} \\
-%     &= N_{X, X} + N_{X, X} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
-%     &= N_{X, X} + \begin{bmatrix} 0 & N_{r, s} \\ N_{s, r} & 0 \end{bmatrix} \begin{bmatrix} \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{s, r}} & 0 \\ 0 & \frac{T_{r, s}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \\
-%     &= N_{X, X} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\
-%     &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
-%     &= \begin{bmatrix} 0 & \frac{N_{r, s}(1 + T_{r, s}N_{r, s} + T_{s, r}N_{s, r})}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} \\ 
-%     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}
-% \end{align*}
+Let \(RS \coloneqq R \cup S\).
+By \cref{cor:update_cor}, one has:
+\begin{align*}
+  \tilde{T}^{-1}_{RS, RS} &= N_{RS, RS} - N_{RS, RS} (I + \Delta N_{RS, RS})^{-1} \Delta N_{RS, RS} & \\
+                     &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix}^{-1} \Delta N_{RS, RS} & \eqref{rank-two:eq} \\
+                     &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{RS, RS} &\\
+                     % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} & \\
+                     % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} 
+                     &= N_{RS, RS} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
+                     % &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} 
+                     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}. & \qedhere
+\end{align*}
 \end{proof}
 
 \begin{theorem}[Update 2]
@@ -103,7 +97,7 @@ We have the following algorithm.
                 Let $r$ in $R$
                 Let $s$ in $S$
                 if $T_{r, s} \neq 0$ \textbf{ and } $N_{r, s} \neq -1 / T_{r, s}$ then // \cref{cor:condition_edge_removal}.
-                    $N_{r, s}$ := $N_{r, s} (1 - T_{r, s} N_{r, s}) / (1 + T_{r, s} N_{r, s})$ // \cref{update:1}.
+                    $N_{r, s}$ := $N_{r, s} / (1 + T_{r, s} N_{r, s})$ // \cref{update:1}.
                     $N_{s, r}$ := $-N_{r, s}$
                     RemoveEdge($T, rs$)
                 return

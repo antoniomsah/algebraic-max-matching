@@ -181,8 +181,9 @@ Finally,
 \begin{align*}
     (I + \Delta N_{S, S})^{-1} 
     &= \begin{pmatrix} 1 + T_{u, v}N_{u, v} & 0  \\ 0 & 1 + T_{v, u}N_{v, u} \end{pmatrix}^{-1} \\
-    &= \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}. \qedhere
+    &= \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}. \numberthis \label{rank-two:eq}
 \end{align*}
+Thus, it is proven.
 \end{proof}
 
 \begin{corollary}[Edge removal condition]
@@ -192,7 +193,7 @@ Finally,
 \end{corollary}
 
 \begin{proof}
-    Direct from \cref{thm:rank-two}. 
+    Direct from \cref{rank-two:eq}. 
 \end{proof}
 
 The idea is similar to the naive algorithm.

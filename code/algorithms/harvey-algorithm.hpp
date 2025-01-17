@@ -61,7 +61,7 @@ class HarveyAlgorithmStrategy : public IAlgorithmStrategy {
     if (max(R.size(), S.size()) == 1) {
       int r = R[0], s = S[0];
       if (T(r, s) != 0 and N(r, s) != -1 / T(r, s)) {
-        N(r, s) = N(r, s) * (1 - T(r, s) * N(r, s)) / (T(r, s) * N(r, s) + 1);
+        N(r, s) = N(r, s) / (T(r, s) * N(r, s) + 1);
         N(s, r) = -N(r, s);
         T.removeEdge(r, s);
       }
