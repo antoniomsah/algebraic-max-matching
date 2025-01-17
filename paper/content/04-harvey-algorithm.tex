@@ -57,13 +57,13 @@ Let \(RS \coloneqq R \cup S\).
 By \cref{cor:update_cor}, one has:
 \begin{align*}
   \tilde{T}^{-1}_{RS, RS} &= N_{RS, RS} - N_{RS, RS} (I + \Delta N_{RS, RS})^{-1} \Delta N_{RS, RS} & \\
-                     &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix}^{-1} \Delta N_{RS, RS} & \eqref{rank-two:eq} \\
+                          &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix}^{-1} \Delta N_{RS, RS} & \text{by \eqref{rank-two:eq}} \\
                      &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{RS, RS} &\\
                      % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} & \\
                      % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} 
-                     &= N_{RS, RS} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
-                     % &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{s, r}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} 
-                     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}. & \qedhere
+                     &= N_{RS, RS} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
+                     % &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
+                     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}. \qedhere &
 \end{align*}
 \end{proof}
 
@@ -123,7 +123,7 @@ Otherwise, a line-by-line analysis:
     \item \textbf{Dividing in half (Lines 16 and 17)}: Takes \(O(n)\) time;
     \item \textbf{Saving the states (Line 20)}: Takes \(O(n^2)\) time;
     \item \textbf{Recursive call (Line 21)}: Recurrence is \(f(r/2, s/2)\);
-    \item \textbf{Delta (Line 22)}: Matrix subtraction is \(O(n^2)\);
+    \item \textbf{Delta (Line 22)}: Matrix subby traction is \(O(n^2)\);
     \item \textbf{Update submatrix (Line 23)}: Takes \(O(n^\omega)\).
 \end{enumerate}
 Combining these steps, we have
@@ -205,7 +205,7 @@ Then, through a line-by-line analysis we have
 Now, combining these steps:
 \begin{align*}
     g(n) &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + f(n/2, n/2) &  \\
-    &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + O(n^\omega) & \text{by \ref{alg:delcrossing}} \\
+    &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + O(n^\omega) & \text{by \eqref{alg:delcrossing}} \\
     &= 2g(n / 2) + 3O(n^\omega).
 \end{align*}
 Similarly to \cref{alg:delcrossing}, we have
@@ -273,11 +273,50 @@ Since the updates ensure that the invariants are maintained throughout the algor
 
 \section{Analysis}
 
-This section compares Harvey's algorithm with three perfect matching algorithms:
+This section compares Harvey's algorithm with two perfect matching algorithms:
 \begin{enumerate}
-   \item The simple algorithm presented in \cref{alg:simple};
    \item The rank-two algorithm described in \cref{alg:rank-two};
  \item A graph theory-based implementation used in competitive programming competitions (see \href{https://codeforces.com/blog/entry/92339}{codeforces.com/blog/entry/92339}).
 \end{enumerate}
 The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
 
+\subsection{Methology}
+
+TODO: add computer specs.
+
+\subsection{Results}
+
+By running the benchmark algorithm and generating box plots with the results. 
+The following box plots were generated:
+\begin{figure}[h]
+\label{fig:v10}
+  \centering
+  \includegraphics[width=12cm]{boxplot_v10.png}
+  \caption{Perfect Matching benchmark with 10 vertices.}
+\end{figure}
+\begin{figure}[h]
+\label{fig:v20}
+  \centering
+  \includegraphics[width=12cm]{boxplot_v20.png}
+  \caption{Perfect Matching benchmark with 20 vertices.}
+\end{figure}
+\begin{figure}[h]
+\label{fig:v50}
+  \centering
+  \includegraphics[width=12cm]{boxplot_v50.png}
+  \caption{Perfect Matching benchmark with 50 vertices.}
+\end{figure}
+\begin{figure}[h]
+\label{fig:v100}
+  \centering
+  \includegraphics[width=12cm]{boxplot_v100.png}
+  \caption{Perfect Matching benchmark with 100 vertices.}
+\end{figure}
+\begin{figure}[h]
+\label{fig:v200}
+  \centering
+  \includegraphics[width=12cm]{boxplot_v200.png}
+  \caption{Perfect Matching benchmark with 200 vertices.}
+\end{figure}
+
+Notably,
