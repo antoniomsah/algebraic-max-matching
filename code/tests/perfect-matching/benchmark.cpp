@@ -8,7 +8,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
-  const int NUM_IT = 1;
+  const int NUM_IT = 50;
 
   Benchmarker benchmarker("perfect_matching", NUM_IT);
   try {
