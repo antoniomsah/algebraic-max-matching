@@ -55,6 +55,9 @@ compare:
 		fi \
 	done
 
+run_benchmark:
+	$(CXX) $(CXXFLAGS) benchmark.cpp -o benchmark && ./benchmark && rm benchmark
+
 # Clean up the generated files
 clean:
 	rm -f $(OUT) $(OUTPUT_DIR)/*

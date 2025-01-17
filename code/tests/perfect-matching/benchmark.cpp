@@ -8,8 +8,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
-  assert(argc >= 2);
-  const int NUM_IT = 100;
+  const int NUM_IT = 1;
 
   Benchmarker benchmarker("perfect_matching", NUM_IT);
   try {
@@ -24,7 +23,9 @@ int main(int argc, char* argv[]) {
       if (!entry.is_regular_file()) continue;
       filesFound = true;
       cout << "Running benchmark for file: " << entry.path().filename() << endl;
-      benchmarker.run(entry.path(), false, stoi(argv[1]));
+      for (int alg_id = 1; alg_id < NUM_STRATEGIES; alg_id += 1) {
+        benchmarker.run(entry.path(), true, alg_id);
+      }
     }
 
     if (!filesFound) {
@@ -32,7 +33,6 @@ int main(int argc, char* argv[]) {
       return 1;
     }
     benchmarker.write();
-    benchmarker.print();
   } catch (const exception& e) {
     cerr << "Error: " << e.what() << endl;
     return 1;
