@@ -60,7 +60,7 @@ def create_boxplots(df):
 def main():
     # Run benchmark
     print("Running benchmark...")
-    # run_benchmark()
+    run_benchmark()
     
     # Read CSV data
     try:
