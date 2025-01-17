@@ -276,47 +276,73 @@ Since the updates ensure that the invariants are maintained throughout the algor
 This section compares Harvey's algorithm with two perfect matching algorithms:
 \begin{enumerate}
    \item The rank-two algorithm described in \cref{alg:rank-two};
- \item A graph theory-based implementation used in competitive programming competitions (see \href{https://codeforces.com/blog/entry/92339}{codeforces.com/blog/entry/92339}).
+ \item A Edmonds-Blossom algorithm implementation used in competitive programming competitions (see \href{https://codeforces.com/blog/entry/92339}{codeforces.com/blog/entry/92339}).
 \end{enumerate}
-The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
+
+The naive algorithm was not compared due to its poor performance.
+As a reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
 
 \subsection{Methology}
 
+The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
+
+\subsubsection{Computer specs}
 TODO: add computer specs.
 
-\subsection{Results}
+\subsubsection{Algorithms tested}
+The fast matrix multiplication algorithm was \textbf{not} implemented since its threshold is too high for application purposes.
+Instead the trivial $O(n^3)$ algorithms was implemented, thus Harvey's algorithm has a time complexity of \(O(n^3)\) in these comparisons.
+The tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    Algorithm & Time complexity \\
+    \hline
+    Rank-two algorithm & \(O(n^2m + O(n^3))\) \\
+    Harvey's algorithm & \(O(n^3)\) \\
+    Edmonds-Blossom algorithm & \(O(nm)\) \\
+    \hline
+  \end{tabular}
+\end{center}
 
-By running the benchmark algorithm and generating box plots with the results. 
-The following box plots were generated:
-\begin{figure}[h]
-\label{fig:v10}
+\subsection{Results}
+The Edmonds-Blossom implementation consistently demonstrates superior performance across all tests with its \(O(nm)\) complexity. 
+In \cref{fig:v10} and \cref{fig:v20}, the Rank-two algorithm outperforms Harvey's algorithm, likely due to its lower constant factor. 
+However, as the test sizes increase, Harvey's algorithm shows progressive improvement relative to the Rank-two algorithm. 
+This trend becomes evident in \cref{fig:v50}, where the performance gap narrows significantly. 
+In \cref{fig:v100} and \cref{fig:v200}, Harvey's algorithm ultimately achieves better overall performance.
+
+Moreover, the Rank-Two algorithm exhibits significant performance variability, which can be attributed to its update frequency being directly tied to the number of edges removed from the graph. 
+In contrast, Harvey's algorithm maintains consistent performance by executing a fixed number of updates, independent of the edge count. 
+This behavior makes Harvey's algorithm more predictable in terms of execution time, particularly for larger graphs.
+
+\begin{figure}[H]
   \centering
   \includegraphics[width=12cm]{boxplot_v10.png}
   \caption{Perfect Matching benchmark with 10 vertices.}
+  \label{fig:v10}
 \end{figure}
-\begin{figure}[h]
-\label{fig:v20}
+\begin{figure}[H]
   \centering
   \includegraphics[width=12cm]{boxplot_v20.png}
   \caption{Perfect Matching benchmark with 20 vertices.}
+  \label{fig:v20}
 \end{figure}
-\begin{figure}[h]
-\label{fig:v50}
+\begin{figure}[H]
   \centering
   \includegraphics[width=12cm]{boxplot_v50.png}
   \caption{Perfect Matching benchmark with 50 vertices.}
+  \label{fig:v50}
 \end{figure}
-\begin{figure}[h]
-\label{fig:v100}
+\begin{figure}[H]
   \centering
   \includegraphics[width=12cm]{boxplot_v100.png}
   \caption{Perfect Matching benchmark with 100 vertices.}
+  \label{fig:v100}
 \end{figure}
-\begin{figure}[h]
-\label{fig:v200}
+\begin{figure}[H]
   \centering
   \includegraphics[width=12cm]{boxplot_v200.png}
   \caption{Perfect Matching benchmark with 200 vertices.}
+  \label{fig:v200}
 \end{figure}
-
-Notably,
