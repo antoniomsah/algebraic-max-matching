@@ -26,7 +26,7 @@ public:
         }
     }
 
-    bool hasVertex(int u) { return u < int(V.size()); }
+    bool hasVertex(int u) { return 0 <= u && u < int(V.size()); }
 
     bool isAdj(int u, int v) {
         if (!hasVertex(u) || !hasVertex(v)) return false;

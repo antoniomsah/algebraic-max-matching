@@ -1,197 +1,154 @@
 #pragma once
 
 #include "algorithm-strategy-interface.hpp"
-#include <queue>
 
 using namespace std;
 
 /** 
  * Implements the Blossom algorithm.
- * Solves maximum matching in O(nm).
+ * Solves maximum matching in O(n^2m).
  *
- * The implementation was based on: https://codeforces.com/blog/entry/92339.
+ * This implementation is based on the Capstone project from
+ * Giovana Gomes Delfino, see https://bccdev.ime.usp.br/tccs/2017/gigd/.
  **/
 class BlossomAlgorithm {
-  int n, sz;
-  vector<int> mate, // mate[u] is the vertex matched to u.
-              id,   // id[u] is the blossom containing u.
-              p,    // p[u] is the parent of u.
-              vis;  // vis[u] is 0 if not visited, 1 if even depth and 2 if odd depth.
-  vector<vector<int>> blossom; // blossom[b] is the list of vertices contained in blossom 'b'.
-  Matrix<int> g;
+  int n, m;
 
-  /**
-   * Prepares the iteration.
-   **/
-  queue<int> init() {
-    queue<int> q;
-    fill(vis.begin(), vis.end(), 0);
-    iota(id.begin(), id.end(), 0);
-    for (int v = 0; v < n; v++) if (mate[v] == -1) {
-      // Exposed vertex.
-      q.push(v);
-      p[v] = v;
-      vis[v] = 1;
+  struct Edge {
+      int v, next;
+      Edge(int _v = -1, int _next = -1) : v(_v), next(_next) {}
+  };
+
+  vector<int> adj;
+  vector<Edge> edges;
+
+  int qh, qt;
+  vector<int> match, q, p, base, inQ, inB;
+
+  void add_edge(int u, int v) {
+    edges.emplace_back(v, adj[u]);
+    adj[u] = edges.size() - 1;
+
+    edges.emplace_back(u, adj[v]);
+    adj[v] = edges.size() - 1;
+  }
+
+  int LCA(int root, int u, int v) {
+    vector<bool> inP(n, false);
+    while (42) {
+      u = base[u];
+      inP[u] = true;
+      if (u == root) break;
+      u = p[match[u]];
     }
-    return q;
-  }
 
-  // addEdge adds the edge {u, v} to 'g'.
-  void addEdge(int u, int v) {
-    assert(u < sz && v < sz);
-    g(u, v) = v;
-    g(v, u) = u;
-  }
-
-  // removeEdge removes edge {u, v} from 'g'.
-  void removeEdge(int u, int v) {
-    assert(u < sz && v < sz);
-    g(u, v) = -1;
-    g(v, u) = -1;
-  }
-
-  // isAdj checks if two vertices are adjacent.
-  bool isAdj(int u, int v) {
-    assert(u < sz && v < sz);
-    return g(u, v) != -1;
-  }
-
-  // match matches vertices 'u' and 'v'.
-  void match(int u, int v) {
-    assert(u < sz && v < sz);
-    removeEdge(u, v);
-    mate[u] = v;
-    mate[v] = u;
-  }
-
-  // contract contracts a blossom.
-  void contract(int c, int u, int v, vector<int> &vx, vector<int> &vy) {
-    blossom[c].clear();
-    int r = vx.back();
-    while (!vx.empty() && !vy.empty() && vx.back() == vy.back()) {
-      r = vx.back();
-      vx.pop_back();
-      vy.pop_back();
+    while (42) {
+      v = base[v];
+      if (inP[v]) return v;
+      else v = p[match[v]];
     }
-    blossom[c].push_back(r);
-    blossom[c].insert(blossom[c].end(), vx.rbegin(), vx.rend());
-    blossom[c].insert(blossom[c].end(), vy.begin(), vy.end());
-    for (int i = 0; i <= c; i++) {
-      removeEdge(i, c);
+  }
+
+  void mark(int lca, int u) {
+    while (base[u] != lca) {
+      int v = match[u];
+      inB[base[u]] = inB[base[v]] = true;
+      u = p[v]; 
+      if (base[u] != lca) p[u] = v;
     }
-    for (int b: blossom[c]) {
-      id[b] = c;
-      for (int i = 0; i < c; i++) {
-        if (!isAdj(b, i)) continue;
-        g(c, i) = b;
-        g(i, c) = g(i, b);
+  }
+
+  void contract(int s, int u, int v) {
+    int lca = LCA(s, u, v);
+    fill(inB.begin(), inB.end(), 0);
+    mark(lca, u);
+    mark(lca, v);
+    
+    if (base[u] != lca) p[u] = v;
+    if (base[v] != lca) p[v] = u;
+
+    for (int u = 0; u < n; u++) {
+      if (!inB[base[u]]) continue;
+      base[u] = lca;
+      if (!inQ[u]) { 
+          q[++qt] = u;
+          inQ[u] = true;
       }
     }
   }
 
-  // trace returns the path from 'u' to the root.
-  vector<int> trace(int u) {
-    vector<int> vx;
-    while (true) {
-      while (id[u] != u) u = id[u];
-      if (!vx.empty() && vx.back() == u) break;
-      vx.push_back(u);
-      u = p[u];
+  int find_augmenting_path(int s) {
+    fill(inQ.begin(), inQ.end(), 0);
+    fill(p.begin(), p.end(), -1);
+    iota(base.begin(), base.end(), 0);
+
+    qh = qt = 0;
+    q[0] = s;
+    inQ[s] = true;
+
+    while (qh <= qt) {
+        int u = q[qh++];
+        for (int e = adj[u]; e != -1; e = edges[e].next) {
+            int v = edges[e].v;
+            if (base[u] == base[v] || match[u] == v) continue;
+
+            if ((v == s) || (match[v] != -1 && p[match[v]] != -1)) {
+              contract(s, u, v);
+              continue;
+            }
+
+            if (p[v] == -1) {
+                p[v] = u;
+                if (match[v] == -1) return v;
+
+                if (!inQ[match[v]]) {
+                    q[++qt] = match[v];
+                    inQ[match[v]] = true;
+                }
+            }
+        }
     }
-    return vx;
+    return -1;
   }
 
-  // lift liftes a path from the contracted graph to the original graph.
-  vector<int> lift(vector<int> &vx) {
-    vector<int> A;
-    while (vx.size() >= 2) {
-      int z = vx.back(); vx.pop_back();
-      if (z < n) {
-        A.push_back(z);
-        continue;
-      }
-
-      int w = vx.back();
-      int i = (A.size() % 2 == 0 ? find(blossom[z].begin(), blossom[z].end(), g(z, w)) - blossom[z].begin() : 0);
-      int j = (A.size() % 2 == 1 ? find(blossom[z].begin(), blossom[z].end(), g(z, A.back())) - blossom[z].begin() : 0);
-      int k = blossom[z].size();
-      int dif = (A.size() % 2 == 0 ? i % 2 == 1 : j % 2 == 0) ? 1 : k - 1;
-      while (i != j) {
-          vx.push_back(blossom[z][i]);
-          i = (i + dif) % k;
-      }
-      vx.push_back(blossom[z][i]);
+  int augment(int s, int t) {
+    int u = t, v, w;
+    while (u != -1) {
+        v = p[u];
+        w = match[v];
+        match[v] = u;
+        match[u] = v;
+        u = w;
     }
-    return A;
+    return t != -1;
   }
 
-public:
-  BlossomAlgorithm(const Graph& _G) : n(V(_G).size()), sz(n + n/2), g(sz, sz, -1) {
-    mate.resize(n, -1);
-    id.resize(sz);
-    p.resize(sz);
-    vis.resize(sz);
-    blossom.resize(sz);
-    for (const auto& [u, v]: E(_G)) {
-      addEdge(u, v);
+public: 
+  BlossomAlgorithm(const Graph& _G) : n(V(_G).size()), m(E(_G).size()) {
+    match.resize(n);
+    q.resize(n);
+    p.resize(n);
+    base.resize(n);
+    inQ.resize(n);
+    inB.resize(n);
+    adj.resize(n, -1);
+    for (auto [u, v]: E(_G)) {
+      add_edge(u, v);
     }
   }
 
   vector<pair<int, int>> solve() {
-    bool aug = true;
-    while (aug) {
-      queue<int> q = init();
-      int c = n;
-      aug = false;
-      while (!q.empty() && !aug) {
-        int u = q.front(); q.pop();
-        if (id[u] != u) continue; // Not exposed.
-        for (int v = 0; v < c; v++) {
-          if (id[v] != v || !isAdj(u, v)) {
-            continue;
-          }
-
-          if (vis[v] == 0) {
-            p[v] = u;
-            vis[v] = 2;
-            int m = mate[v]; // Matched vertex to v.
-            p[m] = v;
-            vis[m] = 1;
-            q.push(m);
-            continue;
-          }
-
-          if (vis[v] == 2) {
-            continue;
-          }
-
-          vector<int> vx = trace(u), vy = trace(v);
-          if (vx.back() == vy.back()) {
-            contract(c, u, v, vx, vy);
-            q.push(c);
-            p[c] = p[blossom[c][0]];
-            vis[c] = 1;
-            c++;
-            break;
-          }
-
-          aug = true;
-          vx.insert(vx.begin(), v);
-          vy.insert(vy.begin(), u);
-          vector<int> A = lift(vx), B = lift(vy);
-          A.insert(A.end(), B.rbegin(), B.rend());
-          for (size_t i = 0; i < A.size(); i += 2) {
-            match(A[i], A[i+1]);
-            if (i+2 < A.size()) addEdge(A[i+1], A[i+2]);
-          }
-          break;
-        }
+    int match_new = 0;
+    fill(match.begin(), match.end(), -1);
+    for (int u = 0; u < n; u++) {
+      if (match[u] == -1) {
+        match_new += augment(u, find_augmenting_path(u));
       }
     }
 
     vector<pair<int, int>> M;
     for (int u = 0; u < n; u++) {
-      if (mate[u] > u) M.emplace_back(u, mate[u]);
+      if (u < match[u]) M.emplace_back(match[u], u);
     }
     return M;
   }
@@ -199,7 +156,7 @@ public:
 
 /**
  * BlossomAlgorithmStrategy uses an algorithm based on Edmonds-Blossom algorithm
- * to solve Maximum Matching in O(n^3).
+ * to solve Maximum Matching in O(n^2m).
  */
 class BlossomAlgorithmStrategy : public IAlgorithmStrategy {
  public:
