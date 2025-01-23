@@ -93,8 +93,8 @@ Now, a naive algorithm can be implemented.
 For a graph \(G \coloneqq (V, E)\).
 The idea is, for each edge \(e \in E\), check through \cref{fact:matching_condition} if the graph \((V, E \setminus \{e\})\) has a perfect matching.
 \begin{enumerate}
-  \item If it does not have a perfect matching, then this \(e\) is essential;
-  \item Else, let \(G = (V, E \setminus e)\);
+  \item If it does not have a perfect matching, then \(e\) is essential;
+  \item Else, let \(G = (V, E \setminus \{e\})\).
 \end{enumerate}
 Then, after iterating through each edge in \(E\), only the essential edges remain in \(G\), i.e. a perfect matching.
 Hence, achieving the following algorithm.
@@ -237,7 +237,8 @@ Consequently,
 \]
 
 Then, let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
-The running time can be expressed as:
+Since a Rank-two update is performed for each removed edge and it is necessary to compute the matrix inverse,
+we have the following running time.
 \begin{align*}
-    g(n) = \binom{n}{2} t(n) = \binom{n}{2} O(n^2) = O(n^2) O(n^2) = O(n^4).
+    g(n) = m t(n) + O(n^\omega) = m O(n^2) + O(n^\omega) = O(n^2m) + O(n^\omega).
 \end{align*}

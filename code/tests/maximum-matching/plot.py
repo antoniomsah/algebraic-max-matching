@@ -62,7 +62,7 @@ def generate_plots(csv_path):
         plt.close()
     
     # Comprehensive single plot
-    plt.figure(figsize=(18, 8))
+    plt.figure(figsize=(20, 8))
     unique_algorithms = df['Algorithm'].unique()
     unique_algorithms.sort()
     colors = plt.cm.Set3(np.linspace(0, 1, len(unique_algorithms)))
@@ -80,7 +80,7 @@ def generate_plots(csv_path):
         plt.plot(sorted_data['Input'], sorted_data['Average Time (ms)'], 
                  color=colors[i], linestyle='--')
     
-    plt.title('Maximum Matching Time Across Different Inputs')
+    plt.title('Maximum Matching benchmark across all test cases')
     plt.xlabel('Input')
     plt.ylabel('Average Time (ms)')
     plt.legend(title='Algorithms')

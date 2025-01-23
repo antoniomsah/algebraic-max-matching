@@ -73,41 +73,151 @@ t(G) = O(n^2) + f(G') + O(n^2) = O(n^2) + O(n^\omega) + O(n^2) = O(n^\omega). \n
 
 \section{Analysis}
 \label{Maximum:analysis}
+\noindent
+This section compares Harvey's algorithm with two maximum matching algorithms:
+\begin{enumerate}
+   \item The rank-two algorithm described in \cref{alg:rank-two};
+   \item A Edmonds-Blossom algorithm implementation made by \citet{giovana:blossom}.
+\end{enumerate}
+\noindent
+The naive algorithm was not compared due to its poor performance.
+As a reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
 
-\subsection{Methology}
+\subsection{Methodology}
+The comparisons were made through random tests together with a verifier that asserts the output is a valid perfect matching.
+For each number of vertices, 10 tests were generated with the following probabilities of an edge being created between every pair of vertices.
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    Test number & Probability \\
+    \hline
+    1 & 0.10 \\
+    2 & 0.20 \\
+    3 & 0.25 \\
+    4 & 0.50 \\
+    5 & 0.50 \\
+    6 & 0.50 \\
+    7 & 0.75 \\
+    8 & 0.75 \\
+    9 & 0.75 \\
+    10 & 1.00 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+In total there were 100 different test cases and each test case was executed 50 times to ensure behavior.
+
+\subsubsection{Hardware specifications}
+
+\noindent
+The benchmark was executed in a computer with the following specifications:
+
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    GPU & GeForce GTX 1660Ti \\
+    \hline
+    CPU & Intel(R) Core(TM) i7-9750H \\
+    \hline
+    RAM & 32GB \\ 
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsubsection{Algorithms tested}
+The fast matrix multiplication algorithm was \textbf{not} implemented since its threshold is too high for application purposes.
+Instead the trivial $O(n^3)$ algorithms was implemented, thus the tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    Algorithm & Time complexity \\
+    \hline
+    Rank-two algorithm & \(O(n^2m + n^3)\) \\
+    Harvey's algorithm & \(O(n^3)\) \\
+    Edmonds-Blossom algorithm & \(O(n^2m)\) \\
+    \hline
+  \end{tabular}
+\end{center}
 
 \subsection{Results}
+\label{results:max_matching}
+
+Figure \cref{fig:max_matching} illustrates the algorithmic performance across test cases. 
+The Edmonds-Blossom algorithm demonstrated superior performance compared to the alternative approaches.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=12cm]{boxplot_v50_m20.png}
-  \caption{Maximum Matching benchmark with 50 vertices and matching number 20.}
-  \label{fig:v50m20}
+  \includegraphics[width=15cm]{maximum_matching_plot.png}
+  \caption{Maximum Matching benchmark with all test cases.}
+  \label{fig:max_matching}
 \end{figure}
+
+Similarly to the perfect matching algorithm, in small graphs (\cref{fig:v10m2-v20m5}) the Rank-two algorithm outperforms the Harvey's algorithm.
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=12cm]{boxplot_v50_m25.png}
-  \caption{Maximum Matching benchmark with 50 vertices and matching number 25.}
-  \label{fig:v50m25}
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v10_m2.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v20_m5.png}
+  \end{subfigure}
+  \caption{Maximum matching benchmark with smaller graphs.}
+  \label{fig:v10m2-v20m5}
 \end{figure}
+
+In \cref{fig:maxv50}, the impact of matching number on algorithm performance becomes evident through the augmented graph.
+The left plot shows both algorithms maintaining stable, similar performance, likely due to the augmented graph's almost doubling the number of vertices.
+Conversely, the right plot exhibits behavior reminiscent of the perfect matching algorithm, attributed to fewer added vertices in the augmented graph.
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=12cm]{boxplot_v100_m10.png}
-  \caption{Maximum Matching benchmark with 100 vertices and matching number 10.}
-  \label{fig:v100m10}
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v50_m10.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v50_m20.png}
+  \end{subfigure}
+  \caption{Maximum matching benchmark with 50 vertices.}
+  \label{fig:maxv50}
 \end{figure}
-\begin{figure}[H]
+
+
+In \cref{fig:maxv100} and \cref{fig:maxv200}, Harvey's algorithm outperforms the Rank-two algorithm.
+The performance trend observed in \cref{fig:maxv50} recurs: as the graph's matching number increases, algorithm performance varies significantly due to augmented graph characteristics.
+
+\begin{figure}[h]
   \centering
-  \includegraphics[width=12cm]{boxplot_v100_m25.png}
-  \caption{Maximum Matching benchmark with 100 vertices and matching number 25.}
-  \label{fig:v100m20}
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v100_m10.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v100_m50.png}
+  \end{subfigure}
+  \caption{Maximum matching benchmark with 100 vertices.}
+  \label{fig:maxv100}
 \end{figure}
-\begin{figure}[H]
+
+\begin{figure}[h]
   \centering
-  \includegraphics[width=12cm]{boxplot_v100_m50.png}
-  \caption{Maximum Matching benchmark with 100 vertices and matching number 50.}
-  \label{fig:v100m50}
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v200_m50.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{maximum_matching_v200_m100.png}
+  \end{subfigure}
+  \caption{Maximum matching benchmark with 200 vertices.}
+  \label{fig:maxv200}
 \end{figure}
+
 % \begin{figure}[H]
 %   \centering
 %   \includegraphics[width=12cm]{boxplot_vX_mY.png}

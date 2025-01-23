@@ -37,12 +37,11 @@ The following invariant must be preserved:
     of \(\SC{DeleteEdgesCrossing}(R_i, S_j)\).
 \end{itemize}
 To maintain this invariant the following updates are done. 
-
-\begin{theorem}[Update 1]
+\begin{theorem}[Update 1\footnote{This update is different from the one in \citet{Harvey:Paper}.}]
 \label{update:1}
     Let \(R, S\) be two disjoint sets of vertices such that \(|R| = |S| = 1\).
     Let \(N \coloneqq T^{-1}\), \(r \in R\) and \(s \in S\).
-    If \(\{r, s\}\) is inessential, let \(\tilde{T}\) be the Tutte matrix of \(G\) without edge \(\{r, s\}\), then one has
+    If \(\{r, s\}\) is inessential, let \(\tilde{T}\) be the Tutte matrix of \(G\) without edge \(rs\), then one has
     \[
         \tilde{T}^{-1}_{r, s} = N_{r, s} / (1 + T_{r, s} N_{r, s})
     \]
@@ -58,12 +57,12 @@ By \cref{cor:update_cor}, one has:
 \begin{align*}
   \tilde{T}^{-1}_{RS, RS} &= N_{RS, RS} - N_{RS, RS} (I + \Delta N_{RS, RS})^{-1} \Delta N_{RS, RS} & \\
                           &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} 1 + T_{r, s} N_{r, s} & 0 \\ 0 & 1 + T_{r, s} N_{r, s} \end{bmatrix}^{-1} \Delta N_{RS, RS} & \text{by \eqref{rank-two:eq}} \\
-                     &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \Delta N_{RS, RS} &\\
+                     &= N_{RS, RS} - N_{RS, RS} \begin{bmatrix} 1 / (1 + T_{r, s} N_{r, s}) & 0 \\ 0 & 1 / (1 + T_{r, s} N_{r, s}) \end{bmatrix} \Delta N_{RS, RS} &\\
                      % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{1}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{1}{1 + T_{r, s} N_{r, s}} \end{bmatrix} \begin{bmatrix} T_{r, s} N_{s, r} & 0 \\ 0 & T_{s, r} N_{r, s} \end{bmatrix} & \\
                      % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} 
-                     &= N_{RS, RS} + \begin{bmatrix} 0 & \frac{N_{r, s}T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
+                     &= N_{RS, RS} + \begin{bmatrix} 0 & N_{r, s}T_{s, r}N_{r, s} / (1 + T_{r, s} N_{r, s}) \\ N_{s, r}T_{r, s}N_{s, r} /  (1 + T_{r, s} N_{r, s}) & 0 \end{bmatrix} & \\
                      % &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
-                     &= \begin{bmatrix} 0 & \frac{N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ \frac{N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix}. \qedhere &
+                     &= \begin{bmatrix} 0 & N_{r, s} / (1 + T_{r, s} N_{r, s}) \\ N_{s, r} / (1 + T_{r, s} N_{r, s}) & 0 \end{bmatrix}. \qedhere &
 \end{align*}
 \end{proof}
 
@@ -82,6 +81,7 @@ By \cref{cor:update_cor}, one has:
 
 We have the following algorithm.
 
+\newpage
 \begin{programruledcaption}{Harvey's algorithm: \(\SC{DeleteEdgesCrossing}\)}
     \begin{lstlisting}[
       language={pseudocode},
@@ -123,7 +123,7 @@ Otherwise, a line-by-line analysis:
     \item \textbf{Dividing in half (Lines 16 and 17)}: Takes \(O(n)\) time;
     \item \textbf{Saving the states (Line 20)}: Takes \(O(n^2)\) time;
     \item \textbf{Recursive call (Line 21)}: Recurrence is \(f(r/2, s/2)\);
-    \item \textbf{Delta (Line 22)}: Matrix subby traction is \(O(n^2)\);
+    \item \textbf{Delta (Line 22)}: Matrix subtraction is \(O(n^2)\);
     \item \textbf{Update submatrix (Line 23)}: Takes \(O(n^\omega)\).
 \end{enumerate}
 Combining these steps, we have
@@ -208,7 +208,7 @@ Now, combining these steps:
     &= O(n) + 2 (2O(n^2) + g(n / 2) + O(n^\omega)) + O(n^\omega) & \text{by \eqref{alg:delcrossing}} \\
     &= 2g(n / 2) + 3O(n^\omega).
 \end{align*}
-Similarly to \cref{alg:delcrossing}, we have
+Similarly to \eqref{alg:delcrossing}, we have
 \begin{equation}
 \label{alg:delwithin}
   g(n) = 2g(n / 2) + 3O(n^\omega) = O(n^\omega).
@@ -219,7 +219,7 @@ Similarly to \cref{alg:delcrossing}, we have
 \(\SC{PerfectMatching}\): Receives a graph \(G\) and finds a perfect matching, or returns \(\emptyset\) if one does not exist.
 It creates a Tutte Matrix of \(G\) with random entries.
 Note that calling \(\SC{DeleteEdgesWithin}(V(G))\) is equivalent to deleting every inessential edge from \(G\).
-Thus, after this call, the graph only has essential edges, i.e., edges from the perfect matching. 
+Thus, after this call, the graph only has essential edges, i.e. edges from the perfect matching. 
 Consequently, there is the following implementation:
 
 \begin{programruledcaption}{Harvey's algorithm: \(\SC{Perfect Matching}\)}
@@ -247,7 +247,7 @@ A line-by-line comparison:
   \item \textbf{Building a TutteMatrix (Line 2)}: Takes \(O(n^2)\) time;
   \item \textbf{Checking if a matrix is singular (Line 3)}: Takes \(O(n^\omega)\) time;
   \item \textbf{Calculating a matrix inverse (Line 4)}: Takes \(O(n^\omega)\) time;
-  \item \textbf{DeleteEdgesWithin (Line 5)}: From \cref{alg:delwithin}, takes \(g(|V|) = O(n^\omega)\) time;
+  \item \textbf{DeleteEdgesWithin (Line 5)}: From \eqref{alg:delwithin}, takes \(g(|V|) = O(n^\omega)\) time;
   \item \textbf{Returning the matching (Line 6)}: Takes \(O(n^2)\) time.
 \end{enumerate}
 Combining these steps, we have:
@@ -265,7 +265,7 @@ Since there are \(\binom{n}{2}\) edges, then
   \delta \leq \binom{n}{2} n / q < n^3 / q.
 \]
 
-\subsubsection{Corretude}
+\subsubsection{Correctness}
 \noindent
 To prove the algorithm's correctness, it suffices that for every edge \(uv \in E(G)\), when evaluating whether \(uv\) can be removed (using \cref{cor:condition_edge_removal}), one has \(N_{uv} = T^{-1}_{uv}\).
 This equality is guaranteed by the invariants.
@@ -273,77 +273,131 @@ Since the updates ensure that the invariants are maintained throughout the algor
 
 \section{Analysis}
 \label{Harvey:analysis}
-
+\noindent
 This section compares Harvey's algorithm with two perfect matching algorithms:
 \begin{enumerate}
    \item The rank-two algorithm described in \cref{alg:rank-two};
- \item A Edmonds-Blossom algorithm implementation used in competitive programming competitions (see \href{https://codeforces.com/blog/entry/92339}{codeforces.com/blog/entry/92339}).
+   \item A Edmonds-Blossom algorithm implementation made by \citet{giovana:blossom}.
 \end{enumerate}
-
+\noindent
 The naive algorithm was not compared due to its poor performance.
 As a reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
 
-\subsection{Methology}
+\subsection{Methodology}
 
-The comparisons are made through random tests together with a verifier that asserts the output is a valid perfect matching.
+The comparisons were made through random tests together with a verifier that asserts the output is a valid perfect matching.
+For each number of vertices, 10 tests were generated with the following probabilities of an edge being created between every pair of vertices.
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    Test number & Probability \\
+    \hline
+    1 & 0.10 \\
+    2 & 0.20 \\
+    3 & 0.25 \\
+    4 & 0.50 \\
+    5 & 0.50 \\
+    6 & 0.50 \\
+    7 & 0.75 \\
+    8 & 0.75 \\
+    9 & 0.75 \\
+    10 & 1.00 \\
+    \hline
+  \end{tabular}
+\end{center}
 
-\subsubsection{Computer specs}
-TODO: add computer specs.
+In total there were 50 different test cases and each test case was executed 50 times to ensure behavior.
+
+\subsubsection{Hardware specifications}
+
+\noindent
+The benchmark was executed in a computer with the following specifications:
+
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    GPU & GeForce GTX 1660Ti \\
+    \hline
+    CPU & Intel(R) Core(TM) i7-9750H \\
+    \hline
+    RAM & 32GB \\ 
+    \hline
+  \end{tabular}
+\end{center}
 
 \subsubsection{Algorithms tested}
 The fast matrix multiplication algorithm was \textbf{not} implemented since its threshold is too high for application purposes.
-Instead the trivial $O(n^3)$ algorithms was implemented, thus Harvey's algorithm has a time complexity of \(O(n^3)\) in these comparisons.
-The tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
+Instead the trivial $O(n^3)$ algorithm was used, thus the tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
 \begin{center}
   \begin{tabular}{|c|c|}
     \hline
     Algorithm & Time complexity \\
     \hline
-    Rank-two algorithm & \(O(n^2m + O(n^3))\) \\
+    Rank-two algorithm & \(O(n^2m + n^3)\) \\
     Harvey's algorithm & \(O(n^3)\) \\
-    Edmonds-Blossom algorithm & \(O(nm)\) \\
+    Edmonds-Blossom algorithm & \(O(n^2m)\) \\
     \hline
   \end{tabular}
 \end{center}
 
 \subsection{Results}
-The Edmonds-Blossom implementation consistently demonstrates superior performance across all tests with its \(O(nm)\) complexity. 
-In \cref{fig:v10} and \cref{fig:v20}, the Rank-two algorithm outperforms Harvey's algorithm, likely due to its lower constant factor. 
-However, as the test sizes increase, Harvey's algorithm shows progressive improvement relative to the Rank-two algorithm. 
-This trend becomes evident in \cref{fig:v50}, where the performance gap narrows significantly. 
-In \cref{fig:v100} and \cref{fig:v200}, Harvey's algorithm ultimately achieves better overall performance.
+\label{results:perfect_matching}
 
-Moreover, the Rank-Two algorithm exhibits significant performance variability, which can be attributed to its update frequency being directly tied to the number of edges removed from the graph. 
+In \cref{fig:perf_matching} provides an overview of the algorithms performance throughout all test cases.
+Even though the Edmonds-Blossom time complexity is theoricatilly worse than Harvey's algorithm, when \(m > n\) (which is true for all test cases with \(n = 200\)), 
+it demonstrates a superior performance in all cases.
+Nonetheless, Harvey's algorithm outperforms the Rank-two algorithm for bigger graphs demonstrating a considerable improvement.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=15cm]{perfect_matching_plot.png}
+  \caption{Perfect Matching benchmark with all test cases.}
+  \label{fig:perf_matching}
+\end{figure}
+
+A more detailed case by case analysis follows.
+
+In \cref{fig:v10-20}, the Rank-two algorithm outperforms Harvey's algorithm, likely due to its lower constant factor. 
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{perfect_matching_10_vertices.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{perfect_matching_20_vertices.png}
+  \end{subfigure}
+  \caption{Perfect Matching benchmark with 10 and 20 vertices.}
+  \label{fig:v10-20}
+\end{figure}
+
+However, as the test sizes increase, Harvey's algorithm shows progressive improvement relative to the Rank-two algorithm. 
+This trend becomes evident in \cref{fig:v50}, where the performance gap narrows significantly;
+And, for the complete graph (e.g. the last test case), the Rank-two algorithm is outperformed by Harvey's algorithm.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=12cm]{perfect_matching_50_vertices.png}
+  \caption{Perfect Matching benchmark with 50 vertices.}
+  \label{fig:v50}
+\end{figure}
+
+In \cref{fig:v100-200}, Harvey's algorithm ultimately achieves better overall performance than the Rank-two algorithm.
+Notably the Rank-two algorithm exhibits significant performance variability, which can be attributed to its update frequency being directly tied to the number of edges removed from the graph. 
 In contrast, Harvey's algorithm maintains consistent performance by executing a fixed number of updates, independent of the edge count. 
 This behavior makes Harvey's algorithm more predictable in terms of execution time, particularly for larger graphs.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=12cm]{boxplot_v10.png}
-  \caption{Perfect Matching benchmark with 10 vertices.}
-  \label{fig:v10}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=12cm]{boxplot_v20.png}
-  \caption{Perfect Matching benchmark with 20 vertices.}
-  \label{fig:v20}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=12cm]{boxplot_v50.png}
-  \caption{Perfect Matching benchmark with 50 vertices.}
-  \label{fig:v50}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=12cm]{boxplot_v100.png}
-  \caption{Perfect Matching benchmark with 100 vertices.}
-  \label{fig:v100}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=12cm]{boxplot_v200.png}
-  \caption{Perfect Matching benchmark with 200 vertices.}
-  \label{fig:v200}
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{perfect_matching_100_vertices.png}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{perfect_matching_200_vertices.png}
+  \end{subfigure}
+  \caption{Perfect Matching benchmark with 100 vertices and 200 vertices.}
+  \label{fig:v100-200}
 \end{figure}

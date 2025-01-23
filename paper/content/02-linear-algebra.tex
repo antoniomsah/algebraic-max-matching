@@ -45,7 +45,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
         \end{pmatrix}
     \]
     where \(D\) is a square matrix; Then, if \(D\) is non-singular, the matrix \(A - B D^{-1} C\) is the \textbf{Schur complement} of \(D\) in \(M\).
-    The Schur complement has the following properties:
+    The Schur complement has the following property:
     \begin{enumerate}
       \item \(\det(M) = \det(D)\det(A - BD^{-1}C)\).
     \end{enumerate}
@@ -111,7 +111,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 
 \begin{proof}
     Let \(k \coloneqq |S|\). 
-    Let \(U\)\footnote{Every column should be a canonical basis vector from \(S\)} be a \(n \times k\) matrix that selects the \(S\) columns from a \(n \times n\) matrix, i.e.
+    Let \(U\)\footnote{Every column should be a canonical basis vector from \(S\).} be a \(n \times k\) matrix that selects the \(S\) columns from a \(n \times n\) matrix, i.e.
     for a \(n \times n\) matrix \(M\), one has \(MU = M_{*, S}\). Let \(V^T \coloneqq \Delta U^T\). 
     Then, by \cref{thm:smw-formula}, 
     \begin{align*}
@@ -143,7 +143,7 @@ Furthermore, we use \(M[R,*]\) or \(M_{R, *}\) to represent the submatrix contai
 \end{definition}
 
 \noindent
-The following milestones related to matrix multiplication algorithms were found:
+Here are some milestone related to the matrix multiplication exponent throughout the years.
 \begin{center}
   \begin{tabular}{|c|c|c|}
     \hline
@@ -158,9 +158,8 @@ The following milestones related to matrix multiplication algorithms were found:
 
 \noindent
 The following algorithms can be done in \(O(n^\omega)\):
-
 \begin{enumerate}
   \item \textbf{Matrix inversion}, see \citet[Theorem 28.2]{CLRS}; 
-  \item \textbf{Matrix rank}, see (TODO: add citation).
+  \item \textbf{Matrix rank}, see \cite{IBARRA198245}.
 \end{enumerate}
 

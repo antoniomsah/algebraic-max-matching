@@ -78,7 +78,7 @@ def generate_plots(csv_path):
         plt.plot(sorted_data['Input'], sorted_data['Average Time (ms)'], 
                  color=colors[i], linestyle='--')
     
-    plt.title('Perfect Matching Time Across Different Inputs')
+    plt.title('Perfect Matching benchmark across all test cases')
     plt.xlabel('Input')
     plt.ylabel('Average Time (ms)')
     plt.legend(title='Algorithms')
