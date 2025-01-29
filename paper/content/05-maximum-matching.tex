@@ -5,7 +5,7 @@ This chapter shows how to extend the perfect matching algorithms to solve the ma
 
 \section{Maximum Matching algorithm}
 
-The extension to maximum matching is based on the following theorem by Lovasz.
+The extension to maximum matching is based on the following theorem.
 \begin{theorem}[\citet{plummer1986matching}]
 \label{thm:rank_matching}
     Let \(G\) be a graph and let \(T\) be the Tutte Matrix of \(G\).
@@ -71,7 +71,7 @@ Combining these steps, the total time complexity is:
 t(G) = O(n^2) + f(G') + O(n^2) = O(n^2) + O(n^\omega) + O(n^2) = O(n^\omega). \numberthis \label{alg:maximum_matching_complexity}
 \]
 
-\section{Analysis}
+\section{Experimental Analysis}
 \label{Maximum:analysis}
 \noindent
 This section compares Harvey's algorithm with two maximum matching algorithms:
@@ -84,9 +84,15 @@ The naive algorithm was not compared due to its poor performance.
 As a reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
 
 \subsection{Methodology}
-The comparisons were made through random tests together with a verifier that asserts the output is a valid perfect matching.
-For each number of vertices, 10 tests were generated with the following probabilities of an edge being created between every pair of vertices.
-\begin{center}
+
+The implementations were evaluated using randomly generated graph instances created with the Erd\"os-R\'enyi model. 
+To establish upper bounds on the matching number, the generated graphs were constrained to include odd components. 
+For example, if the desired matching number was \(k\), then at least \(n/2 - k\) odd components were contained in the generated graph.
+For each vertex count, 10 test graphs were generated, varying the probability of edge creation between each pair of vertices. 
+Each test case number corresponded to a specific probability of edge creation between vertex pairs, as defined in the \cref{tab:edge_max}. 
+A verification system was implemented to validate the correctness of all outputs.
+\begin{table}[H]
+  \centering
   \begin{tabular}{|c|c|}
     \hline
     Test number & Probability \\
@@ -103,9 +109,10 @@ For each number of vertices, 10 tests were generated with the following probabil
     10 & 1.00 \\
     \hline
   \end{tabular}
-\end{center}
-
-In total there were 100 different test cases and each test case was executed 50 times to ensure behavior.
+  \caption{Edge creation probability for each Maximum Matching test case number.}
+  \label{tab:edge_max}
+\end{table}
+Each of the 100 test cases was executed 50 times to account for machine performance variability, resulting in 5,000 total executions.
 
 \subsubsection{Hardware specifications}
 
@@ -114,8 +121,6 @@ The benchmark was executed in a computer with the following specifications:
 
 \begin{center}
   \begin{tabular}{|c|c|}
-    \hline
-    GPU & GeForce GTX 1660Ti \\
     \hline
     CPU & Intel(R) Core(TM) i7-9750H \\
     \hline
@@ -126,7 +131,7 @@ The benchmark was executed in a computer with the following specifications:
 
 \subsubsection{Algorithms tested}
 The fast matrix multiplication algorithm was \textbf{not} implemented since its threshold is too high for application purposes.
-Instead the trivial $O(n^3)$ algorithms was implemented, thus the tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
+Instead the trivial $O(n^3)$ algorithms were implemented, thus the tested algorithms have the following time complexities, where \(n\) is the number of vertices and \(m\) is the number of edges.
 \begin{center}
   \begin{tabular}{|c|c|}
     \hline
@@ -142,7 +147,8 @@ Instead the trivial $O(n^3)$ algorithms was implemented, thus the tested algorit
 \subsection{Results}
 \label{results:max_matching}
 
-Figure \cref{fig:max_matching} illustrates the algorithmic performance across test cases. 
+Figure \cref{fig:max_matching} illustrates the algorithmic performance across test cases,
+where the first input number represents the number of vertices and the second represents the upper bound on the matching number.
 The Edmonds-Blossom algorithm demonstrated superior performance compared to the alternative approaches.
 
 \begin{figure}[H]

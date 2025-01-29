@@ -15,8 +15,8 @@ Harvey's algorithm addresses this limitation by employing a divide-and-conquer s
 After each recursive step, only the necessary portions of the inverse matrix are updated.
 As a result, Harvey's algorithm has a time complexity of \(O(n^\omega)\).
 
-For a graph \(G\) and \(n = |V(G)|\). 
-The algorithm maintains two matrices, \(T\) and \(N\), that are initialized as
+For a graph \(G\) and \(n = |V(G)|\),
+the algorithm maintains two matrices, \(T\) and \(N\), that are initialized as
 \begin{enumerate}
   \item \(T \coloneqq \) a Tutte matrix where the entries were randomly chosen, see \cref{sec:prob_tutte};
     \item \(N \coloneqq T^{-1}\).
@@ -33,7 +33,7 @@ $\SC{DeleteEdgesCrossing}(R, S)$: receives two disjoint sets of vertices \(R\) a
 deletes inessential edges with an end in \(R\) and the other in \(S\).
 The following invariant must be preserved:
 \begin{itemize}
-    \item \(\SC{DeleteEdgesCrossing}(R, S)\): initially has \(N_{R \cup S, R \cup S} = {T^{-1}}_{R \cup S, R \cup S}\) and this property is restored after each call 
+  \item \(\SC{DeleteEdgesCrossing}(R, S)\): initially has \(N[R \cup S, R \cup S] = {T^{-1}}[R \cup S, R \cup S]\) and this property is restored after each call 
     of \(\SC{DeleteEdgesCrossing}(R_i, S_j)\).
 \end{itemize}
 To maintain this invariant the following updates are done. 
@@ -52,7 +52,7 @@ To maintain this invariant the following updates are done.
 \end{theorem}
 
 \begin{proof}
-Let \(RS \coloneqq R \cup S\).
+  Let \(RS \coloneqq R \cup S\) and let \(\Delta \coloneqq \tilde{T}_{RS, RS} - T_{RS, RS}\).
 By \cref{cor:update_cor}, one has:
 \begin{align*}
   \tilde{T}^{-1}_{RS, RS} &= N_{RS, RS} - N_{RS, RS} (I + \Delta N_{RS, RS})^{-1} \Delta N_{RS, RS} & \\
@@ -62,16 +62,16 @@ By \cref{cor:update_cor}, one has:
                      % &= N_{RS, RS} + N_{RS, RS} \begin{bmatrix} \frac{T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \\ 0 & \frac{T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \end{bmatrix} 
                      &= N_{RS, RS} + \begin{bmatrix} 0 & N_{r, s}T_{s, r}N_{r, s} / (1 + T_{r, s} N_{r, s}) \\ N_{s, r}T_{r, s}N_{s, r} /  (1 + T_{r, s} N_{r, s}) & 0 \end{bmatrix} & \\
                      % &= \begin{bmatrix} 0 & N_{r, s} + \frac{N_{r, s}T_{s, r}N_{r, s}}{1 + T_{r, s} N_{r, s}} \\ N_{s, r} + \frac{N_{s, r}T_{r, s}N_{s, r}}{1 + T_{r, s} N_{r, s}} & 0 \end{bmatrix} & \\
-                     &= \begin{bmatrix} 0 & N_{r, s} / (1 + T_{r, s} N_{r, s}) \\ N_{s, r} / (1 + T_{r, s} N_{r, s}) & 0 \end{bmatrix}. \qedhere &
+                     &= \begin{bmatrix} 0 & N_{r, s} / (1 + T_{r, s} N_{r, s}) \\ N_{s, r} / (1 + T_{r, s} N_{r, s}) & 0 \end{bmatrix}. & \qedhere
 \end{align*}
 \end{proof}
 
 \begin{theorem}[Update 2]
 \label{update:2}
     Let \(R, S\) be two disjoint set of vertices. Let \(\tilde{T}\) be \(T\) after removing some (possibly zero) edges from \(G\) with an end in \(R_i\) and another in \(S_j\).
-    Then, let \(N := T^{-1}\) and \(\Delta := \tilde{T} - T\), one has:
+    Let \(N := T^{-1}\) and \(\Delta := \tilde{T} - T\). Then
     \[
-        {\tilde{T}}^{-1}_{R \cup S, R \cup S} = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
+      {\tilde{T}}^{-1}[R \cup S, R \cup S] = N_{R \cup S, R \cup S} - N_{R \cup S, R_i \cup S_j}(I + \Delta N_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta N_{R_i \cup S_j, R \cup S}.
     \]
 \end{theorem}
 
@@ -109,8 +109,8 @@ We have the following algorithm.
                 for j \textbf{in} {1, 2} do
                     $T', N'$ := $T, N$ // Save current T and N states
                     DeleteEdgesCrossing($R_i, S_j$)
-                    $\Delta$ := $T_{R_i \cup S_j, R_i \cup S_j} - {T'}_{R_i \cup S_j, R_i \cup S_j}$
-                    $N_{RS, RS}$ := $N_{RS, RS}' - {N'}_{RS, R_i \cup S_j} (I + \Delta {N'}_{R_i \cup S_j, R_i \cup S_j})^{-1} \Delta {N'}_{R_i \cup S_j, RS}$ // \cref{update:2}.
+                    $\Delta$ := $T[R_i \cup S_j, R_i \cup S_j] - {T'}[R_i \cup S_j, R_i \cup S_j]$
+                    $N_{RS, RS}$ := $N_{RS, RS}' - {N_{RS, R_i \cup S_j}'} (I + \Delta {N_{R_i \cup S_j, R_i \cup S_j}'})^{-1} \Delta {N_{R_i \cup S_j, RS}'}$ // \cref{update:2}.
     \end{lstlisting}
 \end{programruledcaption}
 
@@ -120,19 +120,19 @@ Let \(f(r, s)\) be the running time for \(\SC{DeleteEdgesCrossing}(R, S)\) when 
 Let \(n = r + s\). The base cases are \(O(1)\).
 Otherwise, a line-by-line analysis:
 \begin{enumerate}
-    \item \textbf{Dividing in half (Lines 16 and 17)}: Takes \(O(n)\) time;
-    \item \textbf{Saving the states (Line 20)}: Takes \(O(n^2)\) time;
-    \item \textbf{Recursive call (Line 21)}: Recurrence is \(f(r/2, s/2)\);
-    \item \textbf{Delta (Line 22)}: Matrix subtraction is \(O(n^2)\);
-    \item \textbf{Update submatrix (Line 23)}: Takes \(O(n^\omega)\).
+    \item \textbf{Dividing in half (Lines 14 and 15)}: Takes \(O(n)\) time;
+    \item \textbf{Saving the states (Line 18)}: Takes \(O(n^2)\) time;
+    \item \textbf{Recursive call (Line 19)}: Recurrence is \(f(r/2, s/2)\);
+    \item \textbf{Delta (Line 20)}: Matrix subtraction is \(O(n^2)\);
+    \item \textbf{Update submatrix (Line 21)}: Takes \(O(n^\omega)\).
 \end{enumerate}
 Combining these steps, we have
 \begin{align*}
-    f(r, s) &= O(1) + O(1) + O(n^2) + 4(O(n^2) + T(r / 2, s / 2) + O(n^\omega))  \\
+    f(r, s) &= O(1) + O(1) + O(n^2) + 4(O(n^2) + f(r / 2, s / 2) + O(n^\omega))  \\
     &= 4O(n^2) + 4f(r / 2, s / 2) + 4O(n^\omega) \\
     &= 4f(r / 2, s / 2) + 4O(n^\omega).
 \end{align*}
-Now, applying the master theorem for recursions, i.e. 
+Now, applying the master theorem \cite[Theorem 4.1]{CLRS} for recursions, i.e. 
 \[
   T(n) = aT(n/b) + f(n).
 \]
@@ -149,13 +149,13 @@ Thus, the complexity is dominated by \(O(n^\omega)\) and
 \(\SC{DeleteEdgesWithin}\): receives a set of vertices \(S\) and deletes inessential edges that have both ends in \(S\).
 The following invariant must be preserved:
 \begin{itemize}
-    \item \(\SC{DeleteEdgesWithin}(S)\): initially has \(N_{S, S} = T^{-1}_{S, S}\) and this property is restored after each call of \(\SC{DeleteEdgesWithin}\)
+  \item \(\SC{DeleteEdgesWithin}(S)\): initially has \(N[S, S] = T^{-1}[S, S]\) and this property is restored after each call of \(\SC{DeleteEdgesWithin}\)
     and \(\SC{DeleteEdgesCrossing}\).
 \end{itemize}
 To maintain this invariant the following update is done.
 \begin{theorem}[Update 3]
 \label{update:3}
-    Let \(S \subseteq V_G\), \(\tilde{T}\) be \(T\) after removing some (possibly zero) edges from \(G\) with both ends in \(S\).
+    Let \(S \subseteq V_G\), let \(\tilde{T}\) be \(T\) after removing some (possibly zero) edges from \(G\) with both ends in \(S\).
     Then, let \(N \coloneqq T^{-1}\) and \(\Delta \coloneqq \tilde{T} - T\), one has
     \[
         {\tilde{T}}^{-1}_{S, S} = N_{S, S} - N_{S, S_i}(I + \Delta N_{S_i, S_i})^{-1} \Delta N_{S_i, S}.
@@ -163,7 +163,7 @@ To maintain this invariant the following update is done.
 \end{theorem}
 
 \begin{proof}
-    Direct from \cref{cor:update_cor}. Update the whole matrix with \ref{cor:update_cor} and select only the desired submatrix.
+    Direct from \cref{cor:update_cor}. Update the whole matrix using \ref{cor:update_cor} and select only the desired submatrix.
 \end{proof}
 
 We have the following algorithm.
@@ -181,10 +181,10 @@ We have the following algorithm.
 
             $S_1, S_2$ := DivideInTwo($S, 2$)
             for i \textbf{in} {1, 2} do
-                $T', N'$ := $T, N$ // Save current T and N states
+                $T', N'$ := $T, N$ // Save current T and N states.
                 DeleteEdgesWithin($S_i$)
-                $\Delta$ := $T_{S_i, S_i} - {T'}_{S_i, S_i}$
-                $N_{S, S}$ := $N' - {N'}_{S, S_i}(I + \Delta {N'}_{S_i, S_i})^{-1} \Delta {N'}_{S_i, S}$ // \cref{update:3}. 
+                $\Delta$ := $T_{S_i, S_i} - {T_{S_i, S_i}'}$
+                $N_{S, S}$ := $N' - {N_{S, S_i}'}(I + \Delta {N_{S_i, S_i}'})^{-1} \Delta {N_{S_i, S}'}$ // \cref{update:3}. 
             DeleteEdgesCrossing($S_1, S_2$)
     \end{lstlisting}
 \end{programruledcaption}
@@ -232,7 +232,7 @@ Consequently, there is the following implementation:
     ]
         function PerfectMatching(G)
             T := $\SC{TutteMatrix}(G)$
-            if T \textbf{ is singular} then return $\emptyset$ // The graph has no perfect matching
+            if T \textbf{ is singular} then return $\emptyset$ // The graph has no perfect matching.
             N := $T^{-1}$
             DeleteEdgesWithin($V$)
             return $E(T)$
@@ -247,7 +247,7 @@ A line-by-line comparison:
   \item \textbf{Building a TutteMatrix (Line 2)}: Takes \(O(n^2)\) time;
   \item \textbf{Checking if a matrix is singular (Line 3)}: Takes \(O(n^\omega)\) time;
   \item \textbf{Calculating a matrix inverse (Line 4)}: Takes \(O(n^\omega)\) time;
-  \item \textbf{DeleteEdgesWithin (Line 5)}: From \eqref{alg:delwithin}, takes \(g(|V|) = O(n^\omega)\) time;
+  \item \textbf{DeleteEdgesWithin (Line 5)}: From \eqref{alg:delwithin}, takes \(g(n) = O(n^\omega)\) time;
   \item \textbf{Returning the matching (Line 6)}: Takes \(O(n^2)\) time.
 \end{enumerate}
 Combining these steps, we have:
@@ -271,23 +271,26 @@ To prove the algorithm's correctness, it suffices that for every edge \(uv \in E
 This equality is guaranteed by the invariants.
 Since the updates ensure that the invariants are maintained throughout the algorithm, we can conclude that the edge removal decisions are correct.
 
-\section{Analysis}
+\section{Experimental Analysis}
 \label{Harvey:analysis}
 \noindent
 This section compares Harvey's algorithm with two perfect matching algorithms:
 \begin{enumerate}
    \item The rank-two algorithm described in \cref{alg:rank-two};
-   \item A Edmonds-Blossom algorithm implementation made by \citet{giovana:blossom}.
+   \item An implementation of the Edmonds-Blossom algorithm made by \citet{giovana:blossom}.
 \end{enumerate}
 \noindent
 The naive algorithm was not compared due to its poor performance.
-As a reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
+For reference, its performance is at least 100 times slower than the Rank-two algorithm in all cases.
 
 \subsection{Methodology}
 
-The comparisons were made through random tests together with a verifier that asserts the output is a valid perfect matching.
-For each number of vertices, 10 tests were generated with the following probabilities of an edge being created between every pair of vertices.
-\begin{center}
+The implementations were evaluated using randomly generated graph instances created with the Erd\H{o}s-R\'enyi model. 
+For each vertex count, 10 test graphs were generated, varying the probability of edge creation between each pair of vertices. 
+Each test case number corresponded to a specific probability of edge creation between vertex pairs, as defined in \cref{tab:edge_perf}. 
+A verification system was implemented to validate the correctness of all outputs.
+\begin{table}[H]
+  \centering
   \begin{tabular}{|c|c|}
     \hline
     Test number & Probability \\
@@ -304,9 +307,10 @@ For each number of vertices, 10 tests were generated with the following probabil
     10 & 1.00 \\
     \hline
   \end{tabular}
-\end{center}
-
-In total there were 50 different test cases and each test case was executed 50 times to ensure behavior.
+  \caption{Edge creation probability for each Perfect Matching test case number.}
+  \label{tab:edge_perf}
+\end{table}
+Each of the 50 test cases was executed 50 times to account for machine performance variability, resulting in 2,500 total executions.
 
 \subsubsection{Hardware specifications}
 
@@ -315,8 +319,6 @@ The benchmark was executed in a computer with the following specifications:
 
 \begin{center}
   \begin{tabular}{|c|c|}
-    \hline
-    GPU & GeForce GTX 1660Ti \\
     \hline
     CPU & Intel(R) Core(TM) i7-9750H \\
     \hline
@@ -344,19 +346,17 @@ Instead the trivial $O(n^3)$ algorithm was used, thus the tested algorithms have
 \label{results:perfect_matching}
 
 In \cref{fig:perf_matching} provides an overview of the algorithms performance throughout all test cases.
-Even though the Edmonds-Blossom time complexity is theoricatilly worse than Harvey's algorithm, when \(m > n\) (which is true for all test cases with \(n = 200\)), 
-it demonstrates a superior performance in all cases.
+Even though the Edmonds-Blossom worst-case time complexity is theoretically worse than Harvey's algorithm, when \(m > n\) (which is true for all test cases with \(n = 200\)), 
+it demonstrates superior performance in all cases.
 Nonetheless, Harvey's algorithm outperforms the Rank-two algorithm for bigger graphs demonstrating a considerable improvement.
 \begin{figure}[h]
   \centering
   \includegraphics[width=15cm]{perfect_matching_plot.png}
-  \caption{Perfect Matching benchmark with all test cases.}
+  \caption{Perfect Matching benchmark with all test cases where the input number represents the number of vertices.}
   \label{fig:perf_matching}
 \end{figure}
 
-A more detailed case by case analysis follows.
-
-In \cref{fig:v10-20}, the Rank-two algorithm outperforms Harvey's algorithm, likely due to its lower constant factor. 
+A more detailed case by case analysis follows. In \cref{fig:v10-20}, the Rank-two algorithm outperforms Harvey's algorithm with small \(n\), likely due to its lower constant factor. 
 
 \begin{figure}[h]
   \centering

@@ -23,7 +23,7 @@ These concepts are fundamental for understanding the algorithm's correctness and
 \noindent
 The vertex set of a graph \(G\) is denoted as \(V_G\) or \(V(G)\).
 The edge set of a graph \(G\) is denoted as \(E_G\) or \(E(G)\).
-If \(\{u,v\} \in E(G)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\) and \(e\) \textbf{incides} in both \(u\) and \(v\);
+If \(\{u,v\} \in E(G)\), then \(u\) and \(v\) are the \textbf{ends} of \(e\) and \(e\) \textbf{incides} in both \(u\) and \(v\).
 When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 
 \begin{definition}[Matching]
@@ -31,7 +31,7 @@ When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 	For a graph \(G \coloneqq (V, E)\), a subset \(M \subseteq E\) is a \textbf{matching} of \(G\) if no two edges in \(M\) share an end.
 	A vertex \(v \in V\) is \(M\)-covered if some edge of \(M\) incides in \(v\), 
 	and it is said that \(M\) covers \(v\);
-	Otherwise, \(v\) is \(M\)-exposed.
+	otherwise, \(v\) is \(M\)-exposed.
 	A matching \(M\) is:
 	\begin{itemize}
 		\item 
@@ -39,9 +39,9 @@ When the context is clear, \(\{u, v\}\) may be abbreviated to \(uv\).
 		\item
 			\textbf{maximum}, if for every matching \(M'\) of \(G\) one has \(|M| \geq |M'|\);
 		\item
-			\textbf{perfect}, if \(|V_G| = |M|\), i.e., every vertex of \(G\) is \(M\)-covered.
+			\textbf{perfect}, if \(|V_G| = 2|M|\), i.e., every vertex of \(G\) is \(M\)-covered.
 	\end{itemize}
-	The \textbf{matching number}, denoted as \(\nu(G)\), is the size of a maximum matching of \(G\).
+  The \textbf{matching number} of \(G\), denoted as \(\nu(G)\), is the size of a maximum matching of \(G\).
 \end{definition}
 
 \begin{definition}[Essential edges]

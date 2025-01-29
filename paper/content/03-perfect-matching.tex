@@ -1,11 +1,9 @@
-\chapter{Perfect matching}
+\chapter{Perfect matchings}
 \label{chap:perfect_matching}
 
-% This chapter explores finding a perfect matching through an algebraic approach, diverging from traditional graph theory methods. The chapter is structured around three key components:
-
 The initial section introduces fundamental algebraic techniques, focusing on Tutte matrices and their probabilistic representation. 
-Then, a self-reducible algorithm is presented, demonstrating an algebraic strategy for matching problems. 
-The chapter ends with an enhanced version of the self-reducible algorithm that uses rank-two matrix update techniques. 
+Then, a simple algorithm is presented, demonstrating an algebraic strategy for matching problems. 
+The chapter ends with an enhanced version of the simple algorithm that uses rank-two matrix update techniques. 
 
 \section{Tutte Matrix}
 
@@ -15,18 +13,18 @@ The chapter ends with an enhanced version of the self-reducible algorithm that u
 
 \begin{definition}[Tutte Matrix]
 \label{def:tutte_matrix}
-    Let \(G\) be a graph and \(n \coloneqq |V_G|\).
+    Let \(G\) be a graph and let \(n \coloneqq |V_G|\).
     For each edge \(uv \in E_G\) associate an indeterminate \(t_{uv}\).
     The Tutte matrix is the \(n \times n\) skew-symmetric matrix such that \(T_{uv} = \pm t_{uv}\) if \(uv \in E_G\) and \(0\), otherwise.
     The sign is chosen such that \(T\) is skew-symmetric.
     The Tutte matrix of \(G\) is denoted as \(T_G\).
 \end{definition}
 
-For a Tutte matrix \(T\), its Pfaffian, denoted \(Pf(T)\), is a polynomial whose complete mathematical definition involves sophisticated algebraic concepts beyond our current scope. 
+For a Tutte matrix \(T\), its Pfaffian, denoted \(\Pf(T)\), is a polynomial whose complete mathematical definition involves some algebraic concepts beyond our current scope. 
 However, two properties of the Pfaffian are crucial:
 \begin{enumerate}
-    \item The Pfaffian \(Pf(T)\) has a monomial for every perfect matching in the underlying graph of \(T\);
-    \item There exists a fundamental relationship between the Pfaffian and the determinant of a Tutte matrix: \(\det(T) = Pf(T)^2\). 
+    \item The Pfaffian \(\Pf(T)\) has a monomial for every perfect matching in the underlying graph of \(T\);
+    \item There exists a fundamental relationship between the Pfaffian and the determinant of a Tutte matrix: \(\det(T) = \Pf(T)^2\). 
 \end{enumerate}
 
 For a comprehensive treatment of this polynomial and its properties, we refer the reader to \citet[Chapter 7]{Godsil:1993}.
@@ -37,17 +35,17 @@ For a comprehensive treatment of this polynomial and its properties, we refer th
 \end{fact}
 
 \begin{proof}
-    Direct from the property \(\det(T) = Pf(T)^2\).
+    Direct from the property \(\det(T) = \Pf(T)^2\).
 \end{proof}
 
 While this property of Tutte matrices is powerful, it presents a computational challenge for algorithmic applications. 
-The issue stems from the relationship \(\det(T) = Pf(T)^2\), and that \(Pf(T)\) contains a monomial for each perfect matching in graph \(G\).
+The issue stems from the relationship \(\det(T) = \Pf(T)^2\), and that \(\Pf(T)\) contains a monomial for each perfect matching in graph \(G\).
 Since a graph may contain exponentially many perfect matchings, symbolic computation becomes infeasible.
 
 \subsection{Probabilistic representation of a Tutte Matrix}
 \label{sec:prob_tutte}
 \noindent
-Fortunately, a probabilistic solution was proposed at \citet{Lovasz:Random}:
+Fortunately, a probabilistic solution was proposed by \citet{Lovasz:Random}:
 \begin{itemize}
     \item Replace the non-zero entries of \(T\) with random values from a sufficiently large field.
 \end{itemize}
@@ -76,13 +74,19 @@ For any prime number \(p\), the set of integers modulo \(p\), denoted as \(\Inte
 
 \subsubsection{Implementation Overview}
 
-For a graph \(G\). The following assumption is used for the algorithm pertaining Tutte matrices:
+Let \(G\) be a graph. The following assumption is used for the algorithm pertaining Tutte matrices:
 \begin{itemize}
     \item For each edge \(uv \in E(G)\), the matrix entry \(t_{uv}\) (since Tutte matrices are skew-symmetric, \(t_{vu}\) is also fixed) is randomly selected from the finite field \(\Integers_p\). 
     These values are not altered throughout the subsequent algorithmic procedures and can be accessed in $O(1)$ time complexity.
 %    \item Vertices are mapped to zero-indexed integers, enabling straightforward traversal by iterating from \(0\) to \(n-1\). 
 %    This indexing scheme provides a canonical and computationally convenient representation of the graph's structure.
 \end{itemize}
+In the pseudocode, the following functions related to Tutte matrices are used:
+\begin{enumerate}
+  \item \(\SC{TutteMatrix}(G)\): Builds a Tutte matrix of graph \(G\) with random values;
+  \item \(\SC{RemoveEdge}(T, uv)\): Assigns \(T_{uv} \gets 0\) and \(T_{vu} \gets 0\);
+  \item \(E(T)\): Returns every edge \(uv \in E(G)\) such that \(T_{uv} \neq 0\), i.e. the edges that were not removed from \(G\).
+\end{enumerate}
 
 \newpage
 \section{Naive algorithm}
@@ -90,14 +94,14 @@ For a graph \(G\). The following assumption is used for the algorithm pertaining
 % A tutte matrix to refer to randomized tutte matrix
 
 Now, a naive algorithm can be implemented.
-For a graph \(G \coloneqq (V, E)\).
-The idea is, for each edge \(e \in E\), check through \cref{fact:matching_condition} if the graph \((V, E \setminus \{e\})\) has a perfect matching.
+Let \(G \coloneqq (V, E)\).
+The idea is, for each edge \(e \in E\), check using \cref{fact:matching_condition} if the graph \((V, E \setminus \{e\})\) has a perfect matching.
 \begin{enumerate}
   \item If it does not have a perfect matching, then \(e\) is essential;
   \item Else, let \(G = (V, E \setminus \{e\})\).
 \end{enumerate}
 Then, after iterating through each edge in \(E\), only the essential edges remain in \(G\), i.e. a perfect matching.
-Hence, achieving the following algorithm.
+Thus, we have the following algorithm.
 
 \begin{programruledcaption}{\(\SC{NaiveAlgorithm}\)}
     \label{alg:simple}
@@ -113,9 +117,11 @@ function NaiveAlgorithm($G$)
     if $T$ is singular then // $G$ does not have a perfect matching.
       return $\emptyset$
     for \textbf{ each } $uv \in E(G)$ do
-        RemoveEdge($T, uv$)
+        $t$ := $T_{uv}$ // Save the matrix entry before removing it.
+        RemoveEdge($T, uv$) 
         if $T$ is singular then // By \cref{fact:matching_condition}, edge $uv$ is essential.
-            AddEdge($T, uv$)
+          $T_{uv}$ := $t$ // Reverse the change.
+          $T_{vu}$ := $-t$
     return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
@@ -124,7 +130,7 @@ function NaiveAlgorithm($G$)
 \noindent
 Let \(f(n)\) be the running time of \(\SC{NaiveAlgorithm}\) when \(|V_G| \eqcolon n\).
 \begin{itemize}
-    \item \textbf{Line 2}: Since a graph has at most \(\binom{n}{2}\), there are at most \(O(n^2)\) iterations;
+    \item \textbf{Line 2}: Since a graph has at most \(\binom{n}{2}\), there are \(O(n^2)\) iterations;
     \item \textbf{Line 4}: Checking if a matrix is singular can be done in \(O(n^\omega)\) (\cref{matrix:time_complexity}).
 \end{itemize}
 Thus, the running time can be expressed as:
@@ -135,7 +141,7 @@ Thus, the running time can be expressed as:
 \section{Rank-two update algorithm}
 
 The bottleneck of the previous algorithm is the necessity to recompute the whole matrix inverse after each iteration.
-An improvement from the previous algorithm was achieved by using \cref{cor:condition_edge_removal} to quickly check essential edges and \cref{thm:rank-two} to update the inverse in \(O(n^2)\) instead of \(O(n^\omega)\).
+An improvement from the previous algorithm was achieved by using \cref{cor:condition_edge_removal} to quickly check essential edges and \cref{thm:rank-two} to update the inverse in \(O(n^2)\) time rather than \(O(n^\omega)\).
 
 \begin{theorem}[Rank-two update]
 \label{thm:rank-two}
@@ -196,10 +202,10 @@ Thus, it is proven.
     Direct from \cref{rank-two:eq}. 
 \end{proof}
 
-The idea is similar to the naive algorithm.
-For a graph \(G = (V, E)\).
+The idea is similar to the simple algorithm.
+Let \(G \coloneqq (V, E)\) be a graph.
 For each \(e \in E\), check if \(e\) is essential.
-However, instead of temporarily removing \(e\) from \(G\), we use \cref{cor:condition_edge_removal} to quickly decide if \(e\) is essential.
+However, rather than temporarily removing \(e\) from \(G\), we use \cref{cor:condition_edge_removal} to quickly decide if \(e\) is essential.
 If \(e\) is inessential, then we use a rank-two update instead of completely recomputing the inverse.
 Thus, we have the following algorithm.
 
@@ -216,16 +222,17 @@ Thus, we have the following algorithm.
             $T$ := TutteMatrix($G$)
             $N$ := $T^{-1}$
             for \textbf{ each } $uv \in E(G)$ do
-                if $N_{u,v} \neq -1 / T_{u, v}$ then // By \cref{cor:condition_edge_removal}, this edge is essential
-                    S := $\{u, v\}$
-                    $N$ := RankTwoUpdate($S, T, N$) // \cref{thm:rank-two}.
+                if $N_{u,v} \neq -1 / T_{u, v}$ then // By \cref{cor:condition_edge_removal}, this edge is inessential.
+                  S := $\{u, v\}$
+                  $N$ := RankTwoUpdate($S, T, N$) // \cref{thm:rank-two}.
+                  RemoveEdge($T$, $uv$)
             return $E(T)$
     \end{lstlisting}
 \end{programruledcaption}
 
 \subsubsection{Time complexity}
 \noindent
-First, let \(t(n)\) be the running time of \(\SC{Rank2Update}\) when \(|V_G| \eqcolon n\).
+First, let \(t(n)\) be the running time of \(\SC{RankTwoUpdate}\) when \(|V_G| \eqcolon n\).
 Note that 
 \[
   \begin{pmatrix} 1 / (1 + T_{u, v}N_{u, v}) & 0  \\ 0 & 1 / (1 + T_{v, u}N_{v, u}) \end{pmatrix}
@@ -236,8 +243,8 @@ Consequently,
     t(n) = O(2n^2) = O(n^2).
 \]
 
-Then, let \(g(n)\) be the running time of \(\SC{Rank-2 update algorithm}\) when \(n \eqcolon |V_G|\).
-Since a Rank-two update is performed for each removed edge and it is necessary to compute the matrix inverse,
+Then, let \(g(n)\) be the running time of \(\SC{RankTwoAlgorithm}\) when \(n \eqcolon |V_G|\).
+Since a rank-two update is performed for each removed edge and it is necessary to compute the matrix inverse,
 we have the following running time.
 \begin{align*}
     g(n) = m t(n) + O(n^\omega) = m O(n^2) + O(n^\omega) = O(n^2m) + O(n^\omega).

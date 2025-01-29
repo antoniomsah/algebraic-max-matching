@@ -29,7 +29,7 @@ def generate_plots(csv_path):
         
         unique_algorithms = group['Algorithm'].unique()
         unique_algorithms.sort()
-        colors = plt.cm.Set3(np.linspace(0, 1, len(unique_algorithms)))
+        colors = plt.cm.tab10(np.linspace(0, 1, len(unique_algorithms)))
         bar_width = 0.8 / len(unique_algorithms)
         
         for i, algorithm in enumerate(unique_algorithms):
@@ -63,7 +63,7 @@ def generate_plots(csv_path):
     plt.figure(figsize=(15, 8))
     unique_algorithms = df['Algorithm'].unique()
     unique_algorithms.sort()
-    colors = plt.cm.Set3(np.linspace(0, 1, len(unique_algorithms)))
+    colors = plt.cm.tab10(np.linspace(0, 1, len(unique_algorithms)))
 
     unique_inputs = df['Input'].unique()
     x_labels = [f"{parse_input(x)[0]} (test{parse_input(x)[1]+1})" for x in unique_inputs]

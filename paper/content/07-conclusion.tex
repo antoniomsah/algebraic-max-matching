@@ -1,7 +1,7 @@
 \chapter{Conclusion}
 
 In this paper, we implemented the randomized maximum matching algorithm introduced by \citet{Harvey:Paper}. 
-The algorithm's approach leverages algebraic graph theory, contrasting with traditional methods like the Edmonds-Blossom\cite{Edmonds} algorihtm. 
+The algorithm's approach leverages algebraic graph theory, contrasting with traditional methods like the Edmonds-Blossom \cite{Edmonds} algorithm. 
 While Harvey's algorithm achieves a superior theoretical time complexity of $O(n^\omega)$ (where $n$ represents the number of vertices and $\omega$ is the matrix multiplication exponent), our implementation analysis in \cref{results:perfect_matching} and \cref{results:max_matching} reveals significant practical limitations. 
 The high constant factor in the complexity makes the algorithm less efficient for smaller graphs.
 Theoretically, a performance threshold exists where this approach surpasses the Edmonds-Blossom algorithm, but this threshold was neither found nor tested.
